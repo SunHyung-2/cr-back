@@ -50,7 +50,7 @@ Klago:
     #server: Not yet
 
     # 로컬
-    server: http://172.16.112.85:9015
+    server: http://172.16.112.85:9014
 
 logging:
   config: ./log4j2.xml
