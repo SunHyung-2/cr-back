@@ -1,0 +1,64 @@
+server:
+  port: 8081
+  compression:
+    enabled: true
+  servlet:
+    context-path: /cr
+spring:
+  application:
+    name: cr
+  datasource:
+    hikari:
+      maximum-pool-size: 4
+    url: jdbc:mariadb://14.41.2.189:13306/
+    username: neos
+    password: neos
+    driver-class-name: org.mariadb.jdbc.Driver
+  messages:
+     basename: i18n/common/messages
+     encoding: UTF-8
+  kafka:
+    bootstrap-servers: localhost:9092
+    properties:
+      security:
+        protocol: SASL_PLAINTEXT
+      sasl:
+        mechanism: PLAIN
+        jaas:
+          config: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="duzon@1234";
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+Klago:
+  mode: live
+  dbType: mariadb
+  event:
+    url: http://172.16.121.40:80
+  Sign:
+    Value: 4edec53cebbe603e34458532505c45
+  groupware:
+    domain: http://dev.bizcubex.co.kr
+  redis:
+    ip: 14.41.2.189
+    port: 16384
+    password: 1234
+  sms:
+    # 운영
+    #server: Not yet
+
+    # 개발
+    #server: Not yet
+
+    # 로컬
+    server: http://172.16.112.85:9014
+
+logging:
+  config: ./log4j2.xml
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
