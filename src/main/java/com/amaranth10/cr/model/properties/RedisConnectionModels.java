@@ -2,11 +2,13 @@ package com.amaranth10.cr.model.properties;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 @Getter
 @Setter
+@ToString
 @Configuration
 public class RedisConnectionModels {
 
@@ -21,12 +23,4 @@ public class RedisConnectionModels {
     @Value("${Klago.redis.master.name:#{''}}")
     private String masterName;
 
-    @Override
-    public String toString() {
-        return  "ip='" + ip + '\'' +
-                ", port=" + port +
-                ", password='" + password + '\'' +
-                ", sentinelHosts='" + sentinelHosts + '\'' +
-                ", masterName='" + masterName + '\'';
-    }
 }

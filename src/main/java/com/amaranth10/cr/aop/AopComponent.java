@@ -18,10 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 public class AopComponent {
 
     @Around("execution(* com.amaranth10.cr.Controller.*.*(..))")
-    public Object LogAspect(ProceedingJoinPoint pjp) throws Throwable{
+    public Object LogAspect(ProceedingJoinPoint pjp) throws Throwable {
 
         long startTime = System.currentTimeMillis();
-        // 애플리케이션에서 Request 객체를 읽어옴
         // 애플리케이션에서 Request 객체를 읽어옴
         HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse servletResponse = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();

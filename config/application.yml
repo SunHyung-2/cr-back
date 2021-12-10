@@ -1,34 +1,20 @@
 server:
-  port: 8081
+  port: 8036
   compression:
     enabled: true
-  servlet:
-    context-path: /cr
 spring:
   application:
     name: cr
   datasource:
     hikari:
       maximum-pool-size: 4
-    url: jdbc:mariadb://14.41.2.189:13306/
-    username: neos
-    password: neos
+    url: jdbc:mariadb://172.16.131.11:3306/
+    username: tes_admin
+    password: tjdrhd@roqkf&
     driver-class-name: org.mariadb.jdbc.Driver
   messages:
-     basename: i18n/common/messages
-     encoding: UTF-8
-  kafka:
-    bootstrap-servers: localhost:9092
-    properties:
-      security:
-        protocol: SASL_PLAINTEXT
-      sasl:
-        mechanism: PLAIN
-        jaas:
-          config: org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="duzon@1234";
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    basename: i18n/common/messages
+    encoding: UTF-8
 Klago:
   mode: live
   dbType: mariadb
@@ -44,21 +30,19 @@ Klago:
     password: 1234
   sms:
     # 운영
-    #server: Not yet
+    #server: http://bizcubex.cloudfax.co.kr
 
     # 개발
-    #server: Not yet
+    #server: http://172.16.112.85:9013
 
     # 로컬
     server: http://172.16.112.85:9014
 
 logging:
   config: ./log4j2.xml
+
+
 management:
   endpoint:
     health:
       show-details: always
-  endpoints:
-    web:
-      exposure:
-        include: "*"
