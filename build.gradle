@@ -16,8 +16,8 @@ repositories {
 }
 
 dependencies {
-	compile "com.amaranth10:log:1.0.6"
-	implementation "com.amaranth10:backendcommon:1.0.31"
+	compile "com.amaranth10:log:1.0.9"
+	implementation "com.amaranth10:backendcommon:1.0.49"
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
@@ -34,8 +34,24 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-aop"
 	implementation "org.springframework.boot:spring-boot-starter-data-redis"
 	implementation group: 'commons-io', name: 'commons-io', version: '2.8.0'
-	implementation 'org.springframework.kafka:spring-kafka:2.6.6'
-	implementation "io.micrometer:micrometer-registry-prometheus"
+	//implementation 'org.springframework.kafka:spring-kafka:2.6.6' // sms에서는 미사용
+
+	implementation "org.apache.poi:poi:3.17"
+	implementation "org.apache.poi:poi-ooxml:3.17"
+	implementation "org.apache.poi:poi-scratchpad:3.17"
+	implementation "org.apache.poi:poi-ooxml-schemas:3.17"
+
+	implementation 'net.sf.json-lib:json-lib:2.4:jdk15'
+	implementation 'commons-beanutils:commons-beanutils:1.9.4'
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
+	implementation "org.apache.axis:axis:1.4"
+	compileOnly 'javax:javaee-api:7.0'
+	implementation 'com.sun.mail:javax.mail:1.5.5'
+	implementation 'javax.xml.rpc:javax.xml.rpc-api:1.1'
+	implementation 'commons-discovery:commons-discovery:0.5'
+	implementation 'wsdl4j:wsdl4j:1.6.2'
+
 }
 configurations {
 	all {

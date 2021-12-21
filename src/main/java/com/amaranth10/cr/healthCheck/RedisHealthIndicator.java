@@ -1,5 +1,8 @@
 package com.amaranth10.cr.healthCheck;
 
+import com.amaranth10.backendcommon.util.redis.JedisInfoClient;
+
+import com.amaranth10.cr.util.HealthCheckHelper;
 import com.amaranth10.cr.util.RedisManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
@@ -8,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RedisHealthIndicator implements HealthIndicator {
+
     private static final String key = "Redis";
 
     @Autowired
@@ -16,12 +20,15 @@ public class RedisHealthIndicator implements HealthIndicator {
     @Override
     public Health health() {
         if(!isRedisConnect()) {
-            return Health.down().withDetail(key, "Not Connected").build();
+            return Health.down().withDetail(key, "Not Connected").
+                    build();
         }
         return Health.up().withDetail(key, "Connected").build();
     }
 
     private Boolean isRedisConnect() {
-        return redisManager.healthCheck();
+        JedisInfoClient client = redisManager.getJedisInfoClient();
+        return HealthCheckHelper.isRedisIsConnect(client);
     }
+
 }

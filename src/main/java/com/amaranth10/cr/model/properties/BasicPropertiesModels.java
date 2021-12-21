@@ -16,4 +16,12 @@ public class BasicPropertiesModels {
     @Value("${Klago.Sign.Value:#{''}}")
     private String klagoSignValue;
 
+    /*
+    기본 properties 정의
+     */
+    @Getter
+    @Setter
+    @Value("${Klago.sms.server}")
+    private String klagoSmsServer;
+
 }

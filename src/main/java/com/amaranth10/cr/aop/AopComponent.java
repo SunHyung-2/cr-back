@@ -17,7 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 @Aspect
 public class AopComponent {
 
-    @Around("execution(* com.amaranth10.cr.Controller.*.*(..))")
+    @Around("execution(* com.amaranth10.cr.Controller.*.*(..))"
+            + "&&!@annotation(com.amaranth10.cr.util.NoLogging)")
     public Object LogAspect(ProceedingJoinPoint pjp) throws Throwable {
 
         long startTime = System.currentTimeMillis();

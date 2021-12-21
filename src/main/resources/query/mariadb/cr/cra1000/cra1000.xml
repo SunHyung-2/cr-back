@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amaranth10.cr.cra.cra1000.mapper.CRA1000Mapper">
+
+    <select id="testData" resultType="com.amaranth10.cr.cra.cra1000.model.CRA1000Model">
+        select pid, pt_nm, dobr from cli.cbptbainmt
+    </select>
+
+</mapper>

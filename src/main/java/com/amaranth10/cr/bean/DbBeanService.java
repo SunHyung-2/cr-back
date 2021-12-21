@@ -21,7 +21,7 @@ public class DbBeanService {
         final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sessionFactory.setMapperLocations(resolver.getResources("classpath:query/"+dbType+"/*.xml"));//Mybatis xml 경로
+        sessionFactory.setMapperLocations(resolver.getResources("classpath:query/"+dbType+"/**/*.xml"));//Mybatis xml 경로
         return sessionFactory.getObject();
     }
 
