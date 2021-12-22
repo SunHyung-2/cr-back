@@ -35,11 +35,52 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
             result.setResultData(cra1000Mapper.testData()); // 결과 값(Object)
             return result;
         } catch (Exception e) {
-            System.out.println(e);
             KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
             result.setResultCode(50);
             result.setResultMsg("에러");
             return result;
         }
     }
+
+
+    /** CLRS0101 환자현황 ========================================================================================================================================== */
+    /** 환자현황 대기 환자수 조회 ------------------------------------------------------------------------------------------------------------------------------------   */
+    @Override
+    public APIResult patientCount(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.patientCount(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 환자현황 대기 리스트 ----------------------------------------------------------------------------------------------------------------------------------------   */
+    @Override
+    public APIResult patientList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.patientList(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+    /** ========================================================================================================================================================== */
 }

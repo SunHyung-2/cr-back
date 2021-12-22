@@ -7,4 +7,41 @@
         select pid, pt_nm, dobr from cli.cbptbainmt
     </select>
 
+<!--    CLRS0101 환자현황 ==========================================================================================================================================-->
+<!--    환자현황 대기 환자수 조회  -->
+    <select id="patientCount" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
+        SELECT COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd IN ('R', 'M') THEN 1 END) AS Rcount,
+               COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd = 'W' THEN 1 END) AS Wcount,
+               COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd = 'V' THEN 1 END) AS Vcount,
+               COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd IN ('T', 'D') THEN 1 END) AS Dcount,
+               COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd LIKE '%' THEN 1 END) AS Acount
+          FROM cli.cbotrcinnt
+         WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+           AND cbotrcinnt.mdcr_date = #{mdcr_date}
+           AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
+           AND cbotrcinnt.rcpn_stat_cd != 'C'
+    </select>
+
+<!--    환자현황 대기 리스트-->
+    <select id="patientList" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
+        SELECT cbptbainmt.pid,
+               cbptbainmt.pt_nm,
+               cbotrcinnt.mdcr_date,
+<!--               cli.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.rcpn_stat_cd) as rcpn_stat_cd,-->
+               cbotrcinnt.mdcr_hm,
+               cbotrcinnt.rcpn_sqno,
+               cbotrcinnt.rcpn_stat_cd as call_patient
+          FROM cli.cbptbainmt, cli.cbotrcinnt
+         WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+           AND cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
+           AND cbotrcinnt.pid = cbptbainmt.pid
+           AND cbotrcinnt.mdcr_date = #{mdcr_date}
+<!--           AND cbotrcinnt.rcpn_stat_cd IN (<foreach collection="array" item="item" separator=","> 'R' </foreach>)-->
+           AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
+           AND cbotrcinnt.rcpn_stat_cd != 'C'
+           AND cbptbainmt.del_yn = 'N'
+         ORDER BY cbotrcinnt.mdcr_hm
+    </select>
+<!--    ==========================================================================================================================================================-->
+
 </mapper>
