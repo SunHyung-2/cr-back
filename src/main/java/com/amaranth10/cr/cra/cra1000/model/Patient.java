@@ -34,4 +34,23 @@ public class Patient {
     private String Dcount; // 완료 환자 Count
     private String Acount; // 전체 환자 Count
 
+    private String pt_frrn; // 주민등록앞번호
+    private String pt_srrn; // 주민등록뒷번호
+    private String dobr; // 생년월일
+    private String clph_no; // 휴대폰번호
+    private String pstl_no; // 우편번호
+    private String basc_addr; // 기본주소
+    private String detl_addr; // 상세주소
+    private String vip_pt_yn; // vip 환자 여부
+    private String cncn_pt_yn; // 관심 환자 여부
+    private String priv_pt_yn; // 사생활 보호 환자 여부
+
+    private String type_asst_cd; // 유형보조코드
+    private String rcpn_memo; // 접수메모
+    private String cmhs_path_cd; // 내원경로코드
+
+    private String clr_dvsn; // 메모진료 구분자
+    private String clr_cnts; // 진료메모 내용
+    private String pat_dvsn; // 환자메모 구분자
+    private String pat_cnts; // 환재메모 내용
 }

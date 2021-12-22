@@ -44,4 +44,106 @@
     </select>
 <!--    ==========================================================================================================================================================-->
 
+
+<!--    CLRS0102 환자정보 ==========================================================================================================================================-->
+<!--    환자정보, 접수정보 조회      -->
+    <select id="patientDetails" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
+        SELECT cbptbainmt.pid,
+               cbptbainmt.pt_nm,
+               cbptbainmt.pt_frrn,
+               cbptbainmt.pt_srrn,
+               cbptbainmt.dobr,
+               cbptbainmt.sex_cd As sex,
+               cbptbainmt.clph_no,
+               cbptbainmt.pstl_no,
+               cbptbainmt.basc_addr,
+               cbptbainmt.detl_addr,
+               cbptbainmt.vip_pt_yn,
+               cbptbainmt.cncn_pt_yn,
+               cbptbainmt.priv_pt_yn,
+               cbotrcinnt.rcpn_sqno,
+               cbotrcinnt.mdcr_date,
+               cbotrcinnt.mdcr_hm,
+               cbotrcinnt.mddp_cd,
+               cbotrcinnt.mdcr_dr_id,
+               cbotrcinnt.fvnr_dvcd,
+               cbotrcinnt.insn_tycd,
+               cbotrcinnt.type_asst_cd,
+               cbotrcinnt.rcpn_memo,
+               cbotrcinnt.cmhs_path_cd,
+               cbptmeinnt1.memo_dvsn As clr_dvsn,
+               cbptmeinnt1.memo_cnts As clr_cnts,
+               cbptmeinnt2.memo_dvsn As pat_dvsn,
+               cbptmeinnt2.memo_cnts As pat_cnts
+        FROM cli.cbptbainmt, cli.cbotrcinnt
+        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt1
+          ON cbptmeinnt1.hspt_cd = #{hspt_cd}
+         AND cbptmeinnt1.pid = #{pid}
+         AND cbptmeinnt1.memo_dvsn = 'CLR'
+        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt2
+          ON cbptmeinnt2.hspt_cd = #{hspt_cd}
+         AND cbptmeinnt2.pid = #{pid}
+         AND cbptmeinnt2.memo_dvsn = 'PAT'
+        WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+          AND cbptbainmt.hspt_cd = cbotrcinnt.hspt_cd
+          AND cbotrcinnt.pid = #{pid}
+          AND cbptbainmt.pid = cbotrcinnt.pid
+          AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+    </select>
+
+<!--    관심환자 여부 수정     -->
+    <update id="updatePtCncn">
+        UPDATE cli.cbptbainmt
+           SET cbptbainmt.cncn_pt_yn = #{cncn_pt_yn}
+        WHERE cbptbainmt.hspt_cd = #{hspt_cd}
+          AND cbptbainmt.pid = #{pid}
+    </update>
+
+<!--    접수메모 저장 및 수정    -->
+    <update id="patientRcpnMemo">
+        UPDATE cli.cbotrcinnt
+        SET cbotrcinnt.rcpn_memo = #{rcpn_memo}
+        WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+        AND cbotrcinnt.pid = #{pid}
+        AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+    </update>
+
+<!--    진료메모 & 환자메모 저장      -->
+
+<!--    진료메모 & 환자메모 수정      -->
+
+<!--    보험 구분 목록   -->
+<!--    초재진 구분 목록   -->
+<!--    부서 목록    -->
+<!--    외래경로 목록     -->
+<!--    내원목적 목록     -->
+    <select id="">
+
+    </select>
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0103 신체사정정보 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0104 검사결과 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0105 경과기록 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0106 처방조회 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0107 진단 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
+
+<!--    CLRS0108 처방 ==========================================================================================================================================-->
+<!--    ==========================================================================================================================================================-->
+
 </mapper>
