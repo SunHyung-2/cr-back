@@ -85,4 +85,84 @@ public class CRA1000Controller {
     };
     /** ========================================================================================================================================================== */
 
+
+    /** CLRS0102 환자정보 ========================================================================================================================================== */
+    /** 환자정보 접수정보 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/patientDetails", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult patientDetails(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("patientDetails" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.patientDetails(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 관심환자 여부 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/updatePtCncn", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult updatePtCncn(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("updatePtCncn" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.updatePtCncn(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 접수메모 저장 및 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/patientRcpnMemo", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult patientRcpnMemo(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("patientRcpnMemo" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.patientRcpnMemo(requestInfo, requestModel);
+        return result;
+    };
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0103 신체사정정보 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0104 검사결과 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0105 경과기록 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0107 진단 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
+
+
+    /** CLRS0108 처방 ========================================================================================================================================== */
+    /** ========================================================================================================================================================== */
 }
