@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.amaranth10.cr.cra.cra3000.mapper.CRA3000Mapper">
-    <select id="setPrscList"  resultType="com.amaranth10.cr.cra.cra3000.model.SetPrsc">
+<!--    약속처방 목록     -->
+    <select id="setList"  resultType="com.amaranth10.cr.cra.cra3000.model.SetPrsc">
         SELECT crsetprsmt.set_prsc_sqno,
                crsetprsmt.set_prsc_nm,
                crsetprsmt.set_prsc_uprn_sqno
@@ -11,4 +12,46 @@
           AND crsetprsmt.set_prsc_usid = #{usid}
         ORDER BY crsetprsmt.set_prsc_sqno
     </select>
+
+<!--    약속처방 검색 목록      -->
+    <select id="searchSetList" resultType="com.amaranth10.cr.cra.cra3000.model.SetPrsc">
+        SELECT crsetprsmt.set_prsc_sqno,
+               crsetprsmt.set_prsc_nm,
+               crsetprsmt.set_prsc_uprn_sqno
+        FROM cli_dev.crsetprsmt
+        WHERE crsetprsmt.hspt_cd = #{hspt_cd}
+          AND crsetprsmt.set_prsc_usid = #{usid}
+          AND crsetprsmt.set_prsc_nm like concat ("%", #{keyword}, "%")
+          AND crsetprsmt.set_prsc_sqno != 1
+        ORDER BY crsetprsmt.set_prsc_sqno
+    </select>
+
+<!--    약속처방 진단 내역     -->
+    <select id="setDgnsList" resultType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
+        SELECT crsetdigdt.dgns_cd,
+               crsetdigdt.dgns_nm,
+               crsetdigdt.dgns_site_cd As site_dvcd
+        FROM cli_dev.crsetdigdt
+        WHERE crsetdigdt.set_prsc_sqno = #{set_cd}
+        ORDER BY crsetdigdt.sort_sqno
+    </select>
+
+<!--    약속처방 처방 내역     -->
+    <select id="setPrscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
+        SELECT crsetprsdt.prsc_cd,
+                crsetprsdt.prsc_nm,
+                crsetprsdt.mix_yn As mix_no,
+                crsetprsdt.prsc_dosg1 As dosg_1,
+                crsetprsdt.prsc_notm As notm,
+                crsetprsdt.prsc_nody As nody,
+                crsetprsdt.iotm_cd,
+                crsetprsdt.inpy_dvcd,
+                crsetprsdt.hsin_hsot_dvcd,
+                crsetprsdt.spfm_excp_resn_cd As hsin_prsc_resn_cd
+        FROM cli_dev.crsetprsdt
+        WHERE crsetprsdt.set_prsc_sqno = #{set_cd}
+        ORDER BY crsetprsdt.sort_sqno
+    </select>
+
+<!--    약속처방 진단 저장      -->
 </mapper>

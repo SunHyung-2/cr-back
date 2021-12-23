@@ -70,10 +70,17 @@
                cbotrcinnt.mddp_cd,
                cbotrcinnt.mdcr_dr_id,
                cbotrcinnt.fvnr_dvcd,
-               cbotrcinnt.insn_tycd,
-               cbotrcinnt.type_asst_cd,
+<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.fvnr_dvcd) as fvnr_dvcd,-->
+
+        cbotrcinnt.insn_tycd,
+<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.insn_tycd) as rcpn_stat_cd,-->
+
+        cbotrcinnt.type_asst_cd,
+<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.type_asst_cd) as rcpn_stat_cd,-->
+
                cbotrcinnt.rcpn_memo,
                cbotrcinnt.cmhs_path_cd,
+<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, 'C4004', cbotrcinnt.cmhs_path_cd) as rcpn_stat_cd,-->
                cbptmeinnt1.memo_dvsn As clr_dvsn,
                cbptmeinnt1.memo_cnts As clr_cnts,
                cbptmeinnt2.memo_dvsn As pat_dvsn,
