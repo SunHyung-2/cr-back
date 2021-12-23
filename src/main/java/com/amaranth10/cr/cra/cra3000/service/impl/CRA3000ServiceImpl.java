@@ -21,7 +21,7 @@ public class CRA3000ServiceImpl implements ICRA3000Service {
     @Autowired
     private CRA3000ServiceImpl CRA3000ServiceImpl;
 
-//   약속처방 목록
+    /** 약속처방 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @Override
     public APIResult setPrscList(RequestInfo requestInfo, RequestModel requestModel) {
         APIResult result = new APIResult();

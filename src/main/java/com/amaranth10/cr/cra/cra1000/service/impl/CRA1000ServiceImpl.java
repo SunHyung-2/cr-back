@@ -166,6 +166,43 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
 
     /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** Slip 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult slipList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.slipList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** Slip 수가 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult slipPrscList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.slipPrscList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 
@@ -174,6 +211,24 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
 
     /** CLRS0108 처방 ========================================================================================================================================== */
+    /** 처방 검색 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult prscMList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.prscMList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 }

@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Perscription {
+public class Prescription {
     private String prsc_cd; // 처방코드
     private String prsc_nm; // 처방명
     private String prsc_sqno; // 처방일련번호

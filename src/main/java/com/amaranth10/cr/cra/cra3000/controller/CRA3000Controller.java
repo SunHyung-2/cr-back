@@ -27,7 +27,7 @@ public class CRA3000Controller {
     @Autowired
     SessionManager sessionManager;
 
-//    약속처방 목록
+    /** 약속처방 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @RequestMapping(value = "/setPrscList", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public APIResult setPrscList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
