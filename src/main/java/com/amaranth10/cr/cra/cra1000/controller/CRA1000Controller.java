@@ -193,6 +193,42 @@ public class CRA1000Controller {
 
 
     /** CLRS0107 진단 ========================================================================================================================================== */
+    /** 진단 검색 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/dgnsMList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult dgnsMList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("dgnsMList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.dgnsMList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 진단 내역 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/dgnsList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult dgnsList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("dgnsList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.dgnsList(requestInfo, requestModel);
+        return result;
+    };
+
     /** ========================================================================================================================================================== */
 
 
@@ -214,5 +250,24 @@ public class CRA1000Controller {
         result = cra1000ServiceImpl.prscMList(requestInfo, requestModel);
         return result;
     };
+
+    /** 처방 내역 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/prscList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult prscList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("prscList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.prscList(requestInfo, requestModel);
+        return result;
+    };
+
     /** ========================================================================================================================================================== */
 }
