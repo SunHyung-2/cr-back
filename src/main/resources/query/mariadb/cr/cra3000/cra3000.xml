@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amaranth10.cr.cra.cra3000.mapper.CRA3000Mapper">
+    <select id="setPrscList"  resultType="com.amaranth10.cr.cra.cra3000.model.SetPrsc">
+        SELECT  *
+        FROM cli_dev.crsetprsmt
+        WHERE crsetprsmt.hspt_cd = #{hspt_cd}
+        AND crsetprsmt.set_prsc_usid = #{usid}
+        ORDER BY crsetprsmt.set_prsc_sqno
+    </select>
+</mapper>
