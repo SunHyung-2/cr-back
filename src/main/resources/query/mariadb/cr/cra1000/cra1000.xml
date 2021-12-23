@@ -4,7 +4,7 @@
 <mapper namespace="com.amaranth10.cr.cra.cra1000.mapper.CRA1000Mapper">
 
     <select id="testData" resultType="com.amaranth10.cr.cra.cra1000.model.CRA1000Model">
-        select pid, pt_nm, dobr from cli.cbptbainmt
+        select pid, pt_nm, dobr from cli_dev.cbptbainmt
     </select>
 
 <!--    CLRS0101 환자현황 ==========================================================================================================================================-->
@@ -15,7 +15,7 @@
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd = 'V' THEN 1 END) AS Vcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd IN ('T', 'D') THEN 1 END) AS Dcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd LIKE '%' THEN 1 END) AS Acount
-          FROM cli.cbotrcinnt
+          FROM cli_dev.cbotrcinnt
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.mdcr_date = #{mdcr_date}
            AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
@@ -27,16 +27,19 @@
         SELECT cbptbainmt.pid,
                cbptbainmt.pt_nm,
                cbotrcinnt.mdcr_date,
-<!--               cli.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.rcpn_stat_cd) as rcpn_stat_cd,-->
+               cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.rcpn_stat_cd) as rcpn_stat_cd,
                cbotrcinnt.mdcr_hm,
                cbotrcinnt.rcpn_sqno,
                cbotrcinnt.rcpn_stat_cd as call_patient
-          FROM cli.cbptbainmt, cli.cbotrcinnt
+          FROM cli_dev.cbptbainmt, cli_dev.cbotrcinnt
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
            AND cbotrcinnt.pid = cbptbainmt.pid
            AND cbotrcinnt.mdcr_date = #{mdcr_date}
-<!--           AND cbotrcinnt.rcpn_stat_cd IN (<foreach collection="array" item="item" separator=","> 'R' </foreach>)-->
+           AND cbotrcinnt.rcpn_stat_cd IN (
+               <foreach collection="rcpn_stat_list" item="item" separator=",">
+                   #{item}
+               </foreach>)
            AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
            AND cbotrcinnt.rcpn_stat_cd != 'C'
            AND cbptbainmt.del_yn = 'N'
@@ -75,12 +78,12 @@
                cbptmeinnt1.memo_cnts As clr_cnts,
                cbptmeinnt2.memo_dvsn As pat_dvsn,
                cbptmeinnt2.memo_cnts As pat_cnts
-        FROM cli.cbptbainmt, cli.cbotrcinnt
-        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt1
+        FROM cli_dev.cbptbainmt, cli_dev.cbotrcinnt
+        LEFT OUTER JOIN cli_dev.cbptmeinnt As cbptmeinnt1
           ON cbptmeinnt1.hspt_cd = #{hspt_cd}
          AND cbptmeinnt1.pid = #{pid}
          AND cbptmeinnt1.memo_dvsn = 'CLR'
-        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt2
+        LEFT OUTER JOIN cli_dev.cbptmeinnt As cbptmeinnt2
           ON cbptmeinnt2.hspt_cd = #{hspt_cd}
          AND cbptmeinnt2.pid = #{pid}
          AND cbptmeinnt2.memo_dvsn = 'PAT'
@@ -93,7 +96,7 @@
 
 <!--    관심환자 여부 수정     -->
     <update id="updatePtCncn">
-        UPDATE cli.cbptbainmt
+        UPDATE cli_dev.cbptbainmt
            SET cbptbainmt.cncn_pt_yn = #{cncn_pt_yn}
         WHERE cbptbainmt.hspt_cd = #{hspt_cd}
           AND cbptbainmt.pid = #{pid}
@@ -101,7 +104,7 @@
 
 <!--    접수메모 저장 및 수정    -->
     <update id="patientRcpnMemo">
-        UPDATE cli.cbotrcinnt
+        UPDATE cli_dev.cbotrcinnt
         SET cbotrcinnt.rcpn_memo = #{rcpn_memo}
         WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
         AND cbotrcinnt.pid = #{pid}

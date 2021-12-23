@@ -9,12 +9,19 @@ spring:
     hikari:
       maximum-pool-size: 4
     url: jdbc:mariadb://172.16.131.11:3306/
-    username: tes_admin
-    password: tjdrhd@roqkf&
+#    username: tes_admin
+#    password: tjdrhd@ro
+    username: tes
+    password: '!@his09'
     driver-class-name: org.mariadb.jdbc.Driver
   messages:
     basename: i18n/common/messages
     encoding: UTF-8
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
 Klago:
   mode: live
   dbType: mariadb

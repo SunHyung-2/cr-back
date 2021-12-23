@@ -76,6 +76,8 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         APIResult result = new APIResult();
 
         Object param = requestModel.getData();
+        System.out.println("param = " + param);
+
         try {
             result.setResultCode(HttpServletResponse.SC_OK);
             result.setResultMsg("성공");
