@@ -7,5 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface CRA3000Mapper {
+    /** 약속처방 목록 -------------------------------------------------------------------------------------------------------------------------------------  */
     List<SetPrsc> setPrscList (Object param);
 }

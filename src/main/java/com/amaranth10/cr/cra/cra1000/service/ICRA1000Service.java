@@ -1,6 +1,7 @@
 package com.amaranth10.cr.cra.cra1000.service;
 
 import com.amaranth10.backendcommon.util.model.APIResult;
+import com.amaranth10.backendcommon.util.model.APIResultT;
 import com.amaranth10.cr.model.RequestModel;
 import klago.log.utils.RequestInfo;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,11 @@ public interface ICRA1000Service {
 
 
     /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** Slip 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    APIResult slipList(RequestInfo requestInfo, RequestModel requestModel);
+
+    /** Slip 수가 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    APIResult slipPrscList(RequestInfo requestInfo, RequestModel requestModel);
     /** ========================================================================================================================================================== */
 
 
@@ -53,6 +59,9 @@ public interface ICRA1000Service {
 
 
     /** CLRS0108 처방 ========================================================================================================================================== */
+    /** 처방 검색 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    APIResult prscMList(RequestInfo requestInfo, RequestModel requestModel);
+
     /** ========================================================================================================================================================== */
 
 }

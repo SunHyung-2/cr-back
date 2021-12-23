@@ -154,6 +154,41 @@ public class CRA1000Controller {
 
 
     /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** SLIP 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/slipList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult slipList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("slipList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.slipList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** Slip 수가 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/slipPrscList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult slipPrscList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("slipPrscList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.slipPrscList(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 
 
@@ -162,5 +197,22 @@ public class CRA1000Controller {
 
 
     /** CLRS0108 처방 ========================================================================================================================================== */
+    /** 처방 검색 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/prscMList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult prscMList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("prscMList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.prscMList(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 }

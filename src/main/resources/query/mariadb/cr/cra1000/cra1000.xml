@@ -120,9 +120,7 @@
 <!--    부서 목록    -->
 <!--    외래경로 목록     -->
 <!--    내원목적 목록     -->
-    <select id="">
 
-    </select>
 <!--    ==========================================================================================================================================================-->
 
 
@@ -139,6 +137,26 @@
 
 
 <!--    CLRS0106 처방조회 ==========================================================================================================================================-->
+<!--    SLIP 목록     -->
+    <select id="slipList" resultType="com.amaranth10.cr.cra.cra1000.model.Slip">
+        SELECT crslipclmt.slip_cd,
+               crslipclmt.slip_nm,
+               crslipclmt.clsf_dvcd
+        FROM cli_dev.crslipclmt
+        WHERE crslipclmt.hspt_cd = #{hspt_cd}
+        ORDER BY crslipclmt.slip_cd
+    </select>
+
+<!--    SLIP 수가 항목      -->
+    <select id="slipPrscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
+        SELECT crprsccdmt.prsc_cd,
+               crprsccdmt.prsc_nm
+        FROM cli_dev.crprsccdmt
+        WHERE crprsccdmt.hspt_cd = #{hspt_cd}
+        AND crprsccdmt.slip_cd = #{slip_cd}
+        AND crprsccdmt.prsc_psbl_yn = "Y"
+        ORDER BY crprsccdmt.prsc_nm
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 
@@ -147,6 +165,30 @@
 
 
 <!--    CLRS0108 처방 ==========================================================================================================================================-->
+<!--    처방 검색       -->
+    <select id="prscMList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
+        SELECT crprsccdmt.prsc_cd,
+        crprsccdmt.prsc_nm,
+        crprsccdmt.prsc_clsf_cd,
+        crprsccdmt.slip_cd,
+        crprsccdmt.drug_injc_dvsn,
+        crprsccdmt.iotm_cd,
+        crprsccdmt.inpy_dvcd,
+        crprsccdmt.basc_dosg As dosg_1,
+        crprsccdmt.basc_notm As notm,
+<!--        crprsccdmt.prsc_psbl_yn,-->
+        crprsccdmt.basc_aomd_uncd,
+        crprsccdmt.spcm_cd_1,
+        crprsccdmt.spcm_ctnr_cd_1,
+        crprsccdmt.hsot_prsc_yn As hsin_hsot_dvcd,
+        crprsccdmt.spfm_excp_cd As hsin_prsc_resn_cd,
+        crprsccdmt.ctnt_uncd As uncd,
+        crprsccdmt.exmn_rslt_uncd
+        FROM cli_dev.crprsccdmt
+        WHERE crprsccdmt.hspt_cd = #{hspt_cd}
+          AND crprsccdmt.prsc_psbl_yn = "Y"
+          AND (crprsccdmt.prsc_cd like concat("%", #{keyword}, "%") OR crprsccdmt.prsc_nm like concat("%",#{keyword},"%"))
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 </mapper>
