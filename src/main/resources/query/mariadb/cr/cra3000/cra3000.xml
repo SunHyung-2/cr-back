@@ -21,7 +21,7 @@
         FROM cli_dev.crsetprsmt
         WHERE crsetprsmt.hspt_cd = #{hspt_cd}
           AND crsetprsmt.set_prsc_usid = #{usid}
-          AND crsetprsmt.set_prsc_nm like concat ("%", #{keyword}, "%")
+          AND crsetprsmt.set_prsc_nm LIKE CONCAT ("%", #{keyword}, "%")
           AND crsetprsmt.set_prsc_sqno != 1
         ORDER BY crsetprsmt.set_prsc_sqno
     </select>

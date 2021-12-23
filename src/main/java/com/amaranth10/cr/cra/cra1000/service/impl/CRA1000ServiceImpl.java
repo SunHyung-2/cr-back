@@ -207,6 +207,44 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
 
     /** CLRS0107 진단 ========================================================================================================================================== */
+    /** 진단 검색 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult dgnsMList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.dgnsMList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 진단 내역 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult dgnsList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.dgnsList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** ========================================================================================================================================================== */
 
 
@@ -229,6 +267,27 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
             return result;
         }
     }
+
+    /** 처방 내역 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult prscList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.prscList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+
     /** ========================================================================================================================================================== */
 
 }
