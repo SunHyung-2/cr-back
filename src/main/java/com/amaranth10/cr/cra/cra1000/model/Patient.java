@@ -26,8 +26,7 @@ public class Patient {
     private String mdcr_dr_id; // 진료의
     private String mddp_cd; // 진료과
     private String rcpn_sqno; // 접수 일련번호
-
-    private  Map<String, Object> rcpn_stat_list; // 상태
+    private String[] rcpn_stat_list; // 상태
     private String Rcount; // 대기 환자 Count
     private String Wcount; // 보류 환자 Count
     private String Vcount; // 예약 환자 Count

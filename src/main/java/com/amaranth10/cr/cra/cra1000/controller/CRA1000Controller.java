@@ -77,8 +77,6 @@ public class CRA1000Controller {
         requestModel.setSessionInfo(userInfo);
         requestModel.setData(param);
 
-        System.out.println(param);
-
         APIResult result = new APIResult();
         result = cra1000ServiceImpl.patientList(requestInfo, requestModel);
         return result;
