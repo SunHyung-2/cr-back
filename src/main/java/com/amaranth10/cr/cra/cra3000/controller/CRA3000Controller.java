@@ -28,6 +28,60 @@ public class CRA3000Controller {
     SessionManager sessionManager;
 
     /** 약속처방 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/setList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult setList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("setList" + param);
+
+        APIResult result = new APIResult();
+        result = cra3000ServiceImpl.setList(requestInfo, requestModel);
+        return result;
+    }
+
+    /** 약속처방 검색 목록 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/searchSetList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult searchSetList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("searchSetList" + param);
+
+        APIResult result = new APIResult();
+        result = cra3000ServiceImpl.searchSetList(requestInfo, requestModel);
+        return result;
+    }
+
+    /** 약속처방 진단 상세 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/setDgnsList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult setDgnsList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("setDgnsList" + param);
+
+        APIResult result = new APIResult();
+        result = cra3000ServiceImpl.setDgnsList(requestInfo, requestModel);
+        return result;
+    }
+
+    /** 약속처방 처방 상세 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @RequestMapping(value = "/setPrscList", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public APIResult setPrscList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
@@ -38,8 +92,11 @@ public class CRA3000Controller {
         requestModel.setSessionInfo(userInfo);
         requestModel.setData(param);
 
+        System.out.println("setPrscList" + param);
+
         APIResult result = new APIResult();
         result = cra3000ServiceImpl.setPrscList(requestInfo, requestModel);
         return result;
     }
+
 }
