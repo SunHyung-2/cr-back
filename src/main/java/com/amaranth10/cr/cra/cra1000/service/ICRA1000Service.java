@@ -13,6 +13,9 @@ public interface ICRA1000Service {
     APIResult selectTest(RequestInfo requestInfo, RequestModel requestModel);
 
     /** CLRS0101 환자현황 ========================================================================================================================================== */
+    /** 환자현황 진료의 목록 조회 ------------------------------------------------------------------------------------------------------------------------------------   */
+    APIResult doctList(RequestInfo requestInfo, RequestModel requestModel);
+
     /** 환자현황 대기 환자수 조회 ------------------------------------------------------------------------------------------------------------------------------------   */
     APIResult patientCount(RequestInfo requestInfo, RequestModel requestModel);
 

@@ -48,6 +48,22 @@ public class CRA1000Controller {
     }
 
     /** CLRS0101 환자현황 ========================================================================================================================================== */
+    /** 환자현황 진료의 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/doctList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult doctList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.doctList(requestInfo, requestModel);
+        return result;
+    };
     /** 환자현황 대기 환자수 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @RequestMapping(value = "/patientCount", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody

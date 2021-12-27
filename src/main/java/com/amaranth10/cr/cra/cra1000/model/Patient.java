@@ -28,12 +28,6 @@ public class Patient {
     private String mdcr_dr_id; // 진료의
     private String mddp_cd; // 진료과
     private String rcpn_sqno; // 접수 일련번호
-    private String[] rcpn_stat_list; // 상태
-    private String Rcount; // 대기 환자 Count
-    private String Wcount; // 보류 환자 Count
-    private String Vcount; // 예약 환자 Count
-    private String Dcount; // 완료 환자 Count
-    private String Acount; // 전체 환자 Count
 
     private String pt_frrn; // 주민등록앞번호
     private String pt_srrn; // 주민등록뒷번호

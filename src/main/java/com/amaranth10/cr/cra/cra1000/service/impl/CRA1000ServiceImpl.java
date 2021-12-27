@@ -50,6 +50,26 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
 
     /** CLRS0101 환자현황 ========================================================================================================================================== */
+    /** 환자현황 진료의 목록 조회 ------------------------------------------------------------------------------------------------------------------------------------   */
+    @Override
+    public APIResult doctList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.doctList(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** 환자현황 대기 환자수 조회 ------------------------------------------------------------------------------------------------------------------------------------   */
     @Override
     public APIResult patientCount(RequestInfo requestInfo, RequestModel requestModel) {
@@ -76,7 +96,6 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         APIResult result = new APIResult();
 
         Object param = requestModel.getData();
-        System.out.println("param = " + param);
 
         try {
             result.setResultCode(HttpServletResponse.SC_OK);

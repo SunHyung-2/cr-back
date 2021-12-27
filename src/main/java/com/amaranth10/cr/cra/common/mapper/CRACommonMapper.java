@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface CRACommonMapper {
-
+    /** 환자 접수상태 변경 */
+    void updateRcpnStat(Object param);
 }
