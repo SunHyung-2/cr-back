@@ -22,7 +22,9 @@ public class Patient {
     private String age; // 나이
     private String call_patient; // 호출
     private String insn_tycd; // 보험구분
+    private String insn_tycd_nm;
     private String fvnr_dvcd; // 초재진구분
+    private String fvnr_dvcd_nm;
     private String mdcr_dr_id; // 진료의
     private String mddp_cd; // 진료과
     private String rcpn_sqno; // 접수 일련번호
@@ -36,6 +38,7 @@ public class Patient {
     private String pt_frrn; // 주민등록앞번호
     private String pt_srrn; // 주민등록뒷번호
     private String dobr; // 생년월일
+    private String cntc_tel; // 연락전화번호
     private String clph_no; // 휴대폰번호
     private String pstl_no; // 우편번호
     private String basc_addr; // 기본주소
@@ -45,8 +48,10 @@ public class Patient {
     private String priv_pt_yn; // 사생활 보호 환자 여부
 
     private String type_asst_cd; // 유형보조코드
+    private String type_asst_cd_nm;
     private String rcpn_memo; // 접수메모
     private String cmhs_path_cd; // 내원경로코드
+    private String cmhs_path_cd_nm;
 
     private String clr_dvsn; // 메모진료 구분자
     private String clr_cnts; // 진료메모 내용

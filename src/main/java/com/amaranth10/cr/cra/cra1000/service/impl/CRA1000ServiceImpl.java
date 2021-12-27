@@ -150,6 +150,59 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
             return result;
         }
     }
+
+    /** 진료메모 & 환자메모 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult saveClrPtMemo(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.saveClrPtMemo(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 진료메모 & 환자메모 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult updateClrPtMemo(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.updateClrPtMemo(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 환자정보 접수정보 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+            public APIResult updatePtRcpn(RequestInfo requestInfo, RequestModel requestModel) {
+                APIResult result = new APIResult();
+
+                Object param = requestModel.getData();
+                try {
+                    cra1000Mapper.updatePtRcpn(param);
+                    return null;
+                } catch (Exception e) {
+                    KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+                    result.setResultCode(50);
+                    result.setResultMsg("에러");
+                    return result;
+        }
+    }
+
+
     /** ========================================================================================================================================================== */
 
 
@@ -245,6 +298,22 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         }
     }
 
+    /** 진단 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult savePtDgns(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.savePtDgns(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 
