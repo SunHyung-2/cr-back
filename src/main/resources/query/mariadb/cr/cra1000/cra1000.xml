@@ -8,14 +8,23 @@
     </select>
 
 <!--    CLRS0101 환자현황 ==========================================================================================================================================-->
+<!--    환자현황 진료의 목록 조회  -->
+    <select id="doctList" resultType="java.util.HashMap">
+        SELECT usid as value, user_nm as labelText
+          FROM cli.cxusemngmt
+         WHERE cxusemngmt.hspt_cd = #{hspt_cd}
+           AND cxusemngmt.otpt_mdcr_dr_yn = 'Y'
+           AND cxusemngmt.del_yn = 'N'
+         ORDER BY user_nm
+    </select>
 <!--    환자현황 대기 환자수 조회  -->
-    <select id="patientCount" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
+    <select id="patientCount" resultType="java.util.HashMap">
         SELECT COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd IN ('R', 'M') THEN 1 END) AS Rcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd = 'W' THEN 1 END) AS Wcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd = 'V' THEN 1 END) AS Vcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd IN ('T', 'D') THEN 1 END) AS Dcount,
                COUNT(CASE WHEN cbotrcinnt.rcpn_stat_cd LIKE '%' THEN 1 END) AS Acount
-          FROM cli_dev.cbotrcinnt
+          FROM cli.cbotrcinnt
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.mdcr_date = #{mdcr_date}
            AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
@@ -27,11 +36,11 @@
         SELECT cbptbainmt.pid,
                cbptbainmt.pt_nm,
                cbotrcinnt.mdcr_date,
-               cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.rcpn_stat_cd) as rcpn_stat_cd,
+               cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4001', cbotrcinnt.rcpn_stat_cd) as rcpn_stat_cd,
                cbotrcinnt.mdcr_hm,
                cbotrcinnt.rcpn_sqno,
                cbotrcinnt.rcpn_stat_cd as call_patient
-        FROM cli_dev.cbptbainmt, cli_dev.cbotrcinnt
+        FROM cli.cbptbainmt, cli.cbotrcinnt
         WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
           AND cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
           AND cbotrcinnt.pid = cbptbainmt.pid
