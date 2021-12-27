@@ -154,6 +154,62 @@ public class CRA1000Controller {
         result = cra1000ServiceImpl.patientRcpnMemo(requestInfo, requestModel);
         return result;
     };
+
+    /** 진료메모 & 환자메모 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/saveClrPtMemo", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult saveClrPtMemo(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("saveClrPtMemo" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.saveClrPtMemo(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 진료메모 & 환자메모 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/updateClrPtMemo", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult updateClrPtMemo(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("updateClrPtMemo" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.updateClrPtMemo(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 환자정보 접수정보 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/updatePtRcpn", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult updatePtRcpn(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("updatePtRcpn" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.updatePtRcpn(requestInfo, requestModel);
+        return result;
+    };
+
+
     /** ========================================================================================================================================================== */
 
 
@@ -242,6 +298,24 @@ public class CRA1000Controller {
 
         APIResult result = new APIResult();
         result = cra1000ServiceImpl.dgnsList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 진단 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/savePtDgns", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult savePtDgns(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("savePtDgns" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.savePtDgns(requestInfo, requestModel);
         return result;
     };
 

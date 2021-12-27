@@ -4,7 +4,7 @@
 <mapper namespace="com.amaranth10.cr.cra.cra1000.mapper.CRA1000Mapper">
 
     <select id="testData" resultType="com.amaranth10.cr.cra.cra1000.model.CRA1000Model">
-        select pid, pt_nm, dobr from cli_dev.cbptbainmt
+        select pid, pt_nm, dobr from cli.cbptbainmt
     </select>
 
 <!--    CLRS0101 환자현황 ==========================================================================================================================================-->
@@ -66,6 +66,7 @@
                cbptbainmt.pt_srrn,
                cbptbainmt.dobr,
                cbptbainmt.sex_cd As sex,
+               cbptbainmt.cntc_tel,
                cbptbainmt.clph_no,
                cbptbainmt.pstl_no,
                cbptbainmt.basc_addr,
@@ -79,27 +80,24 @@
                cbotrcinnt.mddp_cd,
                cbotrcinnt.mdcr_dr_id,
                cbotrcinnt.fvnr_dvcd,
-<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.fvnr_dvcd) as fvnr_dvcd,-->
-
-        cbotrcinnt.insn_tycd,
-<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.insn_tycd) as rcpn_stat_cd,-->
-
-        cbotrcinnt.type_asst_cd,
-<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, '접수상태', cbotrcinnt.type_asst_cd) as rcpn_stat_cd,-->
-
+        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) As fvnr_dvcd_nm,
+               cbotrcinnt.insn_tycd,
+        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB3007', cbotrcinnt.insn_tycd) As insn_tycd_nm,
+               cbotrcinnt.type_asst_cd,
+<!--        cli.fn_get_commname(cbotrcinnt.mdcr_date, '보험보조유형', cbotrcinnt.type_asst_cd) as type_asst_cd,-->
                cbotrcinnt.rcpn_memo,
                cbotrcinnt.cmhs_path_cd,
-<!--        cli_dev.fn_get_commname(cbotrcinnt.mdcr_date, 'C4004', cbotrcinnt.cmhs_path_cd) as rcpn_stat_cd,-->
+        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4004', cbotrcinnt.cmhs_path_cd) As cmhs_path_cd_nm,
                cbptmeinnt1.memo_dvsn As clr_dvsn,
                cbptmeinnt1.memo_cnts As clr_cnts,
                cbptmeinnt2.memo_dvsn As pat_dvsn,
                cbptmeinnt2.memo_cnts As pat_cnts
-        FROM cli_dev.cbptbainmt, cli_dev.cbotrcinnt
-        LEFT OUTER JOIN cli_dev.cbptmeinnt As cbptmeinnt1
+        FROM cli.cbptbainmt, cli.cbotrcinnt
+        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt1
           ON cbptmeinnt1.hspt_cd = #{hspt_cd}
          AND cbptmeinnt1.pid = #{pid}
          AND cbptmeinnt1.memo_dvsn = 'CLR'
-        LEFT OUTER JOIN cli_dev.cbptmeinnt As cbptmeinnt2
+        LEFT OUTER JOIN cli.cbptmeinnt As cbptmeinnt2
           ON cbptmeinnt2.hspt_cd = #{hspt_cd}
          AND cbptmeinnt2.pid = #{pid}
          AND cbptmeinnt2.memo_dvsn = 'PAT'
@@ -112,7 +110,7 @@
 
 <!--    관심환자 여부 수정     -->
     <update id="updatePtCncn">
-        UPDATE cli_dev.cbptbainmt
+        UPDATE cli.cbptbainmt
            SET cbptbainmt.cncn_pt_yn = #{cncn_pt_yn}
         WHERE cbptbainmt.hspt_cd = #{hspt_cd}
           AND cbptbainmt.pid = #{pid}
@@ -120,16 +118,57 @@
 
 <!--    접수메모 저장 및 수정    -->
     <update id="patientRcpnMemo">
-        UPDATE cli_dev.cbotrcinnt
-        SET cbotrcinnt.rcpn_memo = #{rcpn_memo}
+        UPDATE cli.cbotrcinnt
+           SET cbotrcinnt.rcpn_memo = #{rcpn_memo}
         WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
-        AND cbotrcinnt.pid = #{pid}
-        AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+          AND cbotrcinnt.pid = #{pid}
+          AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
     </update>
 
 <!--    진료메모 & 환자메모 저장      -->
-
+    <insert id="saveClrPtMemo">
+        INSERT INTO cli.cbptmeinnt (hspt_cd, frst_rgst_usid, last_updt_usid, pid, memo_dvsn, memo_cnts)
+        VALUES (#{hspt_cd}, #{usid}, #{usid}, #{pid}, #{memo_dvsn}, #{memo_cnts})
+    </insert>
 <!--    진료메모 & 환자메모 수정      -->
+    <update id="updateClrPtMemo">
+        UPDATE cli.cbptmeinnt
+        SET last_updt_usid = #{usid},
+            last_uddt = #{date},
+            memo_cnts = #{memo_cnts}
+        WHERE cbptmeinnt.hspt_cd = #{hspt_cd}
+          AND cbptmeinnt.pid = #{pid}
+          AND cbptmeinnt.memo_dvsn = #{memo_dvsn}
+    </update>
+
+<!--    환자정보, 접수정보 수정     -->
+    <update id="updatePtRcpn">
+        UPDATE cli.cbptbainmt As cbptbainmt
+        JOIN cli.cbotrcinnt As cbotrcinnt
+          ON cbptbainmt.hspt_cd = #{hspt_cd}
+         AND cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
+         AND cbptbainmt.pid = #{pid}
+         AND cbotrcinnt.pid = cbptbainmt.pid
+         AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+        SET cbptbainmt.last_updt_usid = #{usid},
+            cbptbainmt.last_uddt = #{date},
+            cbptbainmt.cntc_tel = #{cntc_tel},
+            cbptbainmt.clph_no = #{clph_no},
+            cbptbainmt.pstl_no = #{pstl_no},
+            cbptbainmt.basc_addr = #{basc_addr},
+            cbptbainmt.detl_addr = #{detl_addr},
+            cbptbainmt.vip_pt_yn = #{vip_pt_yn},
+            cbptbainmt.priv_pt_yn = #{priv_pt_yn},
+            cbotrcinnt.last_updt_usid = #{usid},
+            cbotrcinnt.last_uddt = #{date},
+            cbotrcinnt.mdcr_date = #{mdcr_date},
+            cbotrcinnt.mdcr_hm = #{mdcr_hm},
+            cbotrcinnt.mddp_cd = #{mddp_cd},
+            cbotrcinnt.mdcr_dr_id = #{mdcr_dr_id},
+            cbotrcinnt.fvnr_dvcd = #{fvnr_dvcd},
+            cbotrcinnt.insn_tycd = #{insn_tycd},
+            cbotrcinnt.cmhs_path_cd = #{cmhs_path_cd}
+    </update>
 
 <!--    보험 구분 목록   -->
 <!--    초재진 구분 목록   -->
@@ -158,7 +197,7 @@
         SELECT crslipclmt.slip_cd,
                crslipclmt.slip_nm,
                crslipclmt.clsf_dvcd
-        FROM cli_dev.crslipclmt
+        FROM cli.crslipclmt
         WHERE crslipclmt.hspt_cd = #{hspt_cd}
         ORDER BY crslipclmt.slip_cd
     </select>
@@ -167,7 +206,7 @@
     <select id="slipPrscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
         SELECT crprsccdmt.prsc_cd,
                crprsccdmt.prsc_nm
-        FROM cli_dev.crprsccdmt
+        FROM cli.crprsccdmt
         WHERE crprsccdmt.hspt_cd = #{hspt_cd}
         AND crprsccdmt.slip_cd = #{slip_cd}
         AND crprsccdmt.prsc_psbl_yn = "Y"
@@ -183,7 +222,7 @@
                crkcddgcmt.dgns_hnm As dgns_nm,
                crkcddgcmt.dgns_enm,
                crkcddgcmt.spcf_rgno
-        FROM cli_dev.crkcddgcmt
+        FROM cli.crkcddgcmt
         WHERE crkcddgcmt.hspt_cd = #{hspt_cd}
           and (crkcddgcmt.dgns_cd LIKE CONCAT("%", #{keyword}, "%")
             OR crkcddgcmt.dgns_enm LIKE CONCAT("%", #{keyword}, "%")
@@ -199,13 +238,94 @@
                IF(crptdgnsnt.ro_yn = "Y", "True", "False") As ro_yn,
                crptdgnsnt.site_dvcd,
                crptdgnsnt.spcf_rgno
-        FROM cli_dev.crptdgnsnt
+        FROM cli.crptdgnsnt
         WHERE crptdgnsnt.hspt_cd = #{hspt_cd}
           AND crptdgnsnt.del_yn = "N"
           AND crptdgnsnt.rcpn_sqno = #{rcpn_sqno}
           AND crptdgnsnt.pid = #{pid}
         ORDER BY crptdgnsnt.sort_sqno
     </select>
+
+<!--    진단 저장       -->
+    <insert id="savePtDgns" parameterType="java.util.Objects">
+        INSERT INTO cli.crptdgnsnt
+        VALUES
+            <foreach item="item" index="index" collection="dgnsList" separator=",">
+                (#{item.hspt_cd},
+                #{item.usid},
+                #{item.dateTime},
+                #{item.usid},
+                #{item.dateTime},
+                #{item.pid},
+                #{item.rcpn_sqno},
+                #{index}+1,
+                #{item.date},
+                #{item.mddp_cd},
+                #{item.usid},
+                #{item.dgns_cd},
+                #{item.dgns_nm},
+                #{item.dvsn},
+                <choose>
+                    <when test="item.ro_yn == 'True'">"Y",</when>
+                    <otherwise>"N",</otherwise>
+                </choose>
+                #{item.site_dvcd},
+                #{item.spcf_rqno},
+                "N",
+                #{index}+1)
+            </foreach>
+    </insert>
+
+<!--    진단 수정       -->
+    <update id="updatePtDgns">
+        <foreach collection="dgnsList" item="item" index="index" separator=",">
+            <choose>
+<!--                <when test="item.dgns_sqno == undefined">-->
+<!--                    INSERT INTO cli.crptdgnsnt-->
+<!--                    VALUES (-->
+<!--                        #{item.hspt_cd},-->
+<!--                        #{item.usid},-->
+<!--                        #{item.dateTime},-->
+<!--                        #{item.usid},-->
+<!--                        #{item.dateTime},-->
+<!--                        #{item.pid},-->
+<!--                        #{item.rcpn_sqno},-->
+<!--                        ( SELECT MAX(crptdgnsnt.dgns_sqno)+1 FROM cli.crptdgnsnt WHERE crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}),-->
+<!--                        #{item.date},-->
+<!--                        #{item.mddp_cd},-->
+<!--                        #{item.usid},-->
+<!--                        #{item.dgns_cd},-->
+<!--                        #{item.dgns_nm},-->
+<!--                        #{item.dvsn},-->
+<!--                    <choose>-->
+<!--                        <when test="item.ro_yn == 'True'">"Y",</when>-->
+<!--                        <otherwise>"N",</otherwise>-->
+<!--                    </choose>-->
+<!--                        #{item.site_dvcd},-->
+<!--                        #{item.spcf_rqno},-->
+<!--                        "N",-->
+<!--                        #{index}+1-->
+<!--                    )-->
+<!--                </when>-->
+                <otherwise>
+                    UPDATE cli.crptdgnsnt
+                    SET
+                    <if test="item.del_yn == 'Y'">
+                        crptdgnsnt.del_yn = #{item.del_yn}
+                    </if>
+                    <if test="item.del_yn == 'N'">
+                        crptdgnsnt.last_updt_usid = #{item.usid},
+                        crptdgnsnt.last_uddt = #{item.dateTime},
+                        crptdgnsnt.dvsn = #{item.dvsn},
+                        crptdgnsnt.dgns_nm = #{item.dgns_nm},
+                        crptdgnsnt.site_dvcd = #{item.site_dvcd},
+                        crptdgnsnt.spcf_rgno = #{item.spcf_rgno},
+                        crptdgnsnt.sort_sqno = #{index} + 1
+                    </if>
+                </otherwise>
+            </choose>
+        </foreach>
+    </update>
 <!--    ==========================================================================================================================================================-->
 
 
@@ -257,7 +377,7 @@
                 crdrinprnt.dc_yn,
                 crdrinprnt.dc_resn_cd,
                 crdrinprnt.dc_resn
-        FROM cli_dev.crdrinprnt
+        FROM cli.crdrinprnt
         WHERE crdrinprnt.hspt_cd = #{hspt_cd}
           AND crdrinprnt.rcpn_sqno = #{rcpn_sqno}
           AND crdrinprnt.pid = #{pid}

@@ -14,4 +14,6 @@ public class Diagnosis {
     private String dvsn; // 형태
     private String ro_yn; // R/O 여부
     private String site_dvcd; // 부위
+
+//    private String[] dgnsList;
 }

@@ -11,8 +11,8 @@ spring:
     url: jdbc:mariadb://172.16.131.11:3306/
 #    username: tes_admin
 #    password: tjdrhd@ro
-    username: tes
-    password: '!@his09'
+    username: root
+    password: '!@his08'
     driver-class-name: org.mariadb.jdbc.Driver
   messages:
     basename: i18n/common/messages
