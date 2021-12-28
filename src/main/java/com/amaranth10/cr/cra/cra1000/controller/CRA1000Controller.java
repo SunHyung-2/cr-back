@@ -213,11 +213,43 @@ public class CRA1000Controller {
     /** ========================================================================================================================================================== */
 
 
-    /** CLRS0103 신체사정정보 ========================================================================================================================================== */
+    /** CLRS0103 신체사정정보 ======================================================================================================================================= */
+    /** 신체사정정보 조회 -------------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/vitalData", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult vitalData(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.vitalData(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 
 
     /** CLRS0104 검사결과 ========================================================================================================================================== */
+    /** 검사결과 조회 ----------------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/examResult", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult examResult(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.examResult(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 
 

@@ -225,12 +225,51 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** ========================================================================================================================================================== */
 
 
-    /** CLRS0103 신체사정정보 ========================================================================================================================================== */
+    /** CLRS0103 신체사정정보 ======================================================================================================================================= */
+    /** 신체사정정보 조회 -------------------------------------------------------------------------------------------------------------------------------------------- */
+    @Override
+    public APIResult vitalData(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.vitalData(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 
     /** CLRS0104 검사결과 ========================================================================================================================================== */
+    /** 검사결과 조회 ----------------------------------------------------------------------------------------------------------------------------------------------- */
+    @Override
+    public APIResult examResult(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.examResult(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
+
 
 
     /** CLRS0105 경과기록 ========================================================================================================================================== */

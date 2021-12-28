@@ -15,18 +15,49 @@
            AND cbptbainmt.pid = #{pid}
     </select>
 
+    <!-- 감염리스트 조회 -->
+    <select id="infList" resultType="java.util.HashMap">
+        SELECT CONCAT(crkcddgcmt.cort_cmds_dvsn,'급') AS cort_cmds_dvsn,
+               crkcddgcmt.dgns_cd,
+               crkcddgcmt.dgns_hnm
+          FROM cli.crkcddgcmt
+         WHERE crkcddgcmt.hspt_cd = #{hspt_cd}
+           AND crkcddgcmt.cort_cmds_dvsn != ''
+         ORDER BY crkcddgcmt.dgns_cd
+    </select>
+
     <!-- 환자감염정보 조회 -->
     <select id="patientInf" resultType="java.util.HashMap">
-        SELECT crinfinfnt.cmds_grad,
-               crinfinfnt.dgns_cd,
-               crkcddgcmt.dgns_hnm
-          FROM cli.crinfinfnt, cli.crkcddgcmt
-         WHERE crinfinfnt.hspt_cd = #{hspt_cd}
-           AND crinfinfnt.hspt_cd = crkcddgcmt.hspt_cd
-           AND crinfinfnt.dgns_cd = crkcddgcmt.dgns_cd
-           AND crinfinfnt.pid = #{pid}
-           AND crinfinfnt.del_yn = 'N'
+        SELECT crinfinfnt.cort_cmds_dvsn,
+        crinfinfnt.dgns_cd,
+        crinfinfnt.dgns_hnm
+        FROM cli.crinfinfnt
+        WHERE crinfinfnt.hspt_cd = #{hspt_cd}
+        AND crinfinfnt.pid = #{pid}
+        AND crinfinfnt.del_yn = 'N'
     </select>
+
+    <!-- 환자알러지정보 조회 -->
+    <select id="patientAlg" resultType="java.lang.String">
+        SELECT cralginfnt.alrg_info
+          FROM cli.cralginfnt
+         WHERE cralginfnt.hspt_cd = #{hspt_cd}
+           AND cralginfnt.pid = #{pid}
+    </select>
+
+    <!-- 환자알러지정보 추가 -->
+    <insert id="algInsert">
+        INSERT INTO cli.cralginfnt (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, pid, alrg_info)
+        VALUES (#{hspt_cd}, #{frst_rgst_usid}, #{frst_rgdt}, #{last_updt_usid}, #{last_uddt}, #{pid}, #{alrg_info})
+    </insert>
+
+    <!-- 환자알러지정보 수정 -->
+    <update id="algUpdate">
+        UPDATE cli.cralginfnt
+        SET cralginfnt.last_updt_usid = #{last_updt_usid}, cralginfnt.last_uddt = #{last_uddt}, cralginfnt.alrg_info = #{alrg_info}
+        WHERE cralginfnt.hspt_cd = #{hspt_cd}
+        AND cralginfnt.pid = #{pid}
+    </update>
 
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
