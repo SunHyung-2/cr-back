@@ -18,6 +18,12 @@ public interface ICRACommonService {
     /** 환자감염정보 조회 */
     APIResult patientInf(RequestInfo requestInfo, RequestModel requestModel);
 
+    /** 환자감염정보 추가 */
+    APIResult infInsert(@RequestBody Object param);
+
+    /** 환자감염정보 수정 */
+    APIResult infUpdate(@RequestBody Object param);
+
     /** 환자알러지정보 조회 */
     APIResult patientAlg(RequestInfo requestInfo, RequestModel requestModel);
 

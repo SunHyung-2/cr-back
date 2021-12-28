@@ -78,6 +78,40 @@ public class CRACommonController {
         return result;
     };
 
+    /** 환자감염정보 추가 */
+    @RequestMapping(value = "/infInsert", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public APIResult infInsert(HttpServletRequest servletRequest,HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = craCommonServiceImpl.infInsert(param);
+        return result;
+    }
+
+    /** 환자감염정보 수정 */
+    @RequestMapping(value = "/infUpdate", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public APIResult infUpdate(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = craCommonServiceImpl.infUpdate(param);
+        return result;
+    }
+
     /** 환자알러지정보 조회 */
     @RequestMapping(value = "/patientAlg", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody

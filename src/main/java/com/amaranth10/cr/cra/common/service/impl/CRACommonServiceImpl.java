@@ -85,6 +85,21 @@ public class CRACommonServiceImpl implements ICRACommonService {
         }
     }
 
+    /** 환자감염정보 추가 */
+    @Override
+    public APIResult infInsert(@RequestBody Object param){
+        craCommonMapper.infInsert(param);
+        return null;
+    }
+
+    /** 환자감염정보 수정 */
+    @Override
+    public APIResult infUpdate(@RequestBody Object param){
+        System.out.println(param);
+        craCommonMapper.infUpdate(param);
+        return null;
+    }
+
     /** 환자알러지정보 조회 */
     @Override
     public APIResult patientAlg(RequestInfo requestInfo, RequestModel requestModel) {

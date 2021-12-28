@@ -19,6 +19,12 @@ public interface CRACommonMapper {
     /** 환자감염정보 조회 */
     List<Object> patientInf (Object param);
 
+    /** 환자감염정보 추가 */
+    void infInsert(Object param);
+
+    /** 환자감염정보 수정 */
+    void infUpdate(Object param);
+
     /** 환자알러지정보 조회 */
     String patientAlg (Object param);
 
