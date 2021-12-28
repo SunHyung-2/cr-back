@@ -2,6 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.amaranth10.cr.cra.common.mapper.CRACommonMapper">
+    <!-- 환자정보 조회 -->
+    <select id="patientInfo" resultType="com.amaranth10.cr.cra.common.model.Patient">
+        SELECT cbptbainmt.pid,
+               cbptbainmt.pt_nm,
+               cbptbainmt.sex_cd,
+               CONCAT((TRUNCATE((TO_DAYS(NOW()) - TO_DAYS(DATE_FORMAT(cbptbainmt.dobr, '%Y-%m-%d'))) / 365, 0))) AS age,
+               (SELECT count(*) FROM cli.crinfinfnt WHERE pid = #{pid} AND del_yn = 'N') as inf_cnt,
+               (SELECT alrg_info FROM cli.cralginfnt WHERE pid = #{pid}) as alg_info
+          FROM cli.cbptbainmt
+         WHERE cbptbainmt.hspt_cd = #{hspt_cd}
+           AND cbptbainmt.pid = #{pid}
+    </select>
+
+    <!-- 환자감염정보 조회 -->
+    <select id="patientInf" resultType="java.util.HashMap">
+        SELECT crinfinfnt.cmds_grad,
+               crinfinfnt.dgns_cd,
+               crkcddgcmt.dgns_hnm
+          FROM cli.crinfinfnt, cli.crkcddgcmt
+         WHERE crinfinfnt.hspt_cd = #{hspt_cd}
+           AND crinfinfnt.hspt_cd = crkcddgcmt.hspt_cd
+           AND crinfinfnt.dgns_cd = crkcddgcmt.dgns_cd
+           AND crinfinfnt.pid = #{pid}
+           AND crinfinfnt.del_yn = 'N'
+    </select>
+
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
         UPDATE cli.cbotrcinnt

@@ -27,6 +27,40 @@ public class CRACommonController {
     @Autowired
     SessionManager sessionManager;
 
+    /** 환자정보 조회 */
+    @RequestMapping(value = "/patientInfo", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult patientInfo(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = craCommonServiceImpl.patientInfo(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 환자감염정보 조회 */
+    @RequestMapping(value = "/patientInf", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult patientInf(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = craCommonServiceImpl.patientInf(requestInfo, requestModel);
+        return result;
+    };
+
     /** 환자 접수상태 변경 */
     @RequestMapping(value = "/updateRcpnStat", method = { RequestMethod.GET, RequestMethod.POST })
     @ResponseBody
