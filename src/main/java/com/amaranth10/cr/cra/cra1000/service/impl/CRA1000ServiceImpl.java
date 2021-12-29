@@ -372,6 +372,58 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
             return result;
         }
     }
+
+    /** 진단 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult updatePtDgns(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.updatePtDgns(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 추가된 진단 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult saveNewPtDgns(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.saveNewPtDgns(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 삭제된 진단 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult deletePtDgns(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.deletePtDgns(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** ========================================================================================================================================================== */
 
 

@@ -269,7 +269,9 @@
                crptdgnsnt.dvsn,
                IF(crptdgnsnt.ro_yn = "Y", "True", "False") As ro_yn,
                crptdgnsnt.site_dvcd,
-               crptdgnsnt.spcf_rgno
+               crptdgnsnt.spcf_rgno,
+        crptdgnsnt.hspt_cd,
+        crptdgnsnt.rcpn_sqno
         FROM cli.crptdgnsnt
         WHERE crptdgnsnt.hspt_cd = #{hspt_cd}
           AND crptdgnsnt.del_yn = "N"
@@ -282,7 +284,7 @@
     <insert id="savePtDgns" parameterType="java.util.Objects">
         INSERT INTO cli.crptdgnsnt
         VALUES
-            <foreach item="item" index="index" collection="dgnsList" separator=",">
+            <foreach item="item" index="index" collection="dgnsList" separator=";">
                 (#{item.hspt_cd},
                 #{item.usid},
                 #{item.dateTime},
@@ -309,54 +311,76 @@
     </insert>
 
 <!--    진단 수정       -->
-    <update id="updatePtDgns">
-        <foreach collection="dgnsList" item="item" index="index" separator=",">
-            <choose>
-<!--                <when test="item.dgns_sqno == undefined">-->
-<!--                    INSERT INTO cli.crptdgnsnt-->
-<!--                    VALUES (-->
-<!--                        #{item.hspt_cd},-->
-<!--                        #{item.usid},-->
-<!--                        #{item.dateTime},-->
-<!--                        #{item.usid},-->
-<!--                        #{item.dateTime},-->
-<!--                        #{item.pid},-->
-<!--                        #{item.rcpn_sqno},-->
-<!--                        ( SELECT MAX(crptdgnsnt.dgns_sqno)+1 FROM cli.crptdgnsnt WHERE crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}),-->
-<!--                        #{item.date},-->
-<!--                        #{item.mddp_cd},-->
-<!--                        #{item.usid},-->
-<!--                        #{item.dgns_cd},-->
-<!--                        #{item.dgns_nm},-->
-<!--                        #{item.dvsn},-->
-<!--                    <choose>-->
-<!--                        <when test="item.ro_yn == 'True'">"Y",</when>-->
-<!--                        <otherwise>"N",</otherwise>-->
-<!--                    </choose>-->
-<!--                        #{item.site_dvcd},-->
-<!--                        #{item.spcf_rqno},-->
-<!--                        "N",-->
-<!--                        #{index}+1-->
-<!--                    )-->
-<!--                </when>-->
-                <otherwise>
+    <update id="updatePtDgns" parameterType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
+        <if test="updateList != null and updateList.size != 0">
+            <foreach collection="updateList" item="item" index="index" separator=";">
+                <if test="item.dgns_sqno != null and !item.dgns_sqno.equals('')">
                     UPDATE cli.crptdgnsnt
-                    SET
-                    <if test="item.del_yn == 'Y'">
-                        crptdgnsnt.del_yn = #{item.del_yn}
-                    </if>
-                    <if test="item.del_yn == 'N'">
-                        crptdgnsnt.last_updt_usid = #{item.usid},
-                        crptdgnsnt.last_uddt = #{item.dateTime},
-                        crptdgnsnt.dvsn = #{item.dvsn},
-                        crptdgnsnt.dgns_nm = #{item.dgns_nm},
-                        crptdgnsnt.site_dvcd = #{item.site_dvcd},
-                        crptdgnsnt.spcf_rgno = #{item.spcf_rgno},
-                        crptdgnsnt.sort_sqno = #{index} + 1
-                    </if>
-                </otherwise>
-            </choose>
-        </foreach>
+                    SET crptdgnsnt.last_updt_usid = '${item.usid}',
+                        crptdgnsnt.last_uddt = '${item.dateTime}',
+                        crptdgnsnt.dvsn = '${item.dvsn}',
+                        crptdgnsnt.ro_yn =
+                            <choose>
+                                <when test="item.ro_yn == 'True'">'Y',</when>
+                                <otherwise>'N',</otherwise>
+                            </choose>
+                        crptdgnsnt.dgns_nm = '${item.dgns_nm}',
+                        crptdgnsnt.site_dvcd = '${item.site_dvcd}',
+                        crptdgnsnt.spcf_rgno = '${item.spcf_rgno}',
+                        crptdgnsnt.sort_sqno = ${item.row}
+                    WHERE crptdgnsnt.hspt_cd = ${item.hspt_cd}
+                      AND crptdgnsnt.rcpn_sqno = ${item.rcpn_sqno}
+                      AND crptdgnsnt.dgns_sqno = ${item.dgns_sqno}
+                </if>
+            </foreach>
+        </if>
+    </update>
+
+<!--    추가된 진단 저장       -->
+    <insert id="saveNewPtDgns">
+        <if test="dgnsList != null and dgnsList.size != 0">
+            INSERT INTO cli.crptdgnsnt
+            VALUES
+            <foreach item="item" collection="dgnsList" separator=",">
+                <if test="item.dngs_sqno == null">
+                    (#{item.hspt_cd},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.pid},
+                    #{item.rcpn_sqno},
+                    ( SELECT MAX(dgns.dgns_sqno)+1 FROM cli.crptdgnsnt As dgns WHERE dgns.rcpn_sqno = #{item.rcpn_sqno}),
+                    #{item.date},
+                    #{item.mddp_cd},
+                    #{item.usid},
+                    #{item.dgns_cd},
+                    #{item.dgns_nm},
+                    #{item.dvsn},
+                    <choose>
+                        <when test="item.ro_yn == 'True'">'Y',</when>
+                        <otherwise>'N',</otherwise>
+                    </choose>
+                    #{item.site_dvcd},
+                    #{item.spcf_rqno},
+                    "N",
+                    #{item.row})
+                </if>
+            </foreach>
+        </if>
+    </insert>
+
+<!--    삭제된 진단 수정      -->
+    <update id="deletePtDgns">
+        <if test="delList != null and delList.size != 0">
+            <foreach collection="delList" item="item" separator=";">
+                UPDATE cli.crptdgnsnt
+                SET crptdgnsnt.del_yn = 'Y'
+                WHERE crptdgnsnt.hspt_cd = ${item.hspt_cd}
+                AND crptdgnsnt.rcpn_sqno = ${item.rcpn_sqno}
+                AND crptdgnsnt.dgns_sqno = ${item.dgns_sqno}
+            </foreach>
+        </if>
     </update>
 <!--    ==========================================================================================================================================================-->
 

@@ -3,6 +3,7 @@ package com.amaranth10.cr.cra.cra1000.controller;
 import com.amaranth10.backendcommon.util.helper.ExtractUtil;
 import com.amaranth10.backendcommon.util.model.APIResult;
 import com.amaranth10.backendcommon.util.model.SessionInfo;
+import com.amaranth10.cr.cra.cra1000.model.Diagnosis;
 import com.amaranth10.cr.cra.cra1000.service.impl.CRA1000ServiceImpl;
 import com.amaranth10.cr.model.RequestModel;
 import com.amaranth10.cr.util.SessionManager;
@@ -351,6 +352,25 @@ public class CRA1000Controller {
         return result;
     };
 
+    /** 진단 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/updatePtDgns", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult updatePtDgns(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("updatePtDgns" + param);
+
+        APIResult result = new APIResult();
+        cra1000ServiceImpl.updatePtDgns(requestInfo, requestModel);
+        cra1000ServiceImpl.saveNewPtDgns(requestInfo, requestModel);
+        cra1000ServiceImpl.deletePtDgns(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 
 

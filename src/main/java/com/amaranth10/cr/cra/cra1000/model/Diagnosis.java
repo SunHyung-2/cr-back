@@ -6,6 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Diagnosis {
+    private String hspt_cd; // 병원코드
+    private String rcpn_sqno; // 접수일련번호
     private String dgns_cd; // 진단 코드
     private String dgns_nm; // 진단명
     private String dgns_enm; // 진단 영문명
@@ -14,6 +16,4 @@ public class Diagnosis {
     private String dvsn; // 형태
     private String ro_yn; // R/O 여부
     private String site_dvcd; // 부위
-
-//    private String[] dgnsList;
 }
