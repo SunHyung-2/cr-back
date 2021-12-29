@@ -178,12 +178,44 @@
 
 <!--    ==========================================================================================================================================================-->
 
-
-<!--    CLRS0103 신체사정정보 ==========================================================================================================================================-->
+<!--    CLRS0103 신체사정정보 =======================================================================================================================================-->
+<!--    신체사정정보 조회-->
+    <select id="vitalData" resultType="com.amaranth10.cr.cra.cra1000.model.Vital">
+        SELECT DATE_FORMAT(inpt_dt, '%Y-%m-%d %H:%i') AS inpt_dt,
+        hght,
+        wght,
+        fbs,
+        pr,
+        rr,
+        bt,
+        sbp,
+        dbp,
+        sqno
+        FROM cli.crvitlsgnt
+        WHERE crvitlsgnt.hspt_cd = #{hspt_cd}
+        AND crvitlsgnt.pid = #{pid}
+        ORDER BY inpt_dt DESC
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 
 <!--    CLRS0104 검사결과 ==========================================================================================================================================-->
+<!--    검사결과 조회-->
+    <select id="examResult" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
+        SELECT DATE_FORMAT(csexmrelnt.exmn_date, '%Y-%m-%d') AS exmn_date,
+        csexmrelnt.prsc_prgr_stat_cd,
+        csexmrelnt.exmn_cd,
+        crprsccdmt.prsc_nm,
+        csexmrelnt.exmn_rslt1,
+        csexmrelnt.nots_low,
+        csexmrelnt.nots_high,
+        csexmrelnt.prsc_sqno
+        FROM cli.csexmrelnt, cli.crprsccdmt
+        WHERE csexmrelnt.hspt_cd = #{hspt_cd}
+        AND csexmrelnt.pid = #{pid}
+        AND csexmrelnt.exmn_cd = crprsccdmt.prsc_cd
+        ORDER BY csexmrelnt.prsc_sqno DESC
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 
