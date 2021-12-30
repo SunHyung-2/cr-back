@@ -18,7 +18,7 @@ public class Prescription {
     private String inpy_dvcd; // 보험급여구분코드
     private String basc_aomd_uncd; //기본투여단위코드
     private String spcm_cd_1; // 검체코드
-    private String spcm_ctnr_cd_1; //검체용기코드
+    private String exrm_cd; // 검사실 코드
     private String uncd; //함량단위코드
     private String dosg_1; // 1회량
     private String notm; // 횟수

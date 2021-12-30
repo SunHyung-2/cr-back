@@ -277,6 +277,25 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
 
     /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** 과거기록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult pastList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.pastList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** Slip 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @Override
     public APIResult slipList(RequestInfo requestInfo, RequestModel requestModel) {
@@ -466,6 +485,22 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         }
     }
 
+    /** 처방 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult savePtPrsc(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.savePtPrsc(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
 
     /** ========================================================================================================================================================== */
 

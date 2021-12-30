@@ -210,6 +210,16 @@ public class CRA1000Controller {
         return result;
     };
 
+    /** 보험구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+
+    /** 초재진 구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+
+    /** 부서 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+
+    /** 외래경로 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+
+    /** 내원목적 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+
 
     /** ========================================================================================================================================================== */
 
@@ -259,6 +269,24 @@ public class CRA1000Controller {
 
 
     /** CLRS0106 처방조회 ========================================================================================================================================== */
+    /** 과거기록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/pastList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult pastList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("pastList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.pastList(requestInfo, requestModel);
+        return result;
+    };
+
     /** SLIP 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
     @RequestMapping(value = "/slipList", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
@@ -408,6 +436,24 @@ public class CRA1000Controller {
 
         APIResult result = new APIResult();
         result = cra1000ServiceImpl.prscList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 처방 저장 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/savePtPrsc", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult savePtPrsc(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("savePtPrsc" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.savePtPrsc(requestInfo, requestModel);
         return result;
     };
 

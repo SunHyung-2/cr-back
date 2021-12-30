@@ -80,14 +80,14 @@
                cbotrcinnt.mddp_cd,
                cbotrcinnt.mdcr_dr_id,
                cbotrcinnt.fvnr_dvcd,
-        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) As fvnr_dvcd_nm,
+               cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) As fvnr_dvcd_nm,
                cbotrcinnt.insn_tycd,
-        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB3007', cbotrcinnt.insn_tycd) As insn_tycd_nm,
+               cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4005', cbotrcinnt.insn_tycd) As insn_tycd_nm,
                cbotrcinnt.type_asst_cd,
-<!--        cli.fn_get_commname(cbotrcinnt.mdcr_date, '보험보조유형', cbotrcinnt.type_asst_cd) as type_asst_cd,-->
+        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4010', cbotrcinnt.type_asst_cd) As type_asst_cd_nm,
                cbotrcinnt.rcpn_memo,
                cbotrcinnt.cmhs_path_cd,
-        cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4004', cbotrcinnt.cmhs_path_cd) As cmhs_path_cd_nm,
+               cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4004', cbotrcinnt.cmhs_path_cd) As cmhs_path_cd_nm,
                cbptmeinnt1.memo_dvsn As clr_dvsn,
                cbptmeinnt1.memo_cnts As clr_cnts,
                cbptmeinnt2.memo_dvsn As pat_dvsn,
@@ -224,6 +224,20 @@
 
 
 <!--    CLRS0106 처방조회 ==========================================================================================================================================-->
+<!--    과거기록 조회     -->
+    <select id="pastList" resultType="com.amaranth10.cr.cra.cra1000.model.Reception">
+        SELECT cbotrcinnt.rcpn_sqno,
+               DATE_FORMAT(cbotrcinnt.mdcr_date, '%Y-%m-%d') As mdcr_date,
+               cli.fn_get_username(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_dr_id, cbotrcinnt.mddp_cd) As mdcr_dr_id,
+               cli.fn_get_deptname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, cbotrcinnt.mddp_cd) As mddp_cd,
+               cbotrcinnt.fvnr_dvcd,
+               cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4005', cbotrcinnt.insn_tycd) As insn_tycd
+        FROM cli.cbotrcinnt
+        WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+          AND cbotrcinnt.pid = #{pid}
+        ORDER BY cbotrcinnt.mdcr_date DESC
+    </select>
+
 <!--    SLIP 목록     -->
     <select id="slipList" resultType="com.amaranth10.cr.cra.cra1000.model.Slip">
         SELECT crslipclmt.slip_cd,
@@ -284,7 +298,7 @@
     <insert id="savePtDgns" parameterType="java.util.Objects">
         INSERT INTO cli.crptdgnsnt
         VALUES
-            <foreach item="item" index="index" collection="dgnsList" separator=";">
+            <foreach item="item" index="index" collection="dgnsList" separator=",">
                 (#{item.hspt_cd},
                 #{item.usid},
                 #{item.dateTime},
@@ -300,7 +314,7 @@
                 #{item.dgns_nm},
                 #{item.dvsn},
                 <choose>
-                    <when test="item.ro_yn == 'True'">"Y",</when>
+                    <when test='item.ro_yn == "True"'>"Y",</when>
                     <otherwise>"N",</otherwise>
                 </choose>
                 #{item.site_dvcd},
@@ -313,8 +327,8 @@
 <!--    진단 수정       -->
     <update id="updatePtDgns" parameterType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
         <if test="updateList != null and updateList.size != 0">
-            <foreach collection="updateList" item="item" index="index" separator=";">
-                <if test="item.dgns_sqno != null and !item.dgns_sqno.equals('')">
+            <foreach collection="updateList" item="item" index="index">
+                <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>
                     UPDATE cli.crptdgnsnt
                     SET crptdgnsnt.last_updt_usid = '${item.usid}',
                         crptdgnsnt.last_uddt = '${item.dateTime}',
@@ -358,7 +372,7 @@
                     #{item.dgns_nm},
                     #{item.dvsn},
                     <choose>
-                        <when test="item.ro_yn == 'True'">'Y',</when>
+                        <when test='item.ro_yn == "True"'>'Y',</when>
                         <otherwise>'N',</otherwise>
                     </choose>
                     #{item.site_dvcd},
@@ -373,7 +387,7 @@
 <!--    삭제된 진단 수정      -->
     <update id="deletePtDgns">
         <if test="delList != null and delList.size != 0">
-            <foreach collection="delList" item="item" separator=";">
+            <foreach collection="delList" item="item">
                 UPDATE cli.crptdgnsnt
                 SET crptdgnsnt.del_yn = 'Y'
                 WHERE crptdgnsnt.hspt_cd = ${item.hspt_cd}
@@ -400,7 +414,7 @@
 <!--        crprsccdmt.prsc_psbl_yn,-->
                crprsccdmt.basc_aomd_uncd,
                crprsccdmt.spcm_cd_1,
-               crprsccdmt.spcm_ctnr_cd_1,
+               crprsccdmt.exrm_cd,
                crprsccdmt.hsot_prsc_yn As hsin_hsot_dvcd,
                crprsccdmt.spfm_excp_cd As hsin_prsc_resn_cd,
                crprsccdmt.ctnt_uncd As uncd,
@@ -439,6 +453,197 @@
           AND crdrinprnt.pid = #{pid}
         ORDER BY crdrinprnt.sort_sqno
     </select>
+    
+<!--    처방 저장       -->
+    <update id="savePtPrsc">
+        <foreach collection="prscList" item="item" separator=";" index="index">
+            <!-- 기본 처방 -->
+            <if test='item.prsc_clsf_cd == "A1" or item.prsc_clsf_cd == "A2" or item.prsc_clsf_cd == "A3"'>
+                INSERT INTO cli.crbasprsnt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                    pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn)
+                SELECT
+                    #{item.hspt_cd},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.pid},
+                    #{item.date},
+                    IFNULL(MAX(crbasprsnt.prsc_sqno) + 1, 1),
+                    #{item.prsc_cd},
+                    #{item.prsc_nm},
+                    #{item.rcpn_sqno},
+                    #{item.prsc_clsf_cd},
+                    #{item.slip_cd},
+                    cbotrcinnt.mdcr_date,
+                    cbotrcinnt.mdcr_hm,
+                    #{item.mddp_cd},
+                    #{item.usid},
+                    #{item.usid},
+                    #{item.row},
+                    #{item.cmpt_yn},
+                    #{item.prsc_memo},
+                    #{item.jx999},
+                    'N'
+                FROM cli.crbasprsnt, cli.cbotrcinnt
+                WHERE crbasprsnt.hspt_cd = #{item.hspt_cd}
+                  AND crbasprsnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crbasprsnt.pid = #{item.pid}
+                  AND cbotrcinnt.hspt_cd = #{item.hspt_cd}
+                  AND cbotrcinnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND cbotrcinnt.pid = #{item.pid}
+            </if>
+            <!-- 약주사 처방 -->
+            <if test='item.prsc_clsf_cd == "B1" or item.prsc_clsf_cd == "B2" or item.prsc_clsf_cd == "B3" or item.prsc_clsf_cd == "B4"'>
+                INSERT INTO cli.crdrinprnt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                    pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                    dosg_1, uncd, totl_vol, notm, nody, drug_injc_dvsn,
+                    iotm_cd, prsc_pay_dvcd, pwdr_yn, mix_yn, mix_no,
+                    hsin_hsot_dvcd, hsin_prsc_resn_cd
+                )
+                SELECT
+                    #{item.hspt_cd},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.pid},
+                    #{item.date},
+                    IFNULL(MAX(crdrinprnt.prsc_sqno) + 1, 1),
+                    #{item.prsc_cd},
+                    #{item.prsc_nm},
+                    #{item.rcpn_sqno},
+                    #{item.prsc_clsf_cd},
+                    #{item.slip_cd},
+                    cbotrcinnt.mdcr_date,
+                    cbotrcinnt.mdcr_hm,
+                    #{item.mddp_cd},
+                    #{item.usid},
+                    #{item.usid},
+                    #{item.row},
+                    #{item.cmpt_yn},
+                    #{item.prsc_memo},
+                    #{item.jx999},
+                    'N',
+                    #{item.dosg_1},
+                    #{item.uncd},
+                    #{item.totl_vol},
+                    #{item.notm},
+                    #{item.nody},
+                    #{item.drug_injc_dvsn},
+                    #{item.iotm_cd},
+                    #{item.inpy_dvcd},
+                    #{item.pwdr_yn},
+                    <choose>
+                        <when test='item.mix_no != "-"'>'Y',</when>
+                        <otherwise>'N',</otherwise>
+                    </choose>
+                    #{item.mix_no},
+                    #{item.hsin_hsot_dvcd},
+                    #{item.hsin_prsc_resn_cd}
+                FROM cli.crdrinprnt, cli.cbotrcinnt
+                WHERE crdrinprnt.hspt_cd = #{item.hspt_cd}
+                  AND crdrinprnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crdrinprnt.pid = #{item.pid}
+                  AND cbotrcinnt.hspt_cd = #{item.hspt_cd}
+                  AND cbotrcinnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND cbotrcinnt.pid = #{item.pid}
+            </if>
+            <!-- 검사 처방 -->
+            <if test='item.prsc_clsf_cd == "C1" or item.prsc_clsf_cd == "C2" or item.prsc_clsf_cd == "C3"'>
+                INSERT INTO cli.crexmprsnt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                    pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                    spcm_cd_1, hope_exrm_cd
+                )
+                SELECT
+                    #{item.hspt_cd},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.pid},
+                    #{item.date},
+                    IFNULL(MAX(crexmprsnt.prsc_sqno) + 1, 1),
+                    #{item.prsc_cd},
+                    #{item.prsc_nm},
+                    #{item.rcpn_sqno},
+                    #{item.prsc_clsf_cd},
+                    #{item.slip_cd},
+                    cbotrcinnt.mdcr_date,
+                    cbotrcinnt.mdcr_hm,
+                    #{item.mddp_cd},
+                    #{item.usid},
+                    #{item.usid},
+                    #{item.row},
+                    #{item.cmpt_yn},
+                    #{item.prsc_memo},
+                    #{item.jx999},
+                    'N',
+                    #{item.spcm_cd_1},
+                    #{item.exrm_cd}
+                FROM cli.crexmprsnt, cli.cbotrcinnt
+                WHERE crexmprsnt.hspt_cd = #{item.hspt_cd}
+                  AND crexmprsnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crexmprsnt.pid = #{item.pid}
+                  AND cbotrcinnt.hspt_cd = #{item.hspt_cd}
+                  AND cbotrcinnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND cbotrcinnt.pid = #{item.pid}
+            </if>
+            <!-- 처치 처방 -->
+            <if test='item.prsc_clsf_cd == "D" or item.prsc_clsf_cd == "D1" or item.prsc_clsf_cd == "D2" or item.prsc_clsf_cd == "D3" or item.prsc_clsf_cd == "D4" or item.prsc_clsf_cd == "D5"'>
+                INSERT INTO cli.crtrtprsnt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                    pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                    qty, notm, uncd
+                )
+                SELECT
+                    #{item.hspt_cd},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.usid},
+                    #{item.dateTime},
+                    #{item.pid},
+                    #{item.date},
+                    IFNULL(MAX(crtrtprsnt.prsc_sqno) + 1, 1),
+                    #{item.prsc_cd},
+                    #{item.prsc_nm},
+                    #{item.rcpn_sqno},
+                    #{item.prsc_clsf_cd},
+                    #{item.slip_cd},
+                    cbotrcinnt.mdcr_date,
+                    cbotrcinnt.mdcr_hm,
+                    #{item.mddp_cd},
+                    #{item.usid},
+                    #{item.usid},
+                    #{item.row},
+                    #{item.cmpt_yn},
+                    #{item.prsc_memo},
+                    #{item.jx999},
+                    'N',
+                #{item.dosg_1},
+                #{item.notm},
+                #{item.uncd}
+                FROM cli.crtrtprsnt, cli.cbotrcinnt
+                WHERE crtrtprsnt.hspt_cd = #{item.hspt_cd}
+                  AND crtrtprsnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crtrtprsnt.pid = #{item.pid}
+                  AND cbotrcinnt.hspt_cd = #{item.hspt_cd}
+                  AND cbotrcinnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND cbotrcinnt.pid = #{item.pid}
+            </if>
+        </foreach>
+    </update>
 <!--    ==========================================================================================================================================================-->
 
 </mapper>
