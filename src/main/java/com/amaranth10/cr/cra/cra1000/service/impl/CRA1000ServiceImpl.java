@@ -271,8 +271,88 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** ========================================================================================================================================================== */
 
 
-
     /** CLRS0105 경과기록 ========================================================================================================================================== */
+    /** 경과기록 리스트 조회 ------------------------------------------------------------------------------------------------------------------------------------------ */
+    @Override
+    public APIResult progressList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.progressList(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 경과기록 기본형 데이터 조회 ------------------------------------------------------------------------------------------------------------------------------------- */
+    @Override
+    public APIResult progressData(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.progressData(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 경과기록 일련번호 체크 ----------------------------------------------------------------------------------------------------------------------------------------- */
+    @Override
+    public APIResult prgrSqnoCheck(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.prgrSqnoCheck(param));
+            return result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 경과기록 추가 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @Override
+    public APIResult progressInsert(@RequestBody Object param){
+        cra1000Mapper.progressInsert(param);
+        return null;
+    }
+
+    /** 경과기록 수정 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @Override
+    public APIResult progressUpdate(@RequestBody Object param){
+        System.out.println(param);
+        cra1000Mapper.progressUpdate(param);
+        return null;
+    }
+
+    /** 경과기록 삭제 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @Override
+    public APIResult progressDelete(@RequestBody Object param){
+        cra1000Mapper.progressDelete(param);
+        return null;
+    }
     /** ========================================================================================================================================================== */
 
 
