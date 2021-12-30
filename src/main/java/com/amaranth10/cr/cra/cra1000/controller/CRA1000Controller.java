@@ -255,6 +255,107 @@ public class CRA1000Controller {
 
 
     /** CLRS0105 경과기록 ========================================================================================================================================== */
+    /** 경과기록 리스트 조회 ------------------------------------------------------------------------------------------------------------------------------------------ */
+    @RequestMapping(value = "/progressList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult progressList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.progressList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 경과기록 기본형 데이터 조회 ------------------------------------------------------------------------------------------------------------------------------------- */
+    @RequestMapping(value = "/progressData", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult progressData(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.progressData(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 경과기록 일련번호 체크 ----------------------------------------------------------------------------------------------------------------------------------------- */
+    @RequestMapping(value = "/prgrSqnoCheck", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult prgrSqnoCheck(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.prgrSqnoCheck(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 경과기록 추가 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @RequestMapping(value = "/progressInsert", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public APIResult progressInsert(HttpServletRequest servletRequest,HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.progressInsert(param);
+        return result;
+    }
+
+    /** 경과기록 수정 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @RequestMapping(value = "/progressUpdate", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public APIResult progressUpdate(HttpServletRequest servletRequest,HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.progressUpdate(param);
+        return result;
+    }
+
+    /** 경과기록 삭제 ------------------------------------------------------------------------------------------------------------------------------------------------ */
+    @RequestMapping(value = "/progressDelete", method = { RequestMethod.GET, RequestMethod.POST })
+    @ResponseBody
+    public APIResult progressDelete(HttpServletRequest servletRequest,HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.progressDelete(param);
+        return result;
+    }
     /** ========================================================================================================================================================== */
 
 
