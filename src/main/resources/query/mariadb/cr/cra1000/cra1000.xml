@@ -223,7 +223,7 @@
     <select id="progressList" resultType="java.util.HashMap">
         SELECT cli.fn_get_commname(cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) as fvnr_dvnm,
                cbotrcinnt.fvnr_dvcd,
-               cbotrcinnt.mdcr_date,
+               DATE_FORMAT(crprogrsnt.inpt_dt,'%Y-%m-%d') AS inpt_dt,
                crprogrsnt.rcpn_sqno,
                crprogrsnt.prgr_sqno
           FROM cli.crprogrsnt, cli.cbotrcinnt
