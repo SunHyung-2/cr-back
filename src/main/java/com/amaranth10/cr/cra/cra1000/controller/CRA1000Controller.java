@@ -496,7 +496,7 @@ public class CRA1000Controller {
 
         APIResult result = new APIResult();
         cra1000ServiceImpl.updatePtDgns(requestInfo, requestModel);
-        cra1000ServiceImpl.saveNewPtDgns(requestInfo, requestModel);
+        cra1000ServiceImpl.savePtDgns(requestInfo, requestModel);
         cra1000ServiceImpl.deletePtDgns(requestInfo, requestModel);
         return result;
     };

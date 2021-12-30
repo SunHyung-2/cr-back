@@ -358,75 +358,18 @@
 
 <!--    진단 저장       -->
     <insert id="savePtDgns" parameterType="java.util.Objects">
+        <foreach item="item" index="index" collection="dgnsList" separator=";">
         INSERT INTO cli.crptdgnsnt
-        VALUES
-            <foreach item="item" index="index" collection="dgnsList" separator=",">
-                (#{item.hspt_cd},
-                #{item.usid},
-                #{item.dateTime},
-                #{item.usid},
-                #{item.dateTime},
-                #{item.pid},
-                #{item.rcpn_sqno},
-                #{index}+1,
-                #{item.date},
-                #{item.mddp_cd},
-                #{item.usid},
-                #{item.dgns_cd},
-                #{item.dgns_nm},
-                #{item.dvsn},
-                <choose>
-                    <when test="item.ro_yn == 'True'">"Y",</when>
-                    <otherwise>"N",</otherwise>
-                </choose>
-                #{item.site_dvcd},
-                #{item.spcf_rqno},
-                "N",
-                #{index}+1)
-            </foreach>
-    </insert>
-
-<!--    진단 수정       -->
-    <update id="updatePtDgns" parameterType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
-        <if test="updateList != null and updateList.size != 0">
-            <foreach collection="updateList" item="item" index="index">
-                <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>
-                    UPDATE cli.crptdgnsnt
-                    SET crptdgnsnt.last_updt_usid = '${item.usid}',
-                        crptdgnsnt.last_uddt = '${item.dateTime}',
-                        crptdgnsnt.dvsn = '${item.dvsn}',
-                        crptdgnsnt.ro_yn =
-                            <choose>
-                                <when test="item.ro_yn == 'True'">'Y',</when>
-                                <otherwise>'N',</otherwise>
-                            </choose>
-                        crptdgnsnt.dgns_nm = '${item.dgns_nm}',
-                        crptdgnsnt.site_dvcd = '${item.site_dvcd}',
-                        crptdgnsnt.spcf_rgno = '${item.spcf_rgno}',
-                        crptdgnsnt.sort_sqno = ${item.row}
-                    WHERE crptdgnsnt.hspt_cd = ${item.hspt_cd}
-                      AND crptdgnsnt.rcpn_sqno = ${item.rcpn_sqno}
-                      AND crptdgnsnt.dgns_sqno = ${item.dgns_sqno}
-                </if>
-            </foreach>
-        </if>
-    </update>
-
-<!--    추가된 진단 저장       -->
-    <insert id="saveNewPtDgns">
-        <if test="dgnsList != null and dgnsList.size != 0">
-            INSERT INTO cli.crptdgnsnt
-            VALUES
-            <foreach item="item" collection="dgnsList" separator=",">
-                <if test="item.dngs_sqno == null">
-                    (#{item.hspt_cd},
+                SELECT
+                    #{item.hspt_cd},
                     #{item.usid},
                     #{item.dateTime},
                     #{item.usid},
                     #{item.dateTime},
                     #{item.pid},
                     #{item.rcpn_sqno},
-                    ( SELECT MAX(dgns.dgns_sqno)+1 FROM cli.crptdgnsnt As dgns WHERE dgns.rcpn_sqno = #{item.rcpn_sqno}),
+    <!--                #{index}+1,-->
+                    IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
                     #{item.date},
                     #{item.mddp_cd},
                     #{item.usid},
@@ -439,12 +382,40 @@
                     </choose>
                     #{item.site_dvcd},
                     #{item.spcf_rqno},
-                    "N",
-                    #{item.row})
+                    'N',
+                    #{item.row}
+                FROM cli.crptdgnsnt
+                WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
+                  AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crptdgnsnt.pid = #{item.pid}
+            </foreach>
+    </insert>
+
+<!--    진단 수정       -->
+    <update id="updatePtDgns" parameterType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
+        <if test="updateList != null and updateList.size != 0">
+            <foreach collection="updateList" item="item" index="index" separator=";">
+                <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>
+                    UPDATE cli.crptdgnsnt
+                    SET crptdgnsnt.last_updt_usid = #{item.usid},
+                        crptdgnsnt.last_uddt = #{item.dateTime},
+                        crptdgnsnt.dvsn = #{item.dvsn},
+                        crptdgnsnt.ro_yn =
+                            <choose>
+                                <when test='item.ro_yn == "True"'>'Y',</when>
+                                <otherwise>'N',</otherwise>
+                            </choose>
+                        crptdgnsnt.dgns_nm = #{item.dgns_nm},
+                        crptdgnsnt.site_dvcd = #{item.site_dvcd},
+                        crptdgnsnt.spcf_rgno = #{item.spcf_rgno},
+                        crptdgnsnt.sort_sqno = #{item.row}
+                    WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
+                      AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
+                      AND crptdgnsnt.dgns_sqno = #{item.dgns_sqno}
                 </if>
             </foreach>
         </if>
-    </insert>
+    </update>
 
 <!--    삭제된 진단 수정      -->
     <update id="deletePtDgns">
@@ -452,9 +423,9 @@
             <foreach collection="delList" item="item">
                 UPDATE cli.crptdgnsnt
                 SET crptdgnsnt.del_yn = 'Y'
-                WHERE crptdgnsnt.hspt_cd = ${item.hspt_cd}
-                AND crptdgnsnt.rcpn_sqno = ${item.rcpn_sqno}
-                AND crptdgnsnt.dgns_sqno = ${item.dgns_sqno}
+                WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
+                AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
+                AND crptdgnsnt.dgns_sqno = #{item.dgns_sqno}
             </foreach>
         </if>
     </update>
@@ -706,6 +677,8 @@
             </if>
         </foreach>
     </update>
+
+<!--    처방 수정       -->
 <!--    ==========================================================================================================================================================-->
 
 </mapper>
