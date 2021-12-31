@@ -572,7 +572,8 @@ public class CRA1000Controller {
         System.out.println("updatePtPrsc" + param);
 
         APIResult result = new APIResult();
-        result = cra1000ServiceImpl.updatePtPrsc(requestInfo, requestModel);
+        cra1000ServiceImpl.updatePtPrsc(requestInfo, requestModel);
+        cra1000ServiceImpl.savePtPrsc(requestInfo, requestModel);
         return result;
     };
     /** ========================================================================================================================================================== */
