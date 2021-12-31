@@ -558,5 +558,22 @@ public class CRA1000Controller {
         return result;
     };
 
+    /** 처방 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/updatePtPrsc", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult updatePtPrsc(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("updatePtPrsc" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.updatePtPrsc(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 }

@@ -565,6 +565,22 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         }
     }
 
+    /** 처방 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult updatePtPrsc(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.updatePtPrsc(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 }

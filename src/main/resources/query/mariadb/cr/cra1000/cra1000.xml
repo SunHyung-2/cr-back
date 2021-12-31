@@ -368,7 +368,6 @@
                     #{item.dateTime},
                     #{item.pid},
                     #{item.rcpn_sqno},
-    <!--                #{index}+1,-->
                     IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
                     #{item.date},
                     #{item.mddp_cd},
@@ -495,7 +494,7 @@
                 INSERT INTO cli.crbasprsnt
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                     pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
-                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt,
                     sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn)
                 SELECT
                     #{item.hspt_cd},
@@ -516,6 +515,7 @@
                     #{item.mddp_cd},
                     #{item.usid},
                     #{item.usid},
+                    #{item.dateTime},
                     #{item.row},
                     #{item.cmpt_yn},
                     #{item.prsc_memo},
@@ -534,7 +534,7 @@
                 INSERT INTO cli.crdrinprnt
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                     pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
-                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt,
                     sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                     dosg_1, uncd, totl_vol, notm, nody, drug_injc_dvsn,
                     iotm_cd, prsc_pay_dvcd, pwdr_yn, mix_yn, mix_no,
@@ -559,6 +559,7 @@
                     #{item.mddp_cd},
                     #{item.usid},
                     #{item.usid},
+                    #{item.dateTiem},
                     #{item.row},
                     #{item.cmpt_yn},
                     #{item.prsc_memo},
@@ -573,10 +574,11 @@
                     #{item.iotm_cd},
                     #{item.inpy_dvcd},
                     #{item.pwdr_yn},
-                    <choose>
-                        <when test='item.mix_no != "-"'>'Y',</when>
-                        <otherwise>'N',</otherwise>
-                    </choose>
+                    #{item.mix_yn},
+<!--                    <choose>-->
+<!--                        <when test='item.mix_no != "-"'>'Y',</when>-->
+<!--                        <otherwise>'N',</otherwise>-->
+<!--                    </choose>-->
                     #{item.mix_no},
                     #{item.hsin_hsot_dvcd},
                     #{item.hsin_prsc_resn_cd}
@@ -593,7 +595,7 @@
                 INSERT INTO cli.crexmprsnt
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                     pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
-                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt,
                     sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                     spcm_cd_1, hope_exrm_cd
                 )
@@ -616,6 +618,7 @@
                     #{item.mddp_cd},
                     #{item.usid},
                     #{item.usid},
+                    #{item.dateTime},
                     #{item.row},
                     #{item.cmpt_yn},
                     #{item.prsc_memo},
@@ -636,7 +639,7 @@
                 INSERT INTO cli.crtrtprsnt
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                     pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
-                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id,
+                    mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt,
                     sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                     qty, notm, uncd
                 )
@@ -659,14 +662,15 @@
                     #{item.mddp_cd},
                     #{item.usid},
                     #{item.usid},
+                    #{item.dateTime},
                     #{item.row},
                     #{item.cmpt_yn},
                     #{item.prsc_memo},
                     #{item.jx999},
                     'N',
-                #{item.dosg_1},
-                #{item.notm},
-                #{item.uncd}
+                    #{item.dosg_1},
+                    #{item.notm},
+                    #{item.uncd}
                 FROM cli.crtrtprsnt, cli.cbotrcinnt
                 WHERE crtrtprsnt.hspt_cd = #{item.hspt_cd}
                   AND crtrtprsnt.rcpn_sqno = #{item.rcpn_sqno}
@@ -679,6 +683,62 @@
     </update>
 
 <!--    처방 수정       -->
+    <update id="updatePtPrsc" parameterType="com.amaranth10.cr.cra.cra1000.model.Prescription">
+        <if test="updateList != null and updateList.size != 0">
+            <foreach collection="updateList" item="item" separator=";">
+                <!-- 기본 처방 -->
+                <if test='item.prsc_clsf_cd == "A1" or item.prsc_clsf_cd == "A2" or item.prsc_clsf_cd == "A3"'>
+                    UPDATE cli.crbasprsnt
+                    SET crbasprsnt.prsc_nm = #{item.prsc_nm},
+                        crbasprsnt.sort_sqno = #{item.row},
+                        crbasprsnt.cmpt_yn = #{item.cmpt_yn},
+                        crbasprsnt.prsc_memo = #{item.prsc_memo},
+                        crbasprsnt.jx999 = #{item.jx999},
+                        crbasprsnt.dc_yn = #{item.dc_yn}
+                    <if test='item.dc_yn == "Y"'>
+                        , crbasprsnt.dc_drcn_dr_id = #{item.usid},
+                        crbasprsnt.dc_drcn_dt = #{item.dateTime},
+                        crbasprsnt.dc_resn = #{item.dc_resn},
+                        crbasprsnt.dc_resn_cd =#{item.dc_resn_cd}
+                    </if>
+                </if>
+                <!-- 약주사 처방 -->
+                <if test='item.prsc_clsf_cd == "B1" or item.prsc_clsf_cd == "B2" or item.prsc_clsf_cd == "B3" or item.prsc_clsf_cd == "B4"'>
+                    UPDATE cli.crdrinprnt
+                    SET crdrinprnt.prsc_nm = #{item.prsc_nm},
+                        crdrinprnt.sort_sqno = #{item.row},
+                        crdrinprnt.dosg_1 = #{item.dosg_1},
+                        crdrinprnt.totl_vol = #{item.totl_vol},
+                        crdrinprnt.notm = #{item.notm},
+                        crdrinprnt.nody = #{item.nody},
+                        crdrinprnt.iotm_cd = #{item.iotm_cd},
+                        crdrinprnt.mix_yn = #{item.mix_yn},
+                        crdrinprnt.mix_no = #{item.mix_no},
+                        crdrinprnt.hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},
+                        crdrinprnt.hsin_prsc_resn_cd = #{item.hsin_prsc_resn_cd},
+                        crdrinprnt.cmpt_yn = #{item.cmpt_yn},
+                        crdrinprnt.prsc_memo = #{item.prsc_memo},
+                        crdrinprnt.jx999 = #{item.jx999},
+                        crdrinprnt.dc_yn = #{item.dc_yn}
+                    <if test='item.dc_yn == "Y"'>
+                        , crdrinprnt.dc_drcn_dr_id = #{item.usid},
+                        crdrinprnt.dc_drcn_dt = #{item.dateTime},
+                        crdrinprnt.dc_resn = #{item.dc_resn},
+                        crdrinprnt.dc_resn_cd =#{item.dc_resn_cd}
+                    </if>
+                </if>
+                <!-- 검사 처방 -->
+                <if test='item.prsc_clsf_cd == "C1" or item.prsc_clsf_cd == "C2" or item.prsc_clsf_cd == "C3"'>
+
+                </if>
+                <!-- 처치 처방 -->
+                <if test='item.prsc_clsf_cd == "D" or item.prsc_clsf_cd == "D1" or item.prsc_clsf_cd == "D2" or item.prsc_clsf_cd == "D3" or item.prsc_clsf_cd == "D4" or item.prsc_clsf_cd == "D5"'>
+
+                </if>
+            </foreach>
+        </if>
+
+    </update>
 <!--    ==========================================================================================================================================================-->
 
 </mapper>
