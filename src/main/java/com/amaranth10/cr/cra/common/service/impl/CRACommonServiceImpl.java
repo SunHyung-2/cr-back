@@ -1,6 +1,5 @@
 package com.amaranth10.cr.cra.common.service.impl;
 
-import com.amaranth10.backendcommon.util.model.APIResult;
 import com.amaranth10.cr.cra.common.mapper.CRACommonMapper;
 import com.amaranth10.cr.cra.common.model.Patient;
 import com.amaranth10.cr.cra.common.service.ICRACommonService;
@@ -20,9 +19,7 @@ public class CRACommonServiceImpl implements ICRACommonService {
 
     /** 환자정보 조회 */
     @Override
-    public Patient patientInfo(Object param) {
-        return craCommonMapper.patientInfo(param);
-    }
+    public Patient patientInfo(Object param) { return craCommonMapper.patientInfo(param); }
 
     /** 감염리스트 조회 */
     @Override
@@ -44,6 +41,7 @@ public class CRACommonServiceImpl implements ICRACommonService {
     }
 
     /** 환자감염정보 수정 */
+    @Transactional
     @Override
     public void infUpdate(Object param){
         craCommonMapper.infUpdate(param);
@@ -56,20 +54,21 @@ public class CRACommonServiceImpl implements ICRACommonService {
     }
 
     /** 환자알러지정보 추가 */
+    @Transactional
     @Override
     public void algInsert(Object param){
         craCommonMapper.algInsert(param);
     }
 
     /** 환자알러지정보 수정 */
+    @Transactional
     @Override
     public void algUpdate(Object param){
         craCommonMapper.algUpdate(param);
     }
 
     /** 환자 접수상태 변경 */
+    @Transactional
     @Override
-    public void updateRcpnStat(Object param){
-        craCommonMapper.updateRcpnStat(param);
-    }
+    public void updateRcpnStat(Object param){ craCommonMapper.updateRcpnStat(param); }
 }

@@ -1,12 +1,8 @@
 package com.amaranth10.cr.cra.common.controller;
 
-import com.amaranth10.backendcommon.util.model.APIResult;
-import com.amaranth10.cr.cra.common.model.Patient;
 import com.amaranth10.cr.cra.common.service.ICRACommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 진료 공통 Controller
@@ -18,27 +14,19 @@ public class CRACommonController {
 
     /** 환자정보 조회 */
     @PostMapping("/patientInfo")
-    public Object patientInfo (@RequestBody Object param) {
-        return this.iCRACommonService.patientInfo(param);
-    }
+    public Object patientInfo (@RequestBody Object param) { return this.iCRACommonService.patientInfo(param); }
 
     /** 감염리스트 조회 */
     @PostMapping("/infList")
-    public Object infList (@RequestBody Object param) {
-        return this.iCRACommonService.infList(param);
-    }
+    public Object infList (@RequestBody Object param) { return this.iCRACommonService.infList(param); }
 
     /** 환자감염정보 조회 */
     @PostMapping("/patientInf")
-    public Object patientInf (@RequestBody Object param) {
-        return this.iCRACommonService.patientInf(param);
-    };
+    public Object patientInf (@RequestBody Object param) { return this.iCRACommonService.patientInf(param); };
 
     /** 환자감염정보 추가 */
     @PostMapping("/infInsert")
-    public void infInsert (@RequestBody Object param) {
-        this.iCRACommonService.infInsert(param);
-    }
+    public void infInsert (@RequestBody Object param) { this.iCRACommonService.infInsert(param); }
 
     /** 환자감염정보 수정 */
     @PostMapping("/infUpdate")
