@@ -834,6 +834,20 @@
           AND czcomcodmt.cmcd_clsf_cd = 'CZ2001'
         ORDER BY czcomcodmt.cmcd_cd
     </select>
+
+<!--    용법 목록 조회        -->
+    <select id="iotmList" resultType="java.util.HashMap">
+        SELECT iotm_cd As value,
+               iotm_nm As text,
+               prsc_clsf_cd,
+               tkng_notm As notm
+        FROM cli.csiotinfmt
+        WHERE
+<!--        hspt_cd = #{hspt_cd}-->
+<!--          AND -->
+        use_yn = 'Y'
+        ORDER BY iotm_cd
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 </mapper>

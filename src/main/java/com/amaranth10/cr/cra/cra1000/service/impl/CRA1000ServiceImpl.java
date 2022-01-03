@@ -694,6 +694,25 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
         }
     }
 
+    /** 용법 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult iotmList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.iotmList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** ========================================================================================================================================================== */
 
 }

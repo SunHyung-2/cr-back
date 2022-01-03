@@ -673,5 +673,23 @@ public class CRA1000Controller {
         return result;
     };
 
+    /** 용법 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/iotmList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult iotmList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("iotmList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.iotmList(requestInfo, requestModel);
+        return result;
+    };
+
     /** ========================================================================================================================================================== */
 }
