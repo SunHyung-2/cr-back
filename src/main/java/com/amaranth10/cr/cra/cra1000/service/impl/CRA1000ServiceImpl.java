@@ -185,6 +185,9 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** 의약분업예외 목록 조회 */
     @Override
     public List<Object> excpList(Object param) { return cra1000Mapper.excpList(param); }
+
+    @Override
+    public List<Object> iotmList(Object param) { return  cra1000Mapper.iotmList(param); }
     /** ========================================================================================================================================================== */
 
 }
