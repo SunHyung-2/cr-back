@@ -44,7 +44,7 @@ public class Patient {
     private String type_asst_cd; // 유형보조코드
     private String type_asst_cd_nm;
     private String rcpn_memo; // 접수메모
-    private String cmhs_path_cd; // 내원경로코드
+    private String cmhs_path_cd; // 외래경로코드
     private String cmhs_path_cd_nm;
 
     private String clr_dvsn; // 메모진료 구분자

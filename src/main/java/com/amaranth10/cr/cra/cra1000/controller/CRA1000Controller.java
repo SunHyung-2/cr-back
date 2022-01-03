@@ -210,17 +210,95 @@ public class CRA1000Controller {
         return result;
     };
 
-    /** 보험구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    /** 보험구분목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/insnList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult insnList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
 
-    /** 초재진 구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
 
-    /** 부서 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+        System.out.println("insnList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.insnList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 초재진구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/fvnrList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult fvnrList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("fvnrList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.fvnrList(requestInfo, requestModel);
+        return result;
+    };
+
+    /** 부서목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/depList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult depList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("depList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.depList(requestInfo, requestModel);
+        return result;
+    };
 
     /** 외래경로 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/pathList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult pathList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("pathList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.pathList(requestInfo, requestModel);
+        return result;
+    };
 
     /** 내원목적 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/prpsList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult prpsList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
 
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
 
+        System.out.println("prpsList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.prpsList(requestInfo, requestModel);
+        return result;
+    };
     /** ========================================================================================================================================================== */
 
 
@@ -576,5 +654,24 @@ public class CRA1000Controller {
         cra1000ServiceImpl.savePtPrsc(requestInfo, requestModel);
         return result;
     };
+
+    /** 의약분업예외 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @RequestMapping(value = "/excpList", method = {RequestMethod.GET, RequestMethod.POST})
+    @ResponseBody
+    public APIResult excpList(HttpServletRequest servletRequest, HttpServletResponse servletResponse, @RequestBody Object param) throws Exception {
+        RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
+        SessionInfo userInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
+
+        RequestModel requestModel = new RequestModel();
+        requestModel.setSessionInfo(userInfo);
+        requestModel.setData(param);
+
+        System.out.println("excpList" + param);
+
+        APIResult result = new APIResult();
+        result = cra1000ServiceImpl.excpList(requestInfo, requestModel);
+        return result;
+    };
+
     /** ========================================================================================================================================================== */
 }

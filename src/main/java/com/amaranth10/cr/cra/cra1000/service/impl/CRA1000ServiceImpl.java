@@ -206,22 +206,115 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
     /** 환자정보 접수정보 수정 -------------------------------------------------------------------------------------------------------------------------------------  */
     @Override
-            public APIResult updatePtRcpn(RequestInfo requestInfo, RequestModel requestModel) {
-                APIResult result = new APIResult();
+    public APIResult updatePtRcpn(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
 
-                Object param = requestModel.getData();
-                try {
-                    cra1000Mapper.updatePtRcpn(param);
-                    return null;
-                } catch (Exception e) {
-                    KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
-                    result.setResultCode(50);
-                    result.setResultMsg("에러");
-                    return result;
+        Object param = requestModel.getData();
+        try {
+            cra1000Mapper.updatePtRcpn(param);
+            return null;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
         }
     }
 
+    /** 보험구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult insnList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
 
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.insnList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 초재진구분 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult fvnrList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.fvnrList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 부서 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult depList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.depList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 외래경로 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult pathList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.pathList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
+    /** 내원목적 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult prpsList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.prpsList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
     /** ========================================================================================================================================================== */
 
 
@@ -581,6 +674,26 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
             return result;
         }
     }
+
+    /** 의약분업예외 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @Override
+    public APIResult excpList(RequestInfo requestInfo, RequestModel requestModel) {
+        APIResult result = new APIResult();
+
+        Object param = requestModel.getData();
+        try {
+            result.setResultCode(HttpServletResponse.SC_OK);
+            result.setResultMsg("성공");
+            result.setResultData(cra1000Mapper.excpList(param));
+            return  result;
+        } catch (Exception e) {
+            KlagoLog.logError(requestInfo, "[cr]\n" + e.getMessage());
+            result.setResultCode(50);
+            result.setResultMsg("에러");
+            return result;
+        }
+    }
+
     /** ========================================================================================================================================================== */
 
 }

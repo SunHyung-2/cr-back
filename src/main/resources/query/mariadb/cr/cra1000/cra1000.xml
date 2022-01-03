@@ -171,10 +171,53 @@
     </update>
 
 <!--    보험 구분 목록   -->
+    <select id="insnList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM cli.czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CB4005'
+        ORDER BY czcomcodmt.cmcd_cd
+    </select>
+
 <!--    초재진 구분 목록   -->
+    <select id="fvnrList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM cli.czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CB4003'
+        ORDER BY czcomcodmt.cmcd_cd
+    </select>
+
 <!--    부서 목록    -->
-<!--    외래경로 목록     -->
+    <select id="depList" resultType="java.util.HashMap">
+        SELECT dept_cd As value,
+               dept_hnm As text
+        FROM cli.cxdepinfmt
+        WHERE hspt_cd = #{hspt_cd}
+        ORDER BY dept_hnm
+    </select>
+
+    <!--    외래경로 목록     -->
+    <select id="pathList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM cli.czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CB4004'
+        ORDER BY czcomcodmt.cmcd_cd
+    </select>
+
 <!--    내원목적 목록     -->
+    <select id="prpsList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM cli.czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CB4009'
+        ORDER BY czcomcodmt.cmcd_cd
+    </select>
 
 <!--    ==========================================================================================================================================================-->
 
@@ -346,8 +389,8 @@
                IF(crptdgnsnt.ro_yn = "Y", "True", "False") As ro_yn,
                crptdgnsnt.site_dvcd,
                crptdgnsnt.spcf_rgno,
-        crptdgnsnt.hspt_cd,
-        crptdgnsnt.rcpn_sqno
+               crptdgnsnt.hspt_cd,
+               crptdgnsnt.rcpn_sqno
         FROM cli.crptdgnsnt
         WHERE crptdgnsnt.hspt_cd = #{hspt_cd}
           AND crptdgnsnt.del_yn = "N"
@@ -781,6 +824,16 @@
             </foreach>
         </if>
     </update>
+
+<!--    의약분업예외 목록 조회        -->
+    <select id="excpList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM cli.czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CZ2001'
+        ORDER BY czcomcodmt.cmcd_cd
+    </select>
 <!--    ==========================================================================================================================================================-->
 
 </mapper>
