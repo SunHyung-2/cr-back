@@ -112,9 +112,6 @@ public interface ICRA1000Service {
     /** 진단 수정 */
     void updatePtDgns(Object param);
 
-    /** 삭제된 진단 수정 */
-    void deletePtDgns(Object param);
-
     /** 처방 검색 목록 조회 */
     List<Prescription> prscMList(Object param);
 
