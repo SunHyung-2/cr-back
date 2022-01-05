@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 진료 메인 Controller
@@ -130,6 +131,12 @@ public class CRA1000Controller {
     @PostMapping("/progressData")
     public Object progressData (@RequestBody Object param) {
         return this.iCRA1000Service.progressData(param);
+    }
+
+    /** 경과기록 SOAP 데이터 조회 */
+    @PostMapping("/progressSOAPData")
+    public Object progressSOAPData (@RequestBody Object param) {
+        return this.iCRA1000Service.progressSOAPData(param);
     }
 
     /** 경과기록 일련번호 체크 */

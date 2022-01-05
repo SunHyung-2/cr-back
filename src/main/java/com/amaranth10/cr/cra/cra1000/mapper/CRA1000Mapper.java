@@ -74,6 +74,9 @@ public interface CRA1000Mapper {
     /** 경과기록 기본형 데이터 조회 */
     String progressData (Object param);
 
+    /** 경과기록 SOAP 데이터 조회 */
+    Object progressSOAPData (Object param);
+
     /** 경과기록 일련번호 체크 */
     Integer prgrSqnoCheck (Object param);
 

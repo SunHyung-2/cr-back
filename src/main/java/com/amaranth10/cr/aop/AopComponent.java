@@ -43,9 +43,11 @@ public class AopComponent {
         HttpServletRequest servletRequest = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse servletResponse = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
 
-        //로그 정보 (transaction-id, apiCode)를 넘기기 위하여 헤더 정보 파싱
+        // 헤더 정보 파싱 함수를 사용하여 헤더 정보의 필요 값들을 객체로 가져옵니다.
+        // 공용 로그 라이브러리를 사용할때에도 해당 헤더 정보가 필요하기 때문에 모든 로직상에 파라미터로 전달되어야합니다.
         RequestInfo requestInfo = ExtractUtil.extractHeader(servletRequest, servletResponse);
 
+        // 사용자 정보 조회
         SessionInfo sessionInfo = sessionManager.getSessionInfo(requestInfo.getAuthToken());
         String fileName = String.format("%s.%s", pjp.getTarget().getClass().getName(), method.getName());
 
