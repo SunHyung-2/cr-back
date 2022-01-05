@@ -8,9 +8,9 @@
                cbptbainmt.pt_nm,
                cbptbainmt.sex_cd,
                CONCAT((TRUNCATE((TO_DAYS(NOW()) - TO_DAYS(DATE_FORMAT(cbptbainmt.dobr, '%Y-%m-%d'))) / 365, 0))) AS age,
-               (SELECT count(*) FROM cli.crinfinfnt WHERE pid = #{pid} AND del_yn = 'N') as inf_cnt,
-               (SELECT alrg_info FROM cli.cralginfnt WHERE pid = #{pid}) as alg_info
-          FROM cli.cbptbainmt
+               (SELECT count(*) FROM crinfinfnt WHERE pid = #{pid} AND del_yn = 'N') as inf_cnt,
+               (SELECT alrg_info FROM cralginfnt WHERE pid = #{pid}) as alg_info
+          FROM cbptbainmt
          WHERE cbptbainmt.hspt_cd = #{hspt_cd}
            AND cbptbainmt.pid = #{pid}
     </select>
@@ -20,7 +20,7 @@
         SELECT crkcddgcmt.cort_cmds_dvsn,
                crkcddgcmt.dgns_cd,
                crkcddgcmt.dgns_hnm
-          FROM cli.crkcddgcmt
+          FROM crkcddgcmt
          WHERE crkcddgcmt.hspt_cd = #{hspt_cd}
            AND crkcddgcmt.cort_cmds_dvsn != ''
          ORDER BY crkcddgcmt.dgns_cd
@@ -32,7 +32,7 @@
                crinfinfnt.dgns_cd,
                crinfinfnt.dgns_hnm,
                crinfinfnt.del_yn as stat
-          FROM cli.crinfinfnt
+          FROM crinfinfnt
          WHERE crinfinfnt.hspt_cd = #{hspt_cd}
            AND crinfinfnt.pid = #{pid}
            AND crinfinfnt.del_yn = 'N'
@@ -41,7 +41,7 @@
 
     <!-- 환자감염정보 추가 -->
     <insert id="infInsert">
-        INSERT INTO cli.crinfinfnt
+        INSERT INTO crinfinfnt
         (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, pid, cort_cmds_dvsn, dgns_cd, dgns_hnm, del_yn)
         VALUES
         <foreach collection="insertList" item="item" separator=",">
@@ -51,7 +51,7 @@
 
     <!-- 환자감염정보 수정 -->
     <update id="infUpdate">
-        UPDATE cli.crinfinfnt
+        UPDATE crinfinfnt
            SET crinfinfnt.last_updt_usid = #{last_updt_usid}, crinfinfnt.last_uddt = #{last_uddt}, crinfinfnt.del_yn = 'Y'
          WHERE crinfinfnt.hspt_cd = #{hspt_cd}
            AND crinfinfnt.pid = #{pid}
@@ -64,20 +64,20 @@
     <!-- 환자알러지정보 조회 -->
     <select id="patientAlg" resultType="java.lang.String">
         SELECT cralginfnt.alrg_info
-          FROM cli.cralginfnt
+          FROM cralginfnt
          WHERE cralginfnt.hspt_cd = #{hspt_cd}
            AND cralginfnt.pid = #{pid}
     </select>
 
     <!-- 환자알러지정보 추가 -->
     <insert id="algInsert">
-        INSERT INTO cli.cralginfnt (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, pid, alrg_info)
+        INSERT INTO cralginfnt (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, pid, alrg_info)
         VALUES (#{hspt_cd}, #{frst_rgst_usid}, #{frst_rgdt}, #{last_updt_usid}, #{last_uddt}, #{pid}, #{alrg_info})
     </insert>
 
     <!-- 환자알러지정보 수정 -->
     <update id="algUpdate">
-        UPDATE cli.cralginfnt
+        UPDATE cralginfnt
            SET cralginfnt.last_updt_usid = #{last_updt_usid}, cralginfnt.last_uddt = #{last_uddt}, cralginfnt.alrg_info = #{alrg_info}
          WHERE cralginfnt.hspt_cd = #{hspt_cd}
            AND cralginfnt.pid = #{pid}
@@ -85,7 +85,7 @@
 
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
-        UPDATE cli.cbotrcinnt
+        UPDATE cbotrcinnt
            SET cbotrcinnt.rcpn_stat_cd = #{rcpn_stat_cd}
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.pid = #{pid}

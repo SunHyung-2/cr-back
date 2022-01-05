@@ -7,7 +7,7 @@
         SELECT crsetprsmt.set_prsc_sqno,
                crsetprsmt.set_prsc_nm,
                crsetprsmt.set_prsc_uprn_sqno
-        FROM cli.crsetprsmt
+        FROM crsetprsmt
         WHERE crsetprsmt.hspt_cd = #{hspt_cd}
           AND crsetprsmt.set_prsc_usid = #{usid}
         ORDER BY crsetprsmt.set_prsc_sqno
@@ -18,7 +18,7 @@
         SELECT crsetprsmt.set_prsc_sqno,
                crsetprsmt.set_prsc_nm,
                crsetprsmt.set_prsc_uprn_sqno
-        FROM cli.crsetprsmt
+        FROM crsetprsmt
         WHERE crsetprsmt.hspt_cd = #{hspt_cd}
           AND crsetprsmt.set_prsc_usid = #{usid}
           AND crsetprsmt.set_prsc_nm LIKE CONCAT ("%", #{keyword}, "%")
@@ -32,7 +32,7 @@
                crsetdigdt.dgns_nm,
                crsetdigdt.dgns_site_cd As site_dvcd,
                crsetdigdt.dgns_sqno
-        FROM cli.crsetdigdt
+        FROM crsetdigdt
         WHERE crsetdigdt.set_prsc_sqno = #{set_cd}
         ORDER BY crsetdigdt.sort_sqno
     </select>
@@ -51,7 +51,7 @@
                 crsetprsdt.hsin_hsot_dvcd,
                 crsetprsdt.spfm_excp_resn_cd As hsin_prsc_resn_cd,
                 crsetprsdt.prsc_sqno
-        FROM cli.crsetprsdt
+        FROM crsetprsdt
         WHERE crsetprsdt.set_prsc_sqno = #{set_cd}
         ORDER BY crsetprsdt.sort_sqno
     </select>
@@ -61,11 +61,11 @@
         <if test='status != null and status == "del"'>
             <foreach collection="delList" item="item" separator=";">
                 DELETE s, p, d
-                  FROM cli.crsetprsmt As s
-                LEFT JOIN cli.crsetprsdt As p
+                  FROM crsetprsmt As s
+                LEFT JOIN crsetprsdt As p
                        ON p.set_prsc_sqno = s.set_prsc_sqno
                       AND p.hspt_cd = #{hspt_cd}
-                LEFT JOIN cli.crsetdigdt As d
+                LEFT JOIN crsetdigdt As d
                        ON d.set_prsc_sqno = s.set_prsc_sqno
                       AND d.hspt_cd = #{hspt_cd}
                 WHERE s.set_prsc_sqno = #{item}
@@ -76,7 +76,7 @@
         <if test='status != null and status == "upd"'>
             <if test='delDgns != null and delDgns.size != 0'>
                 <foreach collection="delDgns" item="item" separator=";">
-                    DELETE FROM cli.crsetdigdt
+                    DELETE FROM crsetdigdt
                     WHERE set_prsc_sqno = #{set.set_prsc_sqno}
                     AND dgns_sqno = #{item.dgns_sqno}
                     AND hspt_cd = #{hspt_cd}
@@ -84,7 +84,7 @@
             </if>
             <if test='delPrsc != null and delPrsc.size != 0'>
                 <foreach collection="delPrsc" item="item" separator=";">
-                    DELETE FROM cli.crsetprsdt
+                    DELETE FROM crsetprsdt
                     WHERE set_prsc_sqno = #{set.set_prsc_sqno}
                     AND prsc_sqno = #{item.prsc_sqno}
                     AND hspt_cd = #{hspt_cd}
@@ -96,7 +96,7 @@
 <!--    약속처방 진단 저장      -->
     <insert id="saveSet">
         <if test='set.set_prsc_sqno == 0'>
-            INSERT INTO cli.crsetprsmt
+            INSERT INTO crsetprsmt
                 (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
             VALUES (
                 #{hspt_cd},
@@ -109,7 +109,7 @@
         </if>
         <if test="dgnsList != null and dgnsList.size != 0">
             <foreach collection="dgnsList" item="item" separator=";">
-                INSERT INTO cli.crsetdigdt
+                INSERT INTO crsetdigdt
                     (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, dgns_sqno,
                     dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
                 SELECT
@@ -132,7 +132,7 @@
                     #{item.dgns_nm},
                     #{item.site_dvcd},
                     #{item.row}
-                FROM cli.crsetdigdt
+                FROM crsetdigdt
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
                         WHERE crsetdigdt.set_prsc_sqno
@@ -149,7 +149,7 @@
         </if>
         <if test="prscList != null and prscList.size != 0">
             <foreach collection="prscList" item="item" separator=";">
-            INSERT INTO cli.crsetprsdt
+            INSERT INTO crsetprsdt
                 (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, prsc_sqno,
                 prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
                 iotm_cd, hsin_hsot_dvcd, spfm_excp_resn_cd,
@@ -184,7 +184,7 @@
                 #{item.totl_vol},
                 #{item.inpy_dvcd},
                 #{item.row}
-                FROM cli.crsetprsdt
+                FROM crsetprsdt
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
                         WHERE crsetprsdt.set_prsc_sqno
@@ -203,7 +203,7 @@
 
 <!--    약속처방 수정     -->
     <update id="updateSet" parameterType="java.util.Objects">
-        UPDATE cli.crsetprsmt
+        UPDATE crsetprsmt
         SET crsetprsmt.set_prsc_nm = #{set.set_prsc_nm},
             crsetprsmt.set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno},
             crsetprsmt.last_uddt = #{dateTime}
@@ -211,7 +211,7 @@
         AND set_prsc_sqno = #{set.set_prsc_sqno};
         <if test="updDgns != null and updDgns.size != 0">
             <foreach collection="updDgns" item="item" separator=";">
-                UPDATE cli.crsetdigdt
+                UPDATE crsetdigdt
                 SET dgns_nm = #{item.dgns_nm},
                     dgns_site_cd = #{item.site_dvcd},
                     sort_sqno = #{item.row},
@@ -223,7 +223,7 @@
         </if>
         <if test="updPrsc != null and updPrsc.size != 0">
             <foreach collection="updPrsc" item="item" separator=";">
-                UPDATE cli.crsetprsdt
+                UPDATE crsetprsdt
                 SET prsc_nm = #{item.prsc_nm},
                     prsc_dosg1 = #{item.dosg_1},
                     prsc_notm = #{item.notm},
