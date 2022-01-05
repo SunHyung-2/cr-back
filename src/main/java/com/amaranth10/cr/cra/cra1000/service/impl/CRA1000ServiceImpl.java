@@ -104,6 +104,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public String progressData(Object param) { return cra1000Mapper.progressData(param); }
 
+    /** 경과기록 SOAP 데이터 조회 */
+    @Override
+    public Object progressSOAPData(Object param) { return cra1000Mapper.progressSOAPData(param); }
+
     /** 경과기록 일련번호 체크 */
     @Override
     public Integer prgrSqnoCheck(Object param) { return cra1000Mapper.prgrSqnoCheck(param); }

@@ -287,6 +287,17 @@
            AND crprogrsnt.del_yn = 'N'
     </select>
 
+<!--    경과기록 SOAP 데이터 조회-->
+    <select id="progressSOAPData" resultType="java.util.HashMap">
+        SELECT sbjt_cnts, objt_cnts, asss_cnts, plan
+          FROM cli.crprogrsnt
+         WHERE crprogrsnt.hspt_cd = #{hspt_cd}
+           AND crprogrsnt.pid = #{pid}
+           AND crprogrsnt.rcpn_sqno = #{rcpn_sqno}
+           AND crprogrsnt.prgr_sqno = #{prgr_sqno}
+           AND crprogrsnt.del_yn = 'N'
+    </select>
+
 <!--    경과기록 일련번호 체크-->
     <select id="prgrSqnoCheck" resultType="java.lang.Integer">
         SELECT IFNULL(MAX(prgr_sqno) + 1, 1)
@@ -305,7 +316,8 @@
 <!--    경과기록 수정-->
     <update id="progressUpdate">
         UPDATE cli.crprogrsnt
-           SET crprogrsnt.last_updt_usid = #{last_updt_usid}, crprogrsnt.last_uddt = #{last_uddt}, prgr_rcrd = #{prgr_rcrd}
+           SET last_updt_usid = #{last_updt_usid}, last_uddt = #{last_uddt}, prgr_rcrd = #{prgr_rcrd},
+               sbjt_cnts = #{sbjt_cnts}, objt_cnts = #{objt_cnts}, asss_cnts = #{asss_cnts}, plan = #{plan}
          WHERE crprogrsnt.hspt_cd = #{hspt_cd}
            AND crprogrsnt.pid = #{pid}
            AND crprogrsnt.rcpn_sqno = #{rcpn_sqno}
