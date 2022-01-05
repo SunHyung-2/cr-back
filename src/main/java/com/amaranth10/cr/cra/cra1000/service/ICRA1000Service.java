@@ -73,6 +73,9 @@ public interface ICRA1000Service {
     /** 경과기록 기본형 데이터 조회 */
     String progressData(Object param);
 
+    /** 경과기록 SOAP 데이터 조회 */
+    Object progressSOAPData(Object param);
+
     /** 경과기록 일련번호 체크 */
     Integer prgrSqnoCheck(Object param);
 
@@ -112,9 +115,6 @@ public interface ICRA1000Service {
     /** 진단 수정 */
     void updatePtDgns(Object param);
 
-    /** 삭제된 진단 수정 */
-    void deletePtDgns(Object param);
-
     /** 처방 검색 목록 조회 */
     List<Prescription> prscMList(Object param);
 
@@ -129,5 +129,8 @@ public interface ICRA1000Service {
 
     /** 의약분업예외 목록 조회 */
     List<Object> excpList(Object param);
+
+    /** 용법 목록 조회 */
+    List<Object> iotmList(Object param);
     /** ========================================================================================================================================================== */
 }

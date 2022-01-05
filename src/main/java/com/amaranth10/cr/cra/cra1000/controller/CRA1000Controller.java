@@ -1,8 +1,17 @@
 package com.amaranth10.cr.cra.cra1000.controller;
 
+import com.amaranth10.backendcommon.util.helper.ExtractUtil;
+import com.amaranth10.backendcommon.util.model.APIResult;
+import com.amaranth10.backendcommon.util.model.SessionInfo;
 import com.amaranth10.cr.cra.cra1000.service.ICRA1000Service;
+import com.amaranth10.cr.model.RequestModel;
+import klago.log.utils.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 진료 메인 Controller
@@ -124,6 +133,12 @@ public class CRA1000Controller {
         return this.iCRA1000Service.progressData(param);
     }
 
+    /** 경과기록 SOAP 데이터 조회 */
+    @PostMapping("/progressSOAPData")
+    public Object progressSOAPData (@RequestBody Object param) {
+        return this.iCRA1000Service.progressSOAPData(param);
+    }
+
     /** 경과기록 일련번호 체크 */
     @PostMapping("/prgrSqnoCheck")
     public Object prgrSqnoCheck (@RequestBody Object param) {
@@ -224,6 +239,12 @@ public class CRA1000Controller {
     @PostMapping("/excpList")
     public Object excpList (@RequestBody Object param) {
         return this.iCRA1000Service.excpList(param);
+    }
+
+    /** 용법 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    @PostMapping("/iotmList")
+    public Object iotmList (@RequestBody Object param) {
+        return  this.iCRA1000Service.iotmList(param);
     }
     /** ========================================================================================================================================================== */
 }

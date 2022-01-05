@@ -104,6 +104,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public String progressData(Object param) { return cra1000Mapper.progressData(param); }
 
+    /** 경과기록 SOAP 데이터 조회 */
+    @Override
+    public Object progressSOAPData(Object param) { return cra1000Mapper.progressSOAPData(param); }
+
     /** 경과기록 일련번호 체크 */
     @Override
     public Integer prgrSqnoCheck(Object param) { return cra1000Mapper.prgrSqnoCheck(param); }
@@ -159,11 +163,6 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public void updatePtDgns(Object param) { cra1000Mapper.updatePtDgns(param); }
 
-    /** 삭제된 진단 수정 */
-    @Transactional
-    @Override
-    public void deletePtDgns(Object param) { cra1000Mapper.deletePtDgns(param); }
-
     /** 처방 검색 목록 조회 */
     @Override
     public List<Prescription> prscMList(Object param) { return cra1000Mapper.prscMList(param); }
@@ -185,5 +184,9 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** 의약분업예외 목록 조회 */
     @Override
     public List<Object> excpList(Object param) { return cra1000Mapper.excpList(param); }
+
+    @Override
+    public List<Object> iotmList(Object param) { return  cra1000Mapper.iotmList(param); }
     /** ========================================================================================================================================================== */
+
 }
