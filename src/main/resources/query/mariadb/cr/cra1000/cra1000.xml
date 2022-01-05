@@ -164,7 +164,7 @@
             cbotrcinnt.mdcr_dr_id = #{mdcr_dr_id},
             cbotrcinnt.fvnr_dvcd = #{fvnr_dvcd},
             cbotrcinnt.insn_tycd = #{insn_tycd},
-            cbotrcinnt.cmhs_path_cd = #{cmhs_path_cd}
+<!--            cbotrcinnt.cmhs_prps_cd = #{cmhs_path_cd}-->
     </update>
 
 <!--    보험 구분 목록   -->
