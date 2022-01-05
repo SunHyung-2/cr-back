@@ -40,12 +40,13 @@ public class Patient {
     private String vip_pt_yn; // vip 환자 여부
     private String cncn_pt_yn; // 관심 환자 여부
     private String priv_pt_yn; // 사생활 보호 환자 여부
+    private String cmhs_path_dvcd; // 내원경로코드
+    private String cmhs_path_cd_nm;
 
     private String type_asst_cd; // 유형보조코드
     private String type_asst_cd_nm;
     private String rcpn_memo; // 접수메모
-    private String cmhs_path_cd; // 외래경로코드
-    private String cmhs_path_cd_nm;
+    private String cmhs_prps_cd; // 내원목적코드
 
     private String clr_dvsn; // 메모진료 구분자
     private String clr_cnts; // 진료메모 내용
