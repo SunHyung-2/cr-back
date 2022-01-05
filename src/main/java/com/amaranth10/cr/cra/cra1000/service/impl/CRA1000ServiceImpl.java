@@ -163,11 +163,6 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public void updatePtDgns(Object param) { cra1000Mapper.updatePtDgns(param); }
 
-    /** 삭제된 진단 수정 */
-    @Transactional
-    @Override
-    public void deletePtDgns(Object param) { cra1000Mapper.deletePtDgns(param); }
-
     /** 처방 검색 목록 조회 */
     @Override
     public List<Prescription> prscMList(Object param) { return cra1000Mapper.prscMList(param); }

@@ -409,36 +409,36 @@
 
 <!--    진단 저장       -->
     <insert id="savePtDgns" parameterType="java.util.Objects">
-        <foreach item="item" index="index" collection="dgnsList" separator=";">
-        INSERT INTO cli.crptdgnsnt
-                SELECT
-                    #{item.hspt_cd},
-                    #{item.usid},
-                    #{item.dateTime},
-                    #{item.usid},
-                    #{item.dateTime},
-                    #{item.pid},
-                    #{item.rcpn_sqno},
-                    IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
-                    #{item.date},
-                    #{item.mddp_cd},
-                    #{item.usid},
-                    #{item.dgns_cd},
-                    #{item.dgns_nm},
-                    #{item.dvsn},
-                    <choose>
-                        <when test='item.ro_yn == "True"'>'Y',</when>
-                        <otherwise>'N',</otherwise>
-                    </choose>
-                    #{item.site_dvcd},
-                    #{item.spcf_rqno},
-                    'N',
-                    #{item.row}
-                FROM cli.crptdgnsnt
-                WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
-                  AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
-                  AND crptdgnsnt.pid = #{item.pid}
-            </foreach>
+        <foreach item="item" collection="dgnsList" separator=";">
+            INSERT INTO cli.crptdgnsnt
+            SELECT
+                #{item.hspt_cd},
+                #{item.usid},
+                #{item.dateTime},
+                #{item.usid},
+                #{item.dateTime},
+                #{item.pid},
+                #{item.rcpn_sqno},
+                IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
+                #{item.date},
+                #{item.mddp_cd},
+                #{item.usid},
+                #{item.dgns_cd},
+                #{item.dgns_nm},
+                #{item.dvsn},
+                <choose>
+                    <when test='item.ro_yn == "True"'>'Y',</when>
+                    <otherwise>'N',</otherwise>
+                </choose>
+                #{item.site_dvcd},
+                #{item.spcf_rqno},
+                'N',
+                #{item.row}
+            FROM cli.crptdgnsnt
+            WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
+              AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
+              AND crptdgnsnt.pid = #{item.pid}
+        </foreach>
     </insert>
 
 <!--    진단 수정       -->
@@ -465,17 +465,13 @@
                 </if>
             </foreach>
         </if>
-    </update>
-
-<!--    삭제된 진단 수정      -->
-    <update id="deletePtDgns">
         <if test="delList != null and delList.size != 0">
             <foreach collection="delList" item="item">
                 UPDATE cli.crptdgnsnt
-                SET crptdgnsnt.del_yn = 'Y'
+                   SET crptdgnsnt.del_yn = 'Y'
                 WHERE crptdgnsnt.hspt_cd = #{item.hspt_cd}
-                AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
-                AND crptdgnsnt.dgns_sqno = #{item.dgns_sqno}
+                  AND crptdgnsnt.rcpn_sqno = #{item.rcpn_sqno}
+                  AND crptdgnsnt.dgns_sqno = #{item.dgns_sqno}
             </foreach>
         </if>
     </update>
