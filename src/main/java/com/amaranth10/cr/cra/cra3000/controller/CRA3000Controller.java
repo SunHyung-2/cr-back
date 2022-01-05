@@ -60,6 +60,7 @@ public class CRA3000Controller {
     /** 약속처방 수정 */
     @PostMapping("/updateSet")
     public void updateSet (@RequestBody Object param) {
+        System.out.println(param);
         this.iCRA3000Service.updateSet(param);
         this.iCRA3000Service.deleteSet(param);
         this.iCRA3000Service.saveSet(param);
