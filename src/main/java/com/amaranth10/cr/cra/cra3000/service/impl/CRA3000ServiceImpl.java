@@ -10,6 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+/**
+ * 약속처방 Service
+ */
 @Service
 public class CRA3000ServiceImpl implements ICRA3000Service {
     @Autowired
@@ -31,4 +34,19 @@ public class CRA3000ServiceImpl implements ICRA3000Service {
     @Override
     public List<Prescription> setPrscList(Object param) { return cra3000Mapper.setPrscList(param); }
 
+    /** 약속처방 삭제 */
+    @Transactional
+    @Override
+    public void deleteSet(Object param) { cra3000Mapper.deleteSet(param); }
+
+    /** 약속처방 저장 */
+    @Transactional
+    @Override
+    public void saveSet(Object param) { cra3000Mapper.saveSet(param); }
+
+
+    /** 약속처방 수정 */
+    @Transactional
+    @Override
+    public void updateSet (Object param) { cra3000Mapper.updateSet(param); }
 }

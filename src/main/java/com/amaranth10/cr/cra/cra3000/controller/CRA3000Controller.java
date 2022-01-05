@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 약속처방 Controller
+ */
 @RestController
 public class CRA3000Controller {
     @Autowired
@@ -39,5 +42,26 @@ public class CRA3000Controller {
     @PostMapping("/setPrscList")
     public Object setPrscList (@RequestBody Object param) {
         return this.iCRA3000Service.setPrscList(param);
+    }
+
+    /** 약속처방 삭제 */
+    @PostMapping("/deleteSet")
+    public void deleteSet (@RequestBody Object param) {
+        this.iCRA3000Service.deleteSet(param);
+    }
+
+    /** 약속처방 저장 */
+    @PostMapping("/saveSet")
+    public void saveSet (@RequestBody Object param) {
+        System.out.println(param);
+        this.iCRA3000Service.saveSet(param);
+    }
+
+    /** 약속처방 수정 */
+    @PostMapping("/updateSet")
+    public void updateSet (@RequestBody Object param) {
+        this.iCRA3000Service.updateSet(param);
+        this.iCRA3000Service.deleteSet(param);
+        this.iCRA3000Service.saveSet(param);
     }
 }

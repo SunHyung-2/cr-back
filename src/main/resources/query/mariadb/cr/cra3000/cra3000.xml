@@ -7,7 +7,7 @@
         SELECT crsetprsmt.set_prsc_sqno,
                crsetprsmt.set_prsc_nm,
                crsetprsmt.set_prsc_uprn_sqno
-        FROM cli_dev.crsetprsmt
+        FROM cli.crsetprsmt
         WHERE crsetprsmt.hspt_cd = #{hspt_cd}
           AND crsetprsmt.set_prsc_usid = #{usid}
         ORDER BY crsetprsmt.set_prsc_sqno
@@ -18,7 +18,7 @@
         SELECT crsetprsmt.set_prsc_sqno,
                crsetprsmt.set_prsc_nm,
                crsetprsmt.set_prsc_uprn_sqno
-        FROM cli_dev.crsetprsmt
+        FROM cli.crsetprsmt
         WHERE crsetprsmt.hspt_cd = #{hspt_cd}
           AND crsetprsmt.set_prsc_usid = #{usid}
           AND crsetprsmt.set_prsc_nm LIKE CONCAT ("%", #{keyword}, "%")
@@ -30,8 +30,9 @@
     <select id="setDgnsList" resultType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
         SELECT crsetdigdt.dgns_cd,
                crsetdigdt.dgns_nm,
-               crsetdigdt.dgns_site_cd As site_dvcd
-        FROM cli_dev.crsetdigdt
+               crsetdigdt.dgns_site_cd As site_dvcd,
+               crsetdigdt.dgns_sqno
+        FROM cli.crsetdigdt
         WHERE crsetdigdt.set_prsc_sqno = #{set_cd}
         ORDER BY crsetdigdt.sort_sqno
     </select>
@@ -47,11 +48,170 @@
                 crsetprsdt.iotm_cd,
                 crsetprsdt.inpy_dvcd,
                 crsetprsdt.hsin_hsot_dvcd,
-                crsetprsdt.spfm_excp_resn_cd As hsin_prsc_resn_cd
-        FROM cli_dev.crsetprsdt
+                crsetprsdt.spfm_excp_resn_cd As hsin_prsc_resn_cd,
+                crsetprsdt.prsc_sqno
+        FROM cli.crsetprsdt
         WHERE crsetprsdt.set_prsc_sqno = #{set_cd}
         ORDER BY crsetprsdt.sort_sqno
     </select>
 
+<!--    약속처방 삭제     -->
+    <delete id="deleteSet">
+        <if test='status != null and status == "del"'>
+            <foreach collection="delList" item="item" separator=";">
+                DELETE s, p, d
+                  FROM cli.crsetprsmt As s
+                LEFT JOIN cli.crsetprsdt As p
+                       ON p.set_prsc_sqno = s.set_prsc_sqno
+                      AND p.hspt_cd = #{hspt_cd}
+                LEFT JOIN cli.crsetdigdt As d
+                       ON d.set_prsc_sqno = s.set_prsc_sqno
+                      AND d.hspt_cd = #{hspt_cd}
+                WHERE s.set_prsc_sqno = #{item}
+                  AND s.hspt_cd = #{hspt_cd}
+                  AND s.set_prsc_usid = #{usid}
+            </foreach>
+        </if>
+        <if test='status != null and status == "upd"'>
+            <if test='delDgns != null and delDgns.size != 0'>
+                <foreach collection="delDgns" item="item" separator=";">
+                    DELETE FROM cli.crsetdigdt
+                    WHERE set_prsc_sqno = #{set.set_prsc_sqno}
+                    AND dgns_sqno = #{item.dgns_sqno}
+                    AND hspt_cd = #{hspt_cd}
+                </foreach>
+            </if>
+            <if test='delPrsc != null and delPrsc.size != 0'>
+                <foreach collection="delPrsc" item="item" separator=";">
+                    DELETE FROM cli.crsetprsdt
+                    WHERE set_prsc_sqno = #{set.set_prsc_sqno}
+                    AND prsc_sqno = #{item.prsc_sqno}
+                    AND hspt_cd = #{hspt_cd}
+                </foreach>
+            </if>
+        </if>
+    </delete>
+
 <!--    약속처방 진단 저장      -->
+    <insert id="saveSet">
+        <if test='set.set_prsc_sqno == 0'>
+            INSERT INTO cli.crsetprsmt
+                (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
+            VALUES (
+                #{hspt_cd},
+                'ADMIN',
+                'ADMIN',
+                #{usid},
+                #{set.set_prsc_uprn_sqno},
+                #{set.set_prsc_nm}
+            );
+        </if>
+        <if test="dgnsList != null and dgnsList.size != 0">
+            <foreach collection="dgnsList" item="item" separator=";">
+                INSERT INTO cli.crsetdigdt
+                    (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, dgns_sqno,
+                    dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
+                SELECT
+                    #{hspt_cd},
+                    'ADMIN',
+                    'ADMIN',
+                    (SELECT AUTO_INCREMENT - 1
+                    FROM information_schema.tables
+                    WHERE table_name = 'crsetprsmt'
+                    AND table_schema = DATABASE( )),
+                    IFNULL(MAX(crsetdigdt.dgns_sqno) + 1, 1),
+                    #{item.dgns_cd},
+                    #{item.dgns_nm},
+                    #{item.site_dvcd},
+                    #{item.row}
+                FROM cli.crsetdigdt
+                WHERE crsetdigdt.set_prsc_sqno
+                        = (SELECT AUTO_INCREMENT - 1
+                            FROM information_schema.tables
+                            WHERE table_name = 'crsetprsmt'
+                            AND table_schema = DATABASE( ))
+            </foreach>;
+        </if>
+        <if test="prscList != null and prscList.size != 0">
+            <foreach collection="prscList" item="item" separator=";">
+            INSERT INTO cli.crsetprsdt
+                (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, prsc_sqno,
+                prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
+                iotm_cd, hsin_hsot_dvcd, spfm_excp_resn_cd,
+                mix_yn, mix_no, prsc_qty, inpy_dvcd, sort_sqno)
+            SELECT
+                #{hspt_cd},
+                'ADMIN',
+                'ADMIN',
+                (SELECT AUTO_INCREMENT - 1
+                FROM information_schema.tables
+                WHERE table_name = 'crsetprsmt'
+                AND table_schema = DATABASE( )),
+                IFNULL(MAX(crsetprsdt.prsc_sqno) + 1, 1),
+                #{item.prsc_cd},
+                #{item.prsc_nm},
+                #{item.prsc_clsf_cd},
+                #{item.dosg_1},
+                #{item.notm},
+                #{item.nody},
+                #{item.iotm_cd},
+                #{item.hsin_hsot_dvcd},
+                #{item.hsin_prsc_resn_cd},
+                #{item.mix_yn},
+                #{item.mix_no},
+                #{item.totl_vol},
+                #{item.inpy_dvcd},
+                #{item.row}
+                FROM cli.crsetprsdt
+                WHERE crsetprsdt.set_prsc_sqno
+                        = (SELECT AUTO_INCREMENT - 1
+                            FROM information_schema.tables
+                            WHERE table_name = 'crsetprsmt'
+                            AND table_schema = DATABASE( ))
+            </foreach>;
+        </if>
+    </insert>
+
+<!--    약속처방 수정     -->
+    <update id="updateSet" parameterType="java.util.Objects">
+        UPDATE cli.crsetprsmt
+        SET crsetprsmt.set_prsc_nm = #{set.set_prsc_nm},
+            crsetprsmt.set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno},
+            crsetprsmt.last_uddt = #{dateTime}
+        WHERE hspt_cd = #{hspt_cd}
+        AND set_prsc_sqno = #{set.set_prsc_sqno};
+        <if test="updDgns != null and updDgns.size != 0">
+            <foreach collection="updDgns" item="item" separator=";">
+                UPDATE cli.crsetdigdt
+                SET dgns_nm = #{item.dgns_nm},
+                    dgns_site_cd = #{item.site_dvcd},
+                    sort_sqno = #{item.row},
+                    last_uddt = #{dateTime}
+                WHERE hspt_cd = #{hspt_cd}
+                AND set_prsc_sqno = #{item.set_prsc_sqno}
+                AND dgns_sqno = #{itme.dgns_sqno}
+            </foreach>;
+        </if>
+        <if test="updPrsc != null and updPrsc.size != 0">
+            <foreach collection="updPrsc" item="item" separator=";">
+                UPDATE cli.crsetprsdt
+                SET prsc_nm = #{item.prsc_nm},
+                    prsc_dosg1 = #{item.dosg_1},
+                    prsc_notm = #{item.notm},
+                    prsc_nody = #{item.nody},
+                    iotm_cd = #{item.iotm_cd},
+                    hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},
+                    spfm_excp_resn_cd = #{item.hsin_prsc_resn_cd},
+                    mix_yn = #{item.mix_yn},
+                    mix_no = #{item.mix_no},
+                    prsc_qty = #{item.totl_vol},
+                    inpy_dvcd = #{item.inpy_dvcd},
+                    sort_sqno = #{item.row},
+                    last_uddt = #{dateTime}
+                WHERE hspt_cd = #{hspt_cd}
+                AND set_prsc_sqno = #{item.set_prsc_sqno}
+                AND prsc_sqno = #{item.prsc_sqno}
+            </foreach>;
+        </if>
+    </update>
 </mapper>

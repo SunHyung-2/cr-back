@@ -523,7 +523,7 @@
     </select>
 
 <!--    처방 저장       -->
-    <update id="savePtPrsc">
+    <insert id="savePtPrsc">
         <foreach collection="prscList" item="item" separator=";" index="index">
             <!-- 기본 처방 -->
             <if test='item.prsc_clsf_cd == "A1" or item.prsc_clsf_cd == "A2" or item.prsc_clsf_cd == "A3"'>
@@ -719,7 +719,7 @@
                   AND cbotrcinnt.pid = #{item.pid}
             </if>
         </foreach>
-    </update>
+    </insert>
 
 <!--    처방 수정       -->
     <update id="updatePtPrsc" parameterType="com.amaranth10.cr.cra.cra1000.model.Prescription">
