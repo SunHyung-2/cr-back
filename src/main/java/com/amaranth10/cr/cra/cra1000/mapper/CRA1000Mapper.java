@@ -95,6 +95,9 @@ public interface CRA1000Mapper {
     /** 과거기록 조회 */
     List<Reception> pastList (Object param);
 
+    /** 경과기록 조회 */
+    List<Progress> prgrList (Object param);
+
     /** SLIP 목록 조회 */
     List<Slip> slipList (Object param);
 

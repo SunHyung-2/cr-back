@@ -134,6 +134,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Reception> pastList(Object param) { return cra1000Mapper.pastList(param); }
 
+    /** 경과기록 조회 */
+    @Override
+    public List<Progress> prgrList (Object param) { return cra1000Mapper.prgrList(param); }
+
     /** SLIP 목록 조회 */
     @Override
     public List<Slip> slipList(Object param) { return cra1000Mapper.slipList(param); }

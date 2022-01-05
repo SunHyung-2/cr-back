@@ -172,6 +172,10 @@ public class CRA1000Controller {
         return this.iCRA1000Service.pastList(param);
     }
 
+    /** 경과기록 조회 */
+    @PostMapping("prgrList")
+    public Object prgrList (@RequestBody Object param) { return this.iCRA1000Service.prgrList(param); }
+
     /** SLIP 목록 조회 */
     @PostMapping("/slipList")
     public Object slipList (@RequestBody Object param) {
