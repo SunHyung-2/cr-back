@@ -73,10 +73,7 @@ public class CRA1000Controller {
 
     /** 환자정보 접수정보 수정 */
     @PostMapping("/updatePtRcpn")
-    public void updatePtRcpn (@RequestBody Object param) {
-        System.out.println(param);
-        this.iCRA1000Service.updatePtRcpn(param);
-    }
+    public void updatePtRcpn (@RequestBody Object param) { this.iCRA1000Service.updatePtRcpn(param); }
 
     /** 보험구분 목록 조회 */
     @PostMapping("/insnList")
@@ -215,7 +212,8 @@ public class CRA1000Controller {
     /** 진단 수정 */
     @PostMapping("/updatePtDgns")
     public void updatePtDgns (@RequestBody Object param) {
-        this.iCRA1000Service.updatePtDgns(param);
+//        this.iCRA1000Service.updatePtDgns(param);
+//        this.iCRA1000Service.savePtDgns(param);
     }
 
     /** 처방 검색 목록 조회 */
@@ -239,7 +237,9 @@ public class CRA1000Controller {
     /** 처방 수정 */
     @PostMapping("/updatePtPrsc")
     public void updatePtPrsc (@RequestBody Object param) {
+        System.out.println(param);
         this.iCRA1000Service.updatePtPrsc(param);
+        this.iCRA1000Service.savePtPrsc(param);
     }
 
     /** 의약분업예외 목록 조회 */

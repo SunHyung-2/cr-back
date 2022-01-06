@@ -94,14 +94,16 @@
     </delete>
 
 <!--    약속처방 진단 저장      -->
-    <insert id="saveSet">
+    <insert id="saveSet" parameterType="java.util.Objects">
         <if test='set.set_prsc_sqno == 0'>
             INSERT INTO crsetprsmt
-                (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
             VALUES (
                 #{hspt_cd},
-                'ADMIN',
-                'ADMIN',
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
                 #{usid},
                 #{set.set_prsc_uprn_sqno},
                 #{set.set_prsc_nm}
@@ -110,12 +112,14 @@
         <if test="dgnsList != null and dgnsList.size != 0">
             <foreach collection="dgnsList" item="item" separator=";">
                 INSERT INTO crsetdigdt
-                    (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, dgns_sqno,
-                    dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
+                    (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                    set_prsc_sqno, dgns_sqno, dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
                 SELECT
                     #{hspt_cd},
-                    'ADMIN',
-                    'ADMIN',
+                    #{frst_rgst_usid},
+                    #{frst_rgdt},
+                    #{last_updt_usid},
+                    #{last_uddt},
                     <choose>
                         <when test='set.set_prsc_sqno == 0'>
                             (SELECT AUTO_INCREMENT - 1
@@ -133,16 +137,16 @@
                     #{item.site_dvcd},
                     #{item.row}
                 FROM crsetdigdt
+                WHERE set_prsc_sqno =
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
-                        WHERE crsetdigdt.set_prsc_sqno
-                                = (SELECT AUTO_INCREMENT - 1
-                                FROM information_schema.tables
-                                WHERE table_name = 'crsetprsmt'
-                                AND table_schema = DATABASE( ))
+                        (SELECT AUTO_INCREMENT - 1
+                        FROM information_schema.tables
+                        WHERE table_name = 'crsetprsmt'
+                        AND table_schema = DATABASE( ))
                     </when>
                     <otherwise>
-                        WHERE crsetdigdt.set_prsc_sqno = #{set.set_prsc_sqno}
+                        #{set.set_prsc_sqno}
                     </otherwise>
                 </choose>
             </foreach>;
@@ -150,14 +154,16 @@
         <if test="prscList != null and prscList.size != 0">
             <foreach collection="prscList" item="item" separator=";">
             INSERT INTO crsetprsdt
-                (hspt_cd, frst_rgst_usid, last_updt_usid, set_prsc_sqno, prsc_sqno,
-                prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                set_prsc_sqno, prsc_sqno, prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
                 iotm_cd, hsin_hsot_dvcd, spfm_excp_resn_cd,
                 mix_yn, mix_no, prsc_qty, inpy_dvcd, sort_sqno)
             SELECT
                 #{hspt_cd},
-                'ADMIN',
-                'ADMIN',
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
                         (SELECT AUTO_INCREMENT - 1
@@ -185,16 +191,16 @@
                 #{item.inpy_dvcd},
                 #{item.row}
                 FROM crsetprsdt
+                WHERE set_prsc_sqno =
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
-                        WHERE crsetprsdt.set_prsc_sqno
-                        = (SELECT AUTO_INCREMENT - 1
+                        (SELECT AUTO_INCREMENT - 1
                         FROM information_schema.tables
                         WHERE table_name = 'crsetprsmt'
                         AND table_schema = DATABASE( ))
                     </when>
                     <otherwise>
-                        WHERE crsetprsdt.set_prsc_sqno = #{set.set_prsc_sqno}
+                        #{set.set_prsc_sqno}
                     </otherwise>
                 </choose>
             </foreach>;
@@ -204,18 +210,20 @@
 <!--    약속처방 수정     -->
     <update id="updateSet" parameterType="java.util.Objects">
         UPDATE crsetprsmt
-        SET crsetprsmt.set_prsc_nm = #{set.set_prsc_nm},
-            crsetprsmt.set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno},
-            crsetprsmt.last_uddt = #{dateTime}
+        SET last_updt_usid = #{last_updt_usid},
+            last_uddt = #{last_uddt},
+            set_prsc_nm = #{set.set_prsc_nm},
+            set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno}
         WHERE hspt_cd = #{hspt_cd}
-        AND set_prsc_sqno = #{set.set_prsc_sqno};
+          AND set_prsc_sqno = #{set.set_prsc_sqno};
         <if test="updDgns != null and updDgns.size != 0">
             <foreach collection="updDgns" item="item" separator=";">
                 UPDATE crsetdigdt
-                SET dgns_nm = #{item.dgns_nm},
+                SET last_updt_usid = #{last_updt_usid},
+                    last_uddt = #{last_uddt},
+                    dgns_nm = #{item.dgns_nm},
                     dgns_site_cd = #{item.site_dvcd},
-                    sort_sqno = #{item.row},
-                    last_uddt = #{dateTime}
+                    sort_sqno = #{item.row}
                 WHERE crsetdigdt.hspt_cd = #{hspt_cd}
                   AND crsetdigdt.set_prsc_sqno = #{set.set_prsc_sqno}
                   AND crsetdigdt.dgns_sqno = #{item.dgns_sqno}
@@ -224,7 +232,9 @@
         <if test="updPrsc != null and updPrsc.size != 0">
             <foreach collection="updPrsc" item="item" separator=";">
                 UPDATE crsetprsdt
-                SET prsc_nm = #{item.prsc_nm},
+                SET last_updt_usid = #{last_updt_usid},
+                    last_uddt = #{last_uddt},
+                    prsc_nm = #{item.prsc_nm},
                     prsc_dosg1 = #{item.dosg_1},
                     prsc_notm = #{item.notm},
                     prsc_nody = #{item.nody},
@@ -235,8 +245,7 @@
                     mix_no = #{item.mix_no},
                     prsc_qty = #{item.totl_vol},
                     inpy_dvcd = #{item.inpy_dvcd},
-                    sort_sqno = #{item.row},
-                    last_uddt = #{dateTime}
+                    sort_sqno = #{item.row}
                 WHERE crsetprsdt.hspt_cd = #{hspt_cd}
                   AND crsetprsdt.set_prsc_sqno = #{set.set_prsc_sqno}
                   AND crsetprsdt.prsc_sqno = #{item.prsc_sqno}
