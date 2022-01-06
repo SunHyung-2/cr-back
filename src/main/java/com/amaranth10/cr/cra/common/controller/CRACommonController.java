@@ -34,6 +34,12 @@ public class CRACommonController {
         this.iCRACommonService.infUpdate(param);
     }
 
+    /** 환자감염정보 수정 */
+    @PostMapping("/infDelete")
+    public void infDelete (@RequestBody Object param) {
+        this.iCRACommonService.infDelete(param);
+    }
+
     /** 환자알러지정보 조회 */
     @PostMapping("/patientAlg")
     public Object patientAlg (@RequestBody Object param) {
