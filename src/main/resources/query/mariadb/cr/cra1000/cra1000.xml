@@ -61,6 +61,7 @@
                cbptbainmt.pt_frrn,
                cbptbainmt.pt_srrn,
                cbptbainmt.dobr,
+        fn_get_age(cbptbainmt.dobr, '2') As age,
                cbptbainmt.sex_cd As sex,
                cbptbainmt.cntc_tel,
                cbptbainmt.clph_no,
@@ -142,29 +143,28 @@
     <update id="updatePtRcpn">
         UPDATE cbptbainmt As cbptbainmt
         JOIN cbotrcinnt As cbotrcinnt
-          ON cbptbainmt.hspt_cd = #{hspt_cd}
-         AND cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
-         AND cbptbainmt.pid = #{pid}
+          ON cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
          AND cbotrcinnt.pid = cbptbainmt.pid
          AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
-        SET cbptbainmt.last_updt_usid = #{usid},
-            cbptbainmt.last_uddt = #{date},
-            cbptbainmt.cntc_tel = #{cntc_tel},
-            cbptbainmt.clph_no = #{clph_no},
-            cbptbainmt.pstl_no = #{pstl_no},
-            cbptbainmt.basc_addr = #{basc_addr},
-            cbptbainmt.detl_addr = #{detl_addr},
-            cbptbainmt.vip_pt_yn = #{vip_pt_yn},
-            cbptbainmt.priv_pt_yn = #{priv_pt_yn},
-            cbotrcinnt.last_updt_usid = #{usid},
+        SET cbptbainmt.last_uddt = #{date},
+            cbptbainmt.cntc_tel = #{patient.cntc_tel},
+            cbptbainmt.clph_no = #{patient.clph_no},
+            cbptbainmt.pstl_no = #{patient.pstl_no},
+            cbptbainmt.basc_addr = #{patient.basc_addr},
+            cbptbainmt.detl_addr = #{patient.detl_addr},
+            cbptbainmt.vip_pt_yn = #{patient.vip_pt_yn},
+            cbptbainmt.priv_pt_yn = #{patient.priv_pt_yn},
+            cbptbainmt.cmhs_path_dvcd = #{patient.cmhs_path_dvcd},
             cbotrcinnt.last_uddt = #{date},
             cbotrcinnt.mdcr_date = #{mdcr_date},
-            cbotrcinnt.mdcr_hm = #{mdcr_hm},
-            cbotrcinnt.mddp_cd = #{mddp_cd},
-            cbotrcinnt.mdcr_dr_id = #{mdcr_dr_id},
-            cbotrcinnt.fvnr_dvcd = #{fvnr_dvcd},
-            cbotrcinnt.insn_tycd = #{insn_tycd},
-            cbotrcinnt.cmhs_prps_cd = #{cmhs_path_cd}
+            cbotrcinnt.mdcr_hm = #{patient.mdcr_hm},
+            cbotrcinnt.mddp_cd = #{patient.mddp_cd},
+            cbotrcinnt.mdcr_dr_id = #{patient.mdcr_dr_id},
+            cbotrcinnt.fvnr_dvcd = #{patient.fvnr_dvcd},
+            cbotrcinnt.insn_tycd = #{patient.insn_tycd},
+            cbotrcinnt.cmhs_prps_cd = #{patient.cmhs_prps_cd}
+        WHERE cbptbainmt.hspt_cd = #{hspt_cd}
+          AND cbptbainmt.pid = #{pid}
     </update>
 
 <!--    보험 구분 목록   -->
@@ -359,13 +359,13 @@
                crprogrsnt.objt_cnts,
                crprogrsnt.asss_cnts,
                crprogrsnt.plan,
-        crprogrsnt.rcpn_sqno,
-        crprogrsnt.prgr_sqno
+               crprogrsnt.rcpn_sqno,
+               crprogrsnt.prgr_sqno
         FROM crprogrsnt
         WHERE crprogrsnt.hspt_cd = #{hspt_cd}
+          AND crprogrsnt.del_yn = 'N'
           AND crprogrsnt.pid = #{pid}
           AND crprogrsnt.rcpn_sqno = #{rcpn_sqno}
-          AND crprogrsnt.del_yn = 'N'
     </select>
 
 <!--    SLIP 목록     -->
@@ -384,8 +384,8 @@
                crprsccdmt.prsc_nm
         FROM crprsccdmt
         WHERE crprsccdmt.hspt_cd = #{hspt_cd}
-        AND crprsccdmt.slip_cd = #{slip_cd}
-        AND crprsccdmt.prsc_psbl_yn = "Y"
+          AND crprsccdmt.prsc_psbl_yn = "Y"
+          AND crprsccdmt.slip_cd = #{slip_cd}
         ORDER BY crprsccdmt.prsc_nm
     </select>
 <!--    ==========================================================================================================================================================-->
