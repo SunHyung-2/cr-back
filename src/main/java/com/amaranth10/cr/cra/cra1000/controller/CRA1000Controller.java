@@ -73,7 +73,10 @@ public class CRA1000Controller {
 
     /** 환자정보 접수정보 수정 */
     @PostMapping("/updatePtRcpn")
-    public void updatePtRcpn (@RequestBody Object param) { this.iCRA1000Service.updatePtRcpn(param); }
+    public void updatePtRcpn (@RequestBody Object param) {
+        System.out.println(param);
+        this.iCRA1000Service.updatePtRcpn(param);
+    }
 
     /** 보험구분 목록 조회 */
     @PostMapping("/insnList")
