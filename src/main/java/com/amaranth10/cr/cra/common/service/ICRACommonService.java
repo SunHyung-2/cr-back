@@ -23,6 +23,9 @@ public interface ICRACommonService {
     /** 환자감염정보 수정 */
     void infUpdate(Object param);
 
+    /** 환자감염정보 삭제 */
+    void infDelete(Object param);
+
     /** 환자알러지정보 조회 */
     String patientAlg(Object param);
 

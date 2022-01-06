@@ -28,14 +28,15 @@
 
     <!-- 환자감염정보 조회 -->
     <select id="patientInf" resultType="java.util.HashMap">
-        SELECT crinfinfnt.cort_cmds_dvsn,
+        SELECT crinfinfnt.frst_rgst_usid,
+               crinfinfnt.frst_rgdt,
+               crinfinfnt.cort_cmds_dvsn,
                crinfinfnt.dgns_cd,
                crinfinfnt.dgns_hnm,
                crinfinfnt.del_yn as stat
           FROM crinfinfnt
          WHERE crinfinfnt.hspt_cd = #{hspt_cd}
            AND crinfinfnt.pid = #{pid}
-           AND crinfinfnt.del_yn = 'N'
          ORDER BY crinfinfnt.frst_rgdt, crinfinfnt.dgns_cd
     </select>
 
@@ -52,11 +53,23 @@
     <!-- 환자감염정보 수정 -->
     <update id="infUpdate">
         UPDATE crinfinfnt
-           SET crinfinfnt.last_updt_usid = #{last_updt_usid}, crinfinfnt.last_uddt = #{last_uddt}, crinfinfnt.del_yn = 'Y'
+           SET crinfinfnt.last_updt_usid = #{last_updt_usid}, crinfinfnt.last_uddt = #{last_uddt}, crinfinfnt.del_yn = 'N'
          WHERE crinfinfnt.hspt_cd = #{hspt_cd}
            AND crinfinfnt.pid = #{pid}
            AND crinfinfnt.dgns_cd IN
         <foreach collection="updateList" item="item"  open="(" close=")" separator=",">
+            #{item.dgns_cd}
+        </foreach>
+    </update>
+
+    <!-- 환자감염정보 삭제 -->
+    <update id="infDelete">
+        UPDATE crinfinfnt
+           SET crinfinfnt.last_updt_usid = #{last_updt_usid}, crinfinfnt.last_uddt = #{last_uddt}, crinfinfnt.del_yn = 'Y'
+         WHERE crinfinfnt.hspt_cd = #{hspt_cd}
+           AND crinfinfnt.pid = #{pid}
+           AND crinfinfnt.dgns_cd IN
+        <foreach collection="deleteList" item="item"  open="(" close=")" separator=",">
             #{item.dgns_cd}
         </foreach>
     </update>

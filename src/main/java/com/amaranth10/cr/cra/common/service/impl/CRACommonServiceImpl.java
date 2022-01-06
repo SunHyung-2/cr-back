@@ -47,6 +47,13 @@ public class CRACommonServiceImpl implements ICRACommonService {
         craCommonMapper.infUpdate(param);
     }
 
+    /** 환자감염정보 삭제 */
+    @Transactional
+    @Override
+    public void infDelete(Object param){
+        craCommonMapper.infDelete(param);
+    }
+
     /** 환자알러지정보 조회 */
     @Override
     public String patientAlg(Object param) {
