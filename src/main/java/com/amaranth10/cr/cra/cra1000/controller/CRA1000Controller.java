@@ -212,8 +212,8 @@ public class CRA1000Controller {
     /** 진단 수정 */
     @PostMapping("/updatePtDgns")
     public void updatePtDgns (@RequestBody Object param) {
-//        this.iCRA1000Service.updatePtDgns(param);
-//        this.iCRA1000Service.savePtDgns(param);
+        this.iCRA1000Service.updatePtDgns(param);
+        this.iCRA1000Service.savePtDgns(param);
     }
 
     /** 처방 검색 목록 조회 */
