@@ -539,6 +539,7 @@
                 drug_injc_dvsn,
                 iotm_cd,
                 pwdr_yn,
+                mix_yn,
                 mix_no,
                 prsc_pay_dvcd As inpy_dvcd,
                 hsin_hsot_dvcd,
@@ -875,11 +876,128 @@
                prsc_clsf_cd,
                tkng_notm As notm
         FROM csiotinfmt
-        WHERE
-<!--        hspt_cd = #{hspt_cd}-->
-<!--          AND -->
-        use_yn = 'Y'
+        WHERE hspt_cd = #{hspt_cd}
+          AND use_yn = 'Y'
         ORDER BY iotm_cd
+    </select>
+
+<!--    처방 약속 분류 저장     -->
+    <insert id="savePrscSet" parameterType="java.util.Objects">
+        <!-- 처방 분류 직접 입력 시 -->
+        <if test="set.set_prsc_uprn_sqno == -1">
+            INSERT INTO crsetprsmt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
+            VALUES (
+                #{hspt_cd},
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
+                #{usid},
+                1,
+                #{uprnSetNm});
+        </if>
+        INSERT INTO crsetprsmt
+            (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, set_prsc_usid, set_prsc_uprn_sqno, set_prsc_nm)
+        VALUES (
+            #{hspt_cd},
+            #{frst_rgst_usid},
+            #{frst_rgdt},
+            #{last_updt_usid},
+            #{last_uddt},
+            #{usid},
+            <choose>
+                <when test='set.set_prsc_uprn_sqno == -1'>
+                    (SELECT AUTO_INCREMENT - 1
+                    FROM information_schema.tables
+                    WHERE table_name = 'crsetprsmt'
+                    AND table_schema = DATABASE( )),
+                </when>
+                <otherwise>
+                    #{set.set_prsc_uprn_sqno},
+                </otherwise>
+            </choose>
+            #{set.set_prsc_nm});
+
+        <!--  처방 저장   -->
+        <foreach collection="setPrsc" item="item" separator=";">
+            INSERT INTO crsetprsdt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                set_prsc_sqno, prsc_sqno, prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
+                iotm_cd, hsin_hsot_dvcd, spfm_excp_resn_cd,
+                mix_yn, mix_no, prsc_qty, inpy_dvcd, sort_sqno)
+            SELECT
+                #{hspt_cd},
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
+                        (SELECT AUTO_INCREMENT - 1
+                        FROM information_schema.tables
+                        WHERE table_name = 'crsetprsmt'
+                        AND table_schema = DATABASE( )),
+                IFNULL(MAX(crsetprsdt.prsc_sqno) + 1, 1),
+                #{item.prsc_cd},
+                #{item.prsc_nm},
+                #{item.prsc_clsf_cd},
+                #{item.dosg_1},
+                #{item.notm},
+                #{item.nody},
+                #{item.iotm_cd},
+                #{item.hsin_hsot_dvcd},
+                #{item.hsin_prsc_resn_cd},
+                #{item.mix_yn},
+                #{item.mix_no},
+                #{item.totl_vol},
+                #{item.inpy_dvcd},
+                #{item.row}
+            FROM crsetprsdt
+            WHERE set_prsc_sqno =
+                    (SELECT AUTO_INCREMENT - 1
+                    FROM information_schema.tables
+                    WHERE table_name = 'crsetprsmt'
+                    AND table_schema = DATABASE( ))
+        </foreach>;
+
+        <!--   진단 저장  -->
+        <if test='setDgns != null and setDgns.size != 0'>
+            <foreach collection="setDgns" item="item" separator=";">
+                INSERT INTO crsetdigdt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                set_prsc_sqno, dgns_sqno, dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
+                SELECT
+                #{hspt_cd},
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
+                        (SELECT AUTO_INCREMENT - 1
+                        FROM information_schema.tables
+                        WHERE table_name = 'crsetprsmt'
+                        AND table_schema = DATABASE( )),
+                IFNULL(MAX(crsetdigdt.dgns_sqno) + 1, 1),
+                #{item.dgns_cd},
+                #{item.dgns_nm},
+                #{item.site_dvcd},
+                #{item.row}
+                FROM crsetdigdt
+                WHERE set_prsc_sqno =
+                        (SELECT AUTO_INCREMENT - 1
+                        FROM information_schema.tables
+                        WHERE table_name = 'crsetprsmt'
+                        AND table_schema = DATABASE( ))
+            </foreach>;
+        </if>
+    </insert>
+
+<!--    DC 사유 목록        -->
+    <select id="dcList" resultType="java.util.HashMap">
+        SELECT czcomcodmt.cmcd_cd As value,
+               czcomcodmt.cmcd_nm As text
+        FROM czcomcodmt
+        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
+          AND czcomcodmt.cmcd_clsf_cd = 'CR3002'
+        ORDER BY czcomcodmt.cmcd_cd
     </select>
 <!--    ==========================================================================================================================================================-->
 

@@ -135,5 +135,12 @@ public interface ICRA1000Service {
 
     /** 용법 목록 조회 */
     List<Object> iotmList(Object param);
+
+    /** 처방 약속 저장 */
+    void savePrscSet (Object param);
+
+    /** DC사유 목록 조회 */
+    List<Object> dcList (Object param);
+
     /** ========================================================================================================================================================== */
 }

@@ -189,8 +189,19 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Object> excpList(Object param) { return cra1000Mapper.excpList(param); }
 
+    /** 용법 목록 조회 */
     @Override
     public List<Object> iotmList(Object param) { return  cra1000Mapper.iotmList(param); }
+
+    /** 처방 약속 저장 */
+    @Override
+    public void savePrscSet (Object param) { cra1000Mapper.savePrscSet(param); }
+
+
+    /** DC사유 목록 조회 */
+    @Override
+    public List<Object> dcList (Object param) { return cra1000Mapper.dcList(param); };
+
     /** ========================================================================================================================================================== */
 
 }

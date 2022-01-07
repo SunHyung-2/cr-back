@@ -237,7 +237,6 @@ public class CRA1000Controller {
     /** 처방 수정 */
     @PostMapping("/updatePtPrsc")
     public void updatePtPrsc (@RequestBody Object param) {
-        System.out.println(param);
         this.iCRA1000Service.updatePtPrsc(param);
         this.iCRA1000Service.savePtPrsc(param);
     }
@@ -248,10 +247,21 @@ public class CRA1000Controller {
         return this.iCRA1000Service.excpList(param);
     }
 
-    /** 용법 목록 조회 -------------------------------------------------------------------------------------------------------------------------------------  */
+    /** 용법 목록 조회 */
     @PostMapping("/iotmList")
     public Object iotmList (@RequestBody Object param) {
-        return  this.iCRA1000Service.iotmList(param);
+        return this.iCRA1000Service.iotmList(param);
     }
+
+    /** 처방 약속 저장 */
+    @PostMapping("/savePrscSet")
+    public void savePrscSet (@RequestBody Object param) { this.iCRA1000Service.savePrscSet(param); }
+
+    /** 용법 목록 조회 */
+    @PostMapping("/dcList")
+    public Object dcList (@RequestBody Object param) {
+        return this.iCRA1000Service.dcList(param);
+    }
+
     /** ========================================================================================================================================================== */
 }
