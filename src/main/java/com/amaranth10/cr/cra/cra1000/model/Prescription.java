@@ -23,6 +23,7 @@ public class Prescription {
     private String dosg_1; // 1회량
     private String notm; // 횟수
     private String nody; // 일수
+    private String prsc_pay_dvcd; // 처방급여구분코드
     private String hsin_hsot_dvcd; // 원내/원외구분코드
     private String hsin_prsc_resn_cd; // 원내처방사유코드
     private String cmpt_yn; // 산정여부
