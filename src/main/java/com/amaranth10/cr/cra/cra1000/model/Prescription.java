@@ -14,8 +14,8 @@ public class Prescription {
     private String drug_injc_dvsn; // 약주사구분
     private String pwdr_yn; // powder여부
     private String mix_no; // MIX번호
+    private String mix_yn; // MIX여부
     private String iotm_cd; // 용법코드
-    private String inpy_dvcd; // 보험급여구분코드
     private String basc_aomd_uncd; //기본투여단위코드
     private String spcm_cd_1; // 검체코드
     private String exrm_cd; // 검사실 코드
