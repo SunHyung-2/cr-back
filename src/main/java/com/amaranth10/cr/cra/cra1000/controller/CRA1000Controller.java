@@ -216,6 +216,14 @@ public class CRA1000Controller {
         this.iCRA1000Service.savePtDgns(param);
     }
 
+    /** 진단 형태 목록 조회 */
+    @PostMapping("/dvsnList")
+    public Object dvsnList (@RequestBody Object param) { return this.iCRA1000Service.dvsnList(param); }
+
+    /** 진단 부위 목록 조회 */
+    @PostMapping("/siteList")
+    public Object siteList (@RequestBody Object param) { return this.iCRA1000Service.siteList(param); }
+
     /** 처방 검색 목록 조회 */
     @PostMapping("/prscMList")
     public Object prscMList (@RequestBody Object param) {
@@ -261,6 +269,24 @@ public class CRA1000Controller {
     @PostMapping("/dcList")
     public Object dcList (@RequestBody Object param) {
         return this.iCRA1000Service.dcList(param);
+    }
+
+    /** 급여 목록 조회 */
+    @PostMapping("/prscPayList")
+    public Object prscPayList (@RequestBody Object param) {
+        return this.iCRA1000Service.prscPayList(param);
+    }
+
+    /** 원외 목록 조회 */
+    @PostMapping("/hostList")
+    public Object hostList (@RequestBody Object param) {
+        return this.iCRA1000Service.hostList(param);
+    }
+
+    /** 산정 목록 조회 */
+    @PostMapping("/cmptList")
+    public Object cmptList (@RequestBody Object param) {
+        return this.iCRA1000Service.cmptList(param);
     }
 
     /** ========================================================================================================================================================== */
