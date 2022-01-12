@@ -61,6 +61,9 @@ public interface ICRA1000Service {
     /** 신체사정정보 조회 */
     List<Vital> vitalData(Object param);
 
+    /** 신체사정그래프 데이터 조회 */
+    List<Vital> vitalGraphData(Object param);
+
     /** 검사결과 조회 */
     List<Exam> examResult(Object param);
     /** ========================================================================================================================================================== */
