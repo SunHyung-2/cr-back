@@ -2,6 +2,9 @@ package com.amaranth10.cr.cra.cra1000.mapper;
 
 import com.amaranth10.cr.cra.cra1000.model.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 
 /**
@@ -61,6 +64,9 @@ public interface CRA1000Mapper {
     /** CRA1030 신체사정정보 / 검사결과 =============================================================================================================================== */
     /** 신체사정정보 조회 -------------------------------------------------------------------------------------------------------------------------------------------- */
     List<Vital> vitalData (Object param);
+
+    /** 신체사정그래프 데이터 조회 */
+    List<Vital> vitalGraphData (Object param);
 
     /** 검사결과 조회 */
     List<Exam> examResult (Object param);
