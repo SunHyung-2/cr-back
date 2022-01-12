@@ -15,4 +15,6 @@ public class Patient {
     private String age; // 나이
     private String inf_cnt; // 감염 갯수
     private String alg_info; // 알러지 정보
+
+    private String dobr; // 생년월일
 }

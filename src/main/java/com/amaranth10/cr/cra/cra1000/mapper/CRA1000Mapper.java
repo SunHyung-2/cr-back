@@ -2,6 +2,9 @@ package com.amaranth10.cr.cra.cra1000.mapper;
 
 import com.amaranth10.cr.cra.cra1000.model.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import java.util.List;
 
 /**
@@ -62,6 +65,9 @@ public interface CRA1000Mapper {
     /** 신체사정정보 조회 -------------------------------------------------------------------------------------------------------------------------------------------- */
     List<Vital> vitalData (Object param);
 
+    /** 신체사정그래프 데이터 조회 */
+    List<Vital> vitalGraphData (Object param);
+
     /** 검사결과 조회 */
     List<Exam> examResult (Object param);
     /** ========================================================================================================================================================== */
@@ -119,6 +125,12 @@ public interface CRA1000Mapper {
     /** 진단 수정 */
     void updatePtDgns (Object param);
 
+    /** 진단 형태 목록 조회 */
+    List<Object> dvsnList (Object param);
+
+    /** 진단 부위 목록 조회 */
+    List<Object> siteList (Object param);
+
     /** 처방 검색 목록 조회 */
     List<Prescription> prscMList (Object param);
 
@@ -142,6 +154,15 @@ public interface CRA1000Mapper {
 
     /** DC사유 목록 조회 */
     List<Object> dcList (Object param);
+
+    /** 급여 목록 조회 */
+    List<Object> prscPayList (Object param);
+
+    /** 원외 목록 조회 */
+    List<Object> hostList (Object param);
+
+    /** 산정 목록 조회 */
+    List<Object> cmptList (Object param);
 
     /** ========================================================================================================================================================== */
 }

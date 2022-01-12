@@ -89,6 +89,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Vital> vitalData(Object param) { return cra1000Mapper.vitalData(param); }
 
+    /** 신체사정그래프 데이터 조회 */
+    @Override
+    public List<Vital> vitalGraphData(Object param) { return cra1000Mapper.vitalGraphData(param); }
+
     /** 검사결과 조회 */
     @Override
     public List<Exam> examResult(Object param) { return cra1000Mapper.examResult(param); }
@@ -167,6 +171,14 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public void updatePtDgns(Object param) { cra1000Mapper.updatePtDgns(param); }
 
+    /** 진단 형태 목록 조회 */
+    @Override
+    public List<Object> dvsnList(Object param) { return cra1000Mapper.dvsnList(param); }
+
+    /** 진단 부위 목록 조회 */
+    @Override
+    public List<Object> siteList(Object param) { return cra1000Mapper.siteList(param); }
+
     /** 처방 검색 목록 조회 */
     @Override
     public List<Prescription> prscMList(Object param) { return cra1000Mapper.prscMList(param); }
@@ -197,10 +209,21 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public void savePrscSet (Object param) { cra1000Mapper.savePrscSet(param); }
 
-
     /** DC사유 목록 조회 */
     @Override
     public List<Object> dcList (Object param) { return cra1000Mapper.dcList(param); };
+
+    /** 급여 목록 조회 */
+    @Override
+    public List<Object> prscPayList (Object param) { return cra1000Mapper.prscPayList(param); };
+
+    /** 원외 목록 조회 */
+    @Override
+    public List<Object> hostList (Object param) { return cra1000Mapper.hostList(param); };
+
+    /** 산정 목록 조회 */
+    @Override
+    public List<Object> cmptList (Object param) { return cra1000Mapper.cmptList(param); };
 
     /** ========================================================================================================================================================== */
 

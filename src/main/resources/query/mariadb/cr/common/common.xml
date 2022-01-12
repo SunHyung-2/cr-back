@@ -104,4 +104,81 @@
            AND cbotrcinnt.pid = #{pid}
            AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
     </update>
+
+<!--    환자 검색       -->
+    <select id="searchPtList" resultType="com.amaranth10.cr.cra.common.model.Patient">
+        SELECT pid, pt_nm, sex_cd, dobr
+        FROM cbptbainmt
+        WHERE hspt_cd = #{hspt_cd}
+          AND ( pid LIKE CONCAT('%', #{keyword}, '%')
+                OR pt_nm LIKE CONCAT('%', #{keyword}, '%'))
+    </select>
+
+<!--    환자 접수 내역 목록     -->
+    <select id="rcpnList" resultType="com.amaranth10.cr.cra.common.model.Reception">
+        <if test='option == "1"'>
+            SELECT rcpn_sqno,
+                   DATE_FORMAT(mdcr_date, '%Y-%m-%d') As mdcr_date,
+                   fn_get_username(hspt_cd, mdcr_dr_id) As mdcr_dr_id,
+                   fn_get_deptname(hspt_cd, mdcr_date, mddp_cd) As mddp_cd,
+                   fn_get_commname(hspt_cd, mdcr_date, 'CB4003', fvnr_dvcd) As fvnr_dvcd,
+                   fn_get_commname(hspt_cd, mdcr_date, 'CB4005', insn_tycd) As insn_tycd
+            FROM cbotrcinnt
+            WHERE hspt_cd = #{hspt_cd}
+              AND pid = #{pid}
+              AND mdcr_date BETWEEN #{period.from} AND #{period.to}
+            ORDER BY mdcr_date DESC
+        </if>
+        <if test='option == "2"'>
+            SELECT cbotrcinnt.rcpn_sqno,
+                    DATE_FORMAT(cbotrcinnt.mdcr_date, '%Y-%m-%d') As mdcr_date,
+                    fn_get_username(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_dr_id) As mdcr_dr_id,
+                    fn_get_deptname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, cbotrcinnt.mddp_cd) As mddp_cd,
+                    fn_get_commname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) As fvnr_dvcd,
+                    fn_get_commname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, 'CB4005', cbotrcinnt.insn_tycd) As insn_tycd
+            FROM cbotrcinnt AS cbotrcinnt
+            LEFT JOIN crexmprsnt As crexmprsnt
+                   ON crexmprsnt.hspt_cd = #{hspt_cd}
+                  AND crexmprsnt.rcpn_sqno = cbotrcinnt.rcpn_sqno
+                  AND crexmprsnt.pid = #{pid}
+            WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+              AND cbotrcinnt.pid = #{pid}
+              AND cbotrcinnt.mdcr_date BETWEEN #{period.from} AND #{period.to}
+            UNION
+            SELECT cbotrcinnt.rcpn_sqno,
+                    DATE_FORMAT(cbotrcinnt.mdcr_date, '%Y-%m-%d') As mdcr_date,
+                    fn_get_username(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_dr_id) As mdcr_dr_id,
+                    fn_get_deptname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, cbotrcinnt.mddp_cd) As mddp_cd,
+                    fn_get_commname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, 'CB4003', cbotrcinnt.fvnr_dvcd) As fvnr_dvcd,
+                    fn_get_commname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, 'CB4005', cbotrcinnt.insn_tycd) As insn_tycd
+            FROM cbotrcinnt AS cbotrcinnt
+            RIGHT JOIN crexmprsnt As crexmprsnt
+                    ON crexmprsnt.hspt_cd = #{hspt_cd}
+                   AND crexmprsnt.rcpn_sqno = cbotrcinnt.rcpn_sqno
+                   AND crexmprsnt.pid = #{pid}
+                   AND crexmprsnt.rcpn_dt BETWEEN #{period.from} AND #{period.to}
+            WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
+            AND cbotrcinnt.pid = #{pid}
+            ORDER BY mdcr_date DESC, rcpn_sqno DESC
+        </if>
+    </select>
+
+<!--    진단 내역       -->
+    <select id="pastDgns" resultType="com.amaranth10.cr.cra.common.model.Diagnosis">
+        SELECT dgns_sqno,
+               dgns_cd,
+               dgns_nm,
+               fn_get_commname(hspt_cd, inpt_dt, 'CR2001', dvsn) As dvsn
+        FROM crptdgnsnt
+        WHERE hspt_cd = #{hspt_cd}
+          AND del_yn = "N"
+          AND rcpn_sqno = #{rcpn_sqno}
+          AND pid = #{pid}
+        ORDER BY sort_sqno
+    </select>
+
+<!--    처방 내역       -->
+    <select id="pastRcpn" resultType="com.amaranth10.cr.cra.common.model.Prescription">
+
+    </select>
 </mapper>
