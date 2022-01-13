@@ -375,6 +375,7 @@
         FROM cbotrcinnt
         WHERE hspt_cd = #{hspt_cd}
           AND pid = #{pid}
+        <![CDATA[AND mdcr_date <= #{date}]]>
         ORDER BY mdcr_date DESC
     </select>
 
@@ -588,7 +589,7 @@
                 pwdr_yn,
                 mix_yn,
                 mix_no,
-                prsc_pay_dvcd,
+                fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd,
                 hsin_hsot_dvcd,
                 hsin_prsc_resn_cd,
                 cmpt_yn,
@@ -597,7 +598,7 @@
                 dc_yn,
                 dc_resn_cd,
                 dc_resn
-        FROM crdrinprnt
+        FROM crprescpmv
         WHERE hspt_cd = #{hspt_cd}
           AND rcpn_sqno = #{rcpn_sqno}
           AND pid = #{pid}
