@@ -589,7 +589,8 @@
                 pwdr_yn,
                 mix_yn,
                 mix_no,
-                fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd,
+        prsc_pay_dvcd,
+                fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd_nm,
                 hsin_hsot_dvcd,
                 hsin_prsc_resn_cd,
                 cmpt_yn,
@@ -718,7 +719,7 @@
                     INSERT INTO crexmprsnt
                         (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                         pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
-                        mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt, prsc_pay_dvcd
+                        mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt, prsc_pay_dvcd,
                     insn_tycd, type_asst_cd,
                         sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                         spcm_cd_1, hope_exrm_cd)
@@ -742,6 +743,7 @@
                         #{usid},
                         #{usid},
                         #{dateTime},
+                    #{item.prsc_pay_dvcd},
                         cbotrcinnt.insn_tycd,
                         cbotrcinnt.type_asst_cd,
                         #{item.row},
