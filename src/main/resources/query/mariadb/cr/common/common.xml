@@ -6,7 +6,7 @@
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
         UPDATE cbotrcinnt
-           SET cbotrcinnt.rcpn_stat_cd = #{rcpn_stat_cd}
+           SET last_updt_usid = #{last_updt_usid}, last_uddt = #{last_uddt}, cbotrcinnt.rcpn_stat_cd = #{rcpn_stat_cd}
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.pid = #{pid}
            AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
