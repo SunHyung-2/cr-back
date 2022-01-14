@@ -34,7 +34,7 @@
                cbotrcinnt.mdcr_hm,
                cbptbainmt.pt_nm,
                cbptbainmt.pid,
-        cbptbainmt.sex_cd As sex,
+               cbptbainmt.sex_cd As sex,
                CONCAT((TRUNCATE((TO_DAYS(DATE_FORMAT(cbotrcinnt.mdcr_date, '%Y-%m-%d')) - TO_DAYS(DATE_FORMAT(cbptbainmt.dobr, '%Y-%m-%d'))) / 365, 0))) AS age,
                cbotrcinnt.rcpn_stat_cd AS call_patient,
                fn_get_commname(cbotrcinnt.hspt_cd, cbotrcinnt.mdcr_date, 'CB4005', cbotrcinnt.insn_tycd) AS insn_tycd,
@@ -52,7 +52,7 @@
             #{item}
         </foreach>)
            AND cbotrcinnt.mdcr_dr_id like #{mdcr_dr_id}
-           AND cbotrcinnt.rcpn_stat_cd != 'C'
+           AND cbotrcinnt.rcpn_stat_cd NOT IN ('C')
            AND cbptbainmt.del_yn = 'N'
          ORDER BY cbotrcinnt.mdcr_hm
     </select>
