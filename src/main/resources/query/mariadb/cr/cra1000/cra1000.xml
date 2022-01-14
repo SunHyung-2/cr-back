@@ -115,18 +115,22 @@
 <!--    관심환자 여부 수정     -->
     <update id="updatePtCncn">
         UPDATE cbptbainmt
-           SET cbptbainmt.cncn_pt_yn = #{cncn_pt_yn}
-        WHERE cbptbainmt.hspt_cd = #{hspt_cd}
-          AND cbptbainmt.pid = #{pid}
+           SET last_updt_usid = #{last_updt_usid},
+               last_uddt = #{last_uddt},
+               cncn_pt_yn = #{cncn_pt_yn}
+        WHERE hspt_cd = #{hspt_cd}
+          AND pid = #{pid}
     </update>
 
 <!--    접수메모 저장 및 수정    -->
     <update id="patientRcpnMemo">
         UPDATE cbotrcinnt
-           SET cbotrcinnt.rcpn_memo = #{rcpn_memo}
-        WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
-          AND cbotrcinnt.pid = #{pid}
-          AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+           SET last_updt_usid = #{last_updt_usid},
+               last_uddt = #{last_uddt},
+               rcpn_memo = #{rcpn_memo}
+        WHERE hspt_cd = #{hspt_cd}
+          AND pid = #{pid}
+          AND rcpn_sqno = #{rcpn_sqno}
     </update>
 
 <!--    진료메모 & 환자메모 저장      -->
@@ -141,9 +145,9 @@
         SET last_updt_usid = #{last_updt_usid},
             last_uddt = #{last_uddt},
             memo_cnts = #{memo_cnts}
-        WHERE cbptmeinnt.hspt_cd = #{hspt_cd}
-          AND cbptmeinnt.pid = #{pid}
-          AND cbptmeinnt.memo_dvsn = #{memo_dvsn}
+        WHERE hspt_cd = #{hspt_cd}
+          AND pid = #{pid}
+          AND memo_dvsn = #{memo_dvsn}
     </update>
 
 <!--    환자정보, 접수정보 수정     -->
@@ -589,7 +593,8 @@
                 pwdr_yn,
                 mix_yn,
                 mix_no,
-        prsc_pay_dvcd,
+        spcm_cd_1,
+                prsc_pay_dvcd,
                 fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd_nm,
                 hsin_hsot_dvcd,
                 hsin_prsc_resn_cd,
@@ -616,8 +621,8 @@
                         (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                         pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
                         mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt, prsc_pay_dvcd,
-                    insn_tycd, type_asst_cd,
-                        sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn)
+                        insn_tycd, type_asst_cd, sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                        prsc_prgr_stat_cd, rcpt_stat_cd)
                     SELECT
                         #{hspt_cd},
                         #{frst_rgst_usid},
@@ -647,7 +652,9 @@
                         #{item.cmpt_yn},
                         #{item.prsc_memo},
                         #{item.jx999},
-                        'N'
+                        'N',
+                    '',
+                    'N'
                     FROM crbasprsnt, cbotrcinnt
                     WHERE crbasprsnt.hspt_cd = #{hspt_cd}
                       AND crbasprsnt.rcpn_sqno = #{rcpn_sqno}
@@ -665,7 +672,7 @@
                         sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                         dosg_1, uncd, totl_vol, notm, nody, drug_injc_dvsn,
                         iotm_cd, prsc_pay_dvcd, pwdr_yn, mix_yn, mix_no,
-                        hsin_hsot_dvcd, hsin_prsc_resn_cd)
+                        hsin_hsot_dvcd, hsin_prsc_resn_cd, prsc_prgr_stat_cd, rcpt_stat_cd)
                     SELECT
                         #{hspt_cd},
                         #{frst_rgst_usid},
@@ -705,7 +712,9 @@
                         #{item.mix_yn},
                         #{item.mix_no},
                         #{item.hsin_hsot_dvcd},
-                        #{item.hsin_prsc_resn_cd}
+                        #{item.hsin_prsc_resn_cd},
+                    '',
+                    'N'
                     FROM crdrinprnt, cbotrcinnt
                     WHERE crdrinprnt.hspt_cd = #{hspt_cd}
                       AND crdrinprnt.rcpn_sqno = #{rcpn_sqno}
@@ -720,9 +729,8 @@
                         (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                         pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
                         mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt, prsc_pay_dvcd,
-                    insn_tycd, type_asst_cd,
-                        sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
-                        spcm_cd_1, hope_exrm_cd)
+                        insn_tycd, type_asst_cd, sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                        spcm_cd_1, hope_exrm_cd, prsc_prgr_stat_cd, rcpt_stat_cd )
                     SELECT
                         #{hspt_cd},
                         #{frst_rgst_usid},
@@ -743,7 +751,7 @@
                         #{usid},
                         #{usid},
                         #{dateTime},
-                    #{item.prsc_pay_dvcd},
+                        #{item.prsc_pay_dvcd},
                         cbotrcinnt.insn_tycd,
                         cbotrcinnt.type_asst_cd,
                         #{item.row},
@@ -752,7 +760,9 @@
                         #{item.jx999},
                         'N',
                         #{item.spcm_cd_1},
-                        #{item.exrm_cd}
+                        #{item.exrm_cd},
+                    '',
+                    'N'
                     FROM crexmprsnt, cbotrcinnt
                     WHERE crexmprsnt.hspt_cd = #{hspt_cd}
                       AND crexmprsnt.rcpn_sqno = #{rcpn_sqno}
@@ -767,9 +777,8 @@
                         (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                         pid, prsc_date, prsc_sqno, prsc_cd, prsc_nm, rcpn_sqno, prsc_clsf_cd, slip_cd,
                         mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, prsc_dr_id, prsc_inpt_dt, prsc_pay_dvcd,
-                    insn_tycd, type_asst_cd,
-                        sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
-                        qty, notm, uncd)
+                        insn_tycd, type_asst_cd, sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
+                        qty, notm, uncd, prsc_prgr_stat_cd, rcpt_stat_cd)
                     SELECT
                         #{hspt_cd},
                         #{frst_rgst_usid},
@@ -790,7 +799,7 @@
                         #{usid},
                         #{usid},
                         #{dateTime},
-                    #{item.prsc_pay_dvcd},
+                        #{item.prsc_pay_dvcd},
                         cbotrcinnt.insn_tycd,
                         cbotrcinnt.type_asst_cd,
                         #{item.row},
@@ -800,7 +809,9 @@
                         'N',
                         #{item.dosg_1},
                         #{item.notm},
-                        #{item.uncd}
+                        #{item.uncd},
+                    '',
+                    'N'
                     FROM crtrtprsnt, cbotrcinnt
                     WHERE crtrtprsnt.hspt_cd = #{hspt_cd}
                       AND crtrtprsnt.rcpn_sqno = #{rcpn_sqno}
@@ -827,12 +838,13 @@
                         cmpt_yn = #{item.cmpt_yn},
                         prsc_memo = #{item.prsc_memo},
                         jx999 = #{item.jx999},
+                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                         dc_yn = #{item.dc_yn}
                     <if test='item.dc_yn == "Y"'>
                         , dc_drcn_dr_id = #{usid},
                         dc_drcn_dt = #{dateTime},
                         dc_resn = #{item.dc_resn},
-                        dc_resn_cd =#{item.dc_resn_cd}
+                        dc_resn_cd = #{item.dc_resn_cd}
                     </if>
                     WHERE hspt_cd = #{hspt_cd}
                       AND rcpn_sqno = #{rcpn_sqno}
@@ -852,6 +864,7 @@
                         iotm_cd = #{item.iotm_cd},
                         mix_yn = #{item.mix_yn},
                         mix_no = #{item.mix_no},
+                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                         hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},
                         hsin_prsc_resn_cd = #{item.hsin_prsc_resn_cd},
                         cmpt_yn = #{item.cmpt_yn},
@@ -878,14 +891,15 @@
                         cmpt_yn = #{item.cmpt_yn},
                         prsc_memo = #{item.prsc_memo},
                         jx999 = #{item.jx999},
+                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                         dc_yn = #{item.dc_yn},
+                    spcm_cd_1 = #{item.spcm_cd_1}
                     <if test='item.dc_yn == "Y"'>
-                        dc_drcn_dr_id = #{usid},
+                        , dc_drcn_dr_id = #{usid},
                         dc_drcn_dt = #{dateTime},
                         dc_resn = #{item.dc_resn},
                         dc_resn_cd =#{item.dc_resn_cd},
                     </if>
-                        spcm_cd_1, = #{item.spcm_cd_1}
                     WHERE hspt_cd = #{hspt_cd}
                       AND rcpn_sqno = #{rcpn_sqno}
                       AND prsc_sqno = #{item.prsc_sqno}
@@ -900,15 +914,16 @@
                         cmpt_yn = #{item.cmpt_yn},
                         prsc_memo = #{item.prsc_memo},
                         jx999 = #{item.jx999},
+                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                         dc_yn = #{item.dc_yn},
-                    <if test='item.dc_yn == "Y"'>
-                        dc_drcn_dr_id = #{usid},
-                        dc_drcn_dt = #{dateTime},
-                        dc_resn = #{item.dc_resn},
-                        dc_resn_cd =#{item.dc_resn_cd},
-                    </if>
                         qty = #{item.dosg_1},
                         notm = #{item.notm}
+                    <if test='item.dc_yn == "Y"'>
+                        , dc_drcn_dr_id = #{usid},
+                        dc_drcn_dt = #{dateTime},
+                        dc_resn = #{item.dc_resn},
+                        dc_resn_cd =#{item.dc_resn_cd}
+                    </if>
                     WHERE hspt_cd = #{hspt_cd}
                       AND rcpn_sqno = #{rcpn_sqno}
                       AND prsc_sqno = #{item.prsc_sqno}

@@ -99,7 +99,9 @@
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
         UPDATE cbotrcinnt
-           SET cbotrcinnt.rcpn_stat_cd = #{rcpn_stat_cd}
+           SET cbotrcinnt.rcpn_stat_cd = #{rcpn_stat_cd},
+                last_updt_usid = #{last_updt_usid},
+                last_uddt = #{last_uddt}
          WHERE cbotrcinnt.hspt_cd = #{hspt_cd}
            AND cbotrcinnt.pid = #{pid}
            AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
@@ -178,7 +180,27 @@
     </select>
 
 <!--    처방 내역       -->
-    <select id="pastRcpn" resultType="com.amaranth10.cr.cra.common.model.Prescription">
-
+    <select id="pastPrsc" resultType="com.amaranth10.cr.cra.common.model.Prescription">
+        SELECT prsc_cd,
+                prsc_nm,
+                dosg_1,
+                notm,
+                nody,
+                iotm_cd,
+                mix_no,
+                fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd,
+                IF(hsin_hsot_dvcd = '-', '-', fn_get_commname(hspt_cd, mdcr_date, 'CR3003', hsin_hsot_dvcd)) As hsin_hsot_dvcd,
+                prsc_prgr_stat_cd,
+                rcpt_stat_cd,
+                prsc_memo,
+                jx999,
+                dc_yn,
+                dc_resn_cd,
+                dc_resn
+        FROM crprescpmv
+        WHERE hspt_cd = #{hspt_cd}
+          AND rcpn_sqno = #{rcpn_sqno}
+          AND pid = #{pid}
+        ORDER BY sort_sqno
     </select>
 </mapper>
