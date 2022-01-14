@@ -16,4 +16,9 @@ public class Diagnosis {
     private String dvsn; // 형태
     private String ro_yn; // R/O 여부
     private String site_dvcd; // 부위
+
+    private String main_ilns_use_yn; // 주상병사용구분
+    private String sex_cd; // 성별구분
+    private String uplm_age; // 상한연령
+    private String lwlm_age; // 하한연령
 }
