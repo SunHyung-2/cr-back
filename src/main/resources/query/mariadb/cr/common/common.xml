@@ -5,11 +5,12 @@
 
     <!-- 환자 접수상태 변경 -->
     <update id="updateRcpnStat">
-        UPDATE cbotrcinmv
+        UPDATE cbotrcinnt
            SET last_updt_usid = #{last_updt_usid}, last_uddt = #{last_uddt}, cbotrcinmv.rcpn_stat_cd = #{rcpn_stat_cd}
          WHERE cbotrcinmv.hspt_cd = #{hspt_cd}
            AND cbotrcinmv.pid = #{pid}
            AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
+           AND cbotrcinmv.hstr_sqno = #{hstr_sqno}
     </update>
 
 <!--    환자 검색       -->

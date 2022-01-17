@@ -125,7 +125,7 @@
 
 <!--    접수메모 저장 및 수정    -->
     <update id="patientRcpnMemo">
-        UPDATE cbotrcinmv
+        UPDATE cbotrcinnt
            SET last_updt_usid = #{last_updt_usid},
                last_uddt = #{last_uddt},
                rcpn_memo = #{rcpn_memo}
@@ -154,10 +154,10 @@
 <!--    환자정보, 접수정보 수정     -->
     <update id="updatePtRcpn">
         UPDATE cbptbainmt As cbptbainmt
-        JOIN cbotrcinmv As cbotrcinmv
-          ON cbotrcinmv.hspt_cd = cbptbainmt.hspt_cd
-         AND cbotrcinmv.pid = cbptbainmt.pid
-         AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
+        JOIN cbotrcinnt As cbotrcinnt
+          ON cbotrcinnt.hspt_cd = cbptbainmt.hspt_cd
+         AND cbotrcinnt.pid = cbptbainmt.pid
+         AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
         SET cbptbainmt.last_uddt = #{last_uddt},
             cbptbainmt.last_updt_usid = #{last_updt_usid},
             cbptbainmt.cntc_tel = #{patient.cntc_tel},
@@ -168,15 +168,15 @@
             cbptbainmt.vip_pt_yn = #{patient.vip_pt_yn},
             cbptbainmt.priv_pt_yn = #{patient.priv_pt_yn},
             cbptbainmt.cmhs_path_dvcd = #{patient.cmhs_path_dvcd},
-            cbotrcinmv.last_uddt = #{last_uddt},
-            cbotrcinmv.last_updt_usid = #{last_updt_usid},
-            cbotrcinmv.mdcr_date = #{patient.cr_date},
-            cbotrcinmv.mdcr_hm = #{patient.mdcr_hm},
-            cbotrcinmv.mddp_cd = #{patient.mddp_cd},
-            cbotrcinmv.mdcr_dr_id = #{patient.mdcr_dr_id},
-            cbotrcinmv.fvnr_dvcd = #{patient.fvnr_dvcd},
-            cbotrcinmv.insn_tycd = #{patient.insn_tycd},
-            cbotrcinmv.cmhs_prps_cd = #{patient.cmhs_prps_cd}
+            cbotrcinnt.last_uddt = #{last_uddt},
+            cbotrcinnt.last_updt_usid = #{last_updt_usid},
+            cbotrcinnt.mdcr_date = #{patient.cr_date},
+            cbotrcinnt.mdcr_hm = #{patient.mdcr_hm},
+            cbotrcinnt.mddp_cd = #{patient.mddp_cd},
+            cbotrcinnt.mdcr_dr_id = #{patient.mdcr_dr_id},
+            cbotrcinnt.fvnr_dvcd = #{patient.fvnr_dvcd},
+            cbotrcinnt.insn_tycd = #{patient.insn_tycd},
+            cbotrcinnt.cmhs_prps_cd = #{patient.cmhs_prps_cd}
         WHERE cbptbainmt.hspt_cd = #{hspt_cd}
           AND cbptbainmt.pid = #{pid}
     </update>
