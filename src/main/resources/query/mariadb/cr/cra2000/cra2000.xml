@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.amaranth10.cr.cra.cra2000.mapper.CRA2000Mapper">
+
+<!--    상용구 분류 조회-->
+    <select id="blpeList" resultType="java.util.HashMap">
+        SELECT cmcd_cd, cmcd_nm
+          FROM czcomcodmt
+         WHERE cmcd_clsf_cd = 'CRZ001'
+    </select>
+</mapper>
