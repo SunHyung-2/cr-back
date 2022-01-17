@@ -28,6 +28,7 @@ public class Patient {
     private String mdcr_dr_id; // 진료의
     private String mddp_cd; // 진료과
     private String rcpn_sqno; // 접수 일련번호
+    private String hstr_sqno; // 이력일련번호
 
     private String pt_frrn; // 주민등록앞번호
     private String pt_srrn; // 주민등록뒷번호
