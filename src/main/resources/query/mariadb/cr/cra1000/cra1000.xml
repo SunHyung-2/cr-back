@@ -1000,7 +1000,7 @@
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
                 set_prsc_sqno, prsc_sqno, prsc_cd, prsc_nm, prsc_clsf_cd, prsc_dosg1, prsc_notm, prsc_nody,
                 iotm_cd, hsin_hsot_dvcd, spfm_excp_resn_cd,
-                mix_yn, mix_no, prsc_qty, inpy_dvcd, sort_sqno)
+                mix_yn, mix_no, prsc_qty, prsc_pay_dvcd, sort_sqno)
             SELECT
                 #{hspt_cd},
                 #{frst_rgst_usid},
@@ -1024,7 +1024,7 @@
                 #{item.mix_yn},
                 #{item.mix_no},
                 #{item.totl_vol},
-                #{item.inpy_dvcd},
+                #{item.prsc_pay_dvcd},
                 #{item.row}
             FROM crsetprsdt
             WHERE set_prsc_sqno =
