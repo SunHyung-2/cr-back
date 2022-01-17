@@ -110,6 +110,7 @@
           AND cbotrcinnt.pid = #{pid}
           AND cbptbainmt.pid = cbotrcinnt.pid
           AND cbotrcinnt.rcpn_sqno = #{rcpn_sqno}
+<!--        AND cbotrcinnt.hstr_sqno-->
     </select>
 
 <!--    관심환자 여부 수정     -->
@@ -182,22 +183,22 @@
 
 <!--    보험 구분 목록   -->
     <select id="insnList" resultType="java.util.HashMap">
-        SELECT czcomcodmt.cmcd_cd As value,
-               czcomcodmt.cmcd_nm As text
+        SELECT cmcd_cd As value,
+               cmcd_expl As text
         FROM czcomcodmt
-        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
-          AND czcomcodmt.cmcd_clsf_cd = 'CB4005'
-        ORDER BY czcomcodmt.cmcd_cd
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB4005'
+        ORDER BY cmcd_sort_seq
     </select>
 
 <!--    초재진 구분 목록   -->
     <select id="fvnrList" resultType="java.util.HashMap">
-        SELECT czcomcodmt.cmcd_cd As value,
-               czcomcodmt.cmcd_nm As text
+        SELECT cmcd_cd As value,
+               cmcd_expl As text
         FROM czcomcodmt
-        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
-          AND czcomcodmt.cmcd_clsf_cd = 'CB4003'
-        ORDER BY czcomcodmt.cmcd_cd
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB4003'
+        ORDER BY cmcd_sort_seq
     </select>
 
 <!--    부서 목록    -->
@@ -209,24 +210,24 @@
         ORDER BY dept_hnm
     </select>
 
-    <!--    외래경로 목록     -->
+    <!--    내원경로 목록     -->
     <select id="pathList" resultType="java.util.HashMap">
-        SELECT czcomcodmt.cmcd_cd As value,
-               czcomcodmt.cmcd_nm As text
+        SELECT cmcd_cd As value,
+               cmcd_nm As text
         FROM czcomcodmt
-        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
-          AND czcomcodmt.cmcd_clsf_cd = 'CB4004'
-        ORDER BY czcomcodmt.cmcd_cd
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB4004'
+        ORDER BY cmcd_cd
     </select>
 
 <!--    내원목적 목록     -->
     <select id="prpsList" resultType="java.util.HashMap">
-        SELECT czcomcodmt.cmcd_cd As value,
-               czcomcodmt.cmcd_nm As text
+        SELECT cmcd_cd As value,
+               cmcd_nm As text
         FROM czcomcodmt
-        WHERE czcomcodmt.hspt_cd = #{hspt_cd}
-          AND czcomcodmt.cmcd_clsf_cd = 'CB4009'
-        ORDER BY czcomcodmt.cmcd_cd
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB4009'
+        ORDER BY cmcd_cd
     </select>
 
 <!--    ==========================================================================================================================================================-->
