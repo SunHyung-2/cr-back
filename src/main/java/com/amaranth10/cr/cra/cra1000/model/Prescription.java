@@ -7,17 +7,20 @@ import lombok.Setter;
 @Setter
 public class Prescription {
     private String prsc_cd; // 처방코드
+    private String prsc_date; // 처방일자
+    private String prsc_dr_id; // 처방의
     private String prsc_nm; // 처방명
     private String prsc_sqno; // 처방일련번호
     private String prsc_clsf_cd; // 처방분류코드
     private String slip_cd; // SLIP코드
-    private String drug_injc_dvsn; // 약주사구분
+//    private String drug_injc_dvsn; // 약주사구분
     private String pwdr_yn; // powder여부
     private String mix_no; // MIX번호
     private String mix_yn; // MIX여부
     private String iotm_cd; // 용법코드
     private String basc_aomd_uncd; //기본투여단위코드
     private String spcm_cd_1; // 검체코드
+    private String spcm_ctnr_cd_1; // 검체용기코드
     private String exrm_cd; // 검사실 코드
     private String uncd; //함량단위코드
     private String dosg_1; // 1회량
@@ -33,4 +36,5 @@ public class Prescription {
     private String dc_yn; // dc여부
     private String dc_resn; // dc 사유
     private String dc_resn_cd; // dc 사유 코드
+    private String apnt_yn; // 예약여부
 }
