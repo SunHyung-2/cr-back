@@ -4,9 +4,15 @@
 <mapper namespace="com.amaranth10.cr.cra.cra2000.mapper.CRA2000Mapper">
 
 <!--    상용구 분류 조회-->
-    <select id="blpeList" resultType="java.util.HashMap">
-        SELECT cmcd_cd, cmcd_nm
+    <select id="blpeList" resultType="com.amaranth10.cr.cra.cra2000.model.Tree">
+        SELECT cmcd_char_valu1 AS parent, cmcd_cd as code, cmcd_nm as name
           FROM czcomcodmt
-         WHERE cmcd_clsf_cd = 'CRZ001'
+         WHERE hspt_cd = #{hspt_cd}
+           AND cmcd_clsf_cd = 'CRZ001'
+         UNION ALL
+        SELECT blpe_clsf AS parent, blpe_cd as code, blpe_nm as name
+          FROM crblpmngmt
+         WHERE hspt_cd = #{hspt_cd}
+           AND del_yn = 'N'
     </select>
 </mapper>

@@ -1,5 +1,6 @@
 package com.amaranth10.cr.cra.cra2000.service;
 
+import com.amaranth10.cr.cra.cra2000.model.*;
 import java.util.List;
 
 /**
@@ -7,5 +8,5 @@ import java.util.List;
  */
 public interface ICRA2000Service {
     /** 상용구 분류 조회 */
-    List<Object> blpeList(Object param);
+    List<Tree> blpeList(Object param);
 }

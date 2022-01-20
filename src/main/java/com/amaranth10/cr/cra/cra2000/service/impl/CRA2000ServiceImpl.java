@@ -1,5 +1,6 @@
 package com.amaranth10.cr.cra.cra2000.service.impl;
 
+import com.amaranth10.cr.cra.cra2000.model.*;
 import com.amaranth10.cr.cra.cra2000.mapper.CRA2000Mapper;
 import com.amaranth10.cr.cra.cra2000.service.ICRA2000Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,5 @@ public class CRA2000ServiceImpl implements ICRA2000Service {
 
     /** 상용구 분류 조회 */
     @Override
-    public List<Object> blpeList(Object param) { return cra2000Mapper.blpeList(param); }
+    public List<Tree> blpeList(Object param) { return cra2000Mapper.blpeList(param); }
 }
