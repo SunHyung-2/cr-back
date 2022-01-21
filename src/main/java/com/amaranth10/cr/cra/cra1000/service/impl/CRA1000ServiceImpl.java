@@ -37,6 +37,12 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public Object patientDetails(Object param) { return cra1000Mapper.patientDetails(param); }
 
+    /** 환자 만성질환 조회 */
+    @Override
+    public List<Object> ptCfsc (Object param) { return cra1000Mapper.ptCfsc(param); }
+    @Override
+    public List<Object> ptChrn (Object param) { return cra1000Mapper.ptChrn(param); }
+
     /** 관심환자 여부 수정 */
     @Transactional
     @Override
@@ -57,10 +63,23 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public void updateClrPtMemo(Object param) { cra1000Mapper.updateClrPtMemo(param); }
 
-    /** 환자정보 접수정보 수정 */
+    /** 환자정보 수정 */
     @Transactional
     @Override
     public void updatePtRcpn(Object param) { cra1000Mapper.updatePtRcpn(param); }
+
+    /** 접수정보 수정 */
+    @Transactional
+    @Override
+    public void saveRcpn(Object param) { cra1000Mapper.saveRcpn(param); }
+
+    /** 만성질환 수정 */
+    @Transactional
+    @Override
+    public void updateChrn (Object param) { cra1000Mapper.updateChrn(param); }
+    @Transactional
+    @Override
+    public void saveChrn (Object param) { cra1000Mapper.saveChrn(param); }
 
     /** 보험구분 목록 조회 */
     @Override
@@ -81,6 +100,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** 내원목적 목록 조회 */
     @Override
     public List<Object> prpsList(Object param) { return cra1000Mapper.prpsList(param); }
+
+    /** 산정특례구분코드 목록 조회 */
+    @Override
+    public List<Object> cfscDvcdList (Object param) { return cra1000Mapper.cfscDvcdList(param); }
     /** ========================================================================================================================================================== */
 
 
@@ -141,6 +164,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** 경과기록 조회 */
     @Override
     public List<Progress> prgrList (Object param) { return cra1000Mapper.prgrList(param); }
+
+    /** 완료 검사결과 조회 */
+    @Override
+    public List<Exam> completeExam (Object param) { return cra1000Mapper.completeExam(param); }
 
     /** SLIP 목록 조회 */
     @Override

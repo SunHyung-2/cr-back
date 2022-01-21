@@ -27,7 +27,11 @@ public interface CRA1000Mapper {
 
     /** CRA1020 환자정보 =========================================================================================================================================== */
     /** 환자정보 접수정보 조회 */
-    Object patientDetails (Object param);
+    Patient patientDetails (Object param);
+
+    /** 환자 만성질환 조회 */
+    List<Object> ptCfsc (Object param);
+    List<Object> ptChrn (Object param);
 
     /** 관심환자 여부 수정 */
     void updatePtCncn (Object param);
@@ -41,8 +45,15 @@ public interface CRA1000Mapper {
     /** 진료메모 & 환자메모 수정 */
     void updateClrPtMemo (Object param);
 
-    /** 환자정보 접수정보 수정 */
+    /** 환자정보 수정 */
     void updatePtRcpn (Object param);
+
+    /** 접수정보 수정 */
+    void saveRcpn (Object param);
+
+    /** 만성질환 수정 */
+    void updateChrn (Object param);
+    void saveChrn (Object param);
 
     /** 보험구분 목록 조회 */
     List<Object> insnList (Object param);
@@ -58,6 +69,9 @@ public interface CRA1000Mapper {
 
     /** 내원목적 목록 조회 */
     List<Object> prpsList (Object param);
+
+    /** 산정특례구분코드 목록 조회 */
+    List<Object> cfscDvcdList (Object param);
     /** ========================================================================================================================================================== */
 
 
@@ -103,6 +117,9 @@ public interface CRA1000Mapper {
 
     /** 경과기록 조회 */
     List<Progress> prgrList (Object param);
+
+    /** 완료 검사결과 조회 */
+    List<Exam> completeExam (Object param);
 
     /** SLIP 목록 조회 */
     List<Slip> slipList (Object param);

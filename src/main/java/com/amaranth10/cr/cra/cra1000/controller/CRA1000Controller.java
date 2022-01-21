@@ -7,6 +7,7 @@ import com.amaranth10.cr.cra.cra1000.service.ICRA1000Service;
 import com.amaranth10.cr.model.RequestModel;
 import klago.log.utils.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,6 +50,12 @@ public class CRA1000Controller {
         return this.iCRA1000Service.patientDetails(param);
     };
 
+    /** 환자 만성질환 조회 */
+    @PostMapping("/ptCfsc")
+    public Object ptCfsc (@RequestBody Object param) { return this.iCRA1000Service.ptCfsc(param); }
+    @PostMapping("/ptChrn")
+    public Object ptChrn (@RequestBody Object param) { return this.iCRA1000Service.ptChrn(param); }
+
     /** 관심환자 여부 수정 */
     @PostMapping("/updatePtCncn")
     public void updatePtCncn (@RequestBody Object param) {
@@ -71,9 +78,19 @@ public class CRA1000Controller {
     @PostMapping("/updateClrPtMemo")
     public void updateClrPtMemo (@RequestBody Object param) { this.iCRA1000Service.updateClrPtMemo(param); }
 
-    /** 환자정보 접수정보 수정 */
+    /** 환자정보 수정 */
     @PostMapping("/updatePtRcpn")
     public void updatePtRcpn (@RequestBody Object param) { this.iCRA1000Service.updatePtRcpn(param); }
+
+    /** 접수정보 수정 */
+    @PostMapping("/saveRcpn")
+    public void saveRcpn (@RequestBody Object param) { this.iCRA1000Service.saveRcpn(param); }
+
+    /** 만성질환 수정 */
+    @PostMapping("/updateChrn")
+    public void updateChrn (@RequestBody Object param) { this.iCRA1000Service.updateChrn(param); }
+    @PostMapping("/saveChrn")
+    public void saveChrn (@RequestBody Object param) { this.iCRA1000Service.saveChrn(param); }
 
     /** 보험구분 목록 조회 */
     @PostMapping("/insnList")
@@ -102,6 +119,10 @@ public class CRA1000Controller {
     public Object prpsList (@RequestBody Object param) {
         return this.iCRA1000Service.prpsList(param);
     }
+
+    /** 산정특례구분코드 목록 조회 */
+    @PostMapping("/cfscDvcdList")
+    public Object cfscDvcdList (@RequestBody Object param) { return this.iCRA1000Service.cfscDvcdList(param); }
     /** ========================================================================================================================================================== */
 
 
@@ -120,9 +141,7 @@ public class CRA1000Controller {
 
     /** 검사결과 조회 */
     @PostMapping("/examResult")
-    public Object examResult (@RequestBody Object param) {
-        return this.iCRA1000Service.examResult(param);
-    }
+    public Object examResult (@RequestBody Object param) { return this.iCRA1000Service.examResult(param); }
     /** ========================================================================================================================================================== */
 
 
@@ -181,6 +200,10 @@ public class CRA1000Controller {
     /** 경과기록 조회 */
     @PostMapping("prgrList")
     public Object prgrList (@RequestBody Object param) { return this.iCRA1000Service.prgrList(param); }
+
+    /** 완료 검사결과 조회 */
+    @PostMapping("completeExam")
+    public Object completeExam (@RequestBody Object param) { return this.iCRA1000Service.completeExam(param); }
 
     /** SLIP 목록 조회 */
     @PostMapping("/slipList")
