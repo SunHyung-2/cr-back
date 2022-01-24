@@ -87,10 +87,10 @@ public class CRA1000Controller {
     public void saveRcpn (@RequestBody Object param) { this.iCRA1000Service.saveRcpn(param); }
 
     /** 만성질환 수정 */
-    @PostMapping("/updateChrn")
-    public void updateChrn (@RequestBody Object param) { this.iCRA1000Service.updateChrn(param); }
-    @PostMapping("/saveChrn")
-    public void saveChrn (@RequestBody Object param) { this.iCRA1000Service.saveChrn(param); }
+    @PostMapping("/updateCfsc")
+    public void updateCfsc (@RequestBody Object param) { this.iCRA1000Service.updateCfsc(param); }
+    @PostMapping("/saveCfsc")
+    public void saveCfsc (@RequestBody Object param) { this.iCRA1000Service.saveCfsc(param); }
 
     /** 보험구분 목록 조회 */
     @PostMapping("/insnList")

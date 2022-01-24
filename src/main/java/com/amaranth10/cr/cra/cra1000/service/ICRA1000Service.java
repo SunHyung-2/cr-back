@@ -48,8 +48,8 @@ public interface ICRA1000Service {
     void saveRcpn(Object param);
 
     /** 만성질환 수정 */
-    void updateChrn (Object param);
-    void saveChrn (Object param);
+    void updateCfsc (Object param);
+    void saveCfsc (Object param);
 
     /** 보험구분 목록 조회 */
     List<Object> insnList(Object param);

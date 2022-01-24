@@ -254,27 +254,27 @@
           AND pid = #{pid}
     </insert>
 
-<!--    만성질환 수정     -->
-    <update id="updateChrn">
+<!--    산정특례, 만성질환 수정     -->
+    <update id="updateCfsc">
         UPDATE cbptcfscnt
         SET last_updt_usid = #{last_updt_usid},
             last_uddt = #{last_uddt},
-            cfsc_apdy = #{chrn.period.from},
-            cfsc_endy = #{chrn.period.to},
+            cfsc_apdy = #{cfsc.period.from},
+            cfsc_endy = #{cfsc.period.to},
             insn_tycd = #{patient.insn_tycd}
         WHERE pid = #{pid}
         AND hspt_cd = #{hspt_cd}
-        AND cfsc_sqno = #{chrn.chrn_sqno}
+        AND cfsc_sqno = #{cfsc.cfsc_sqno}
     </update>
-    <insert id="saveChrn">
+    <insert id="saveCfsc">
         INSERT INTO cbptcfscnt
             (pid, cfsc_dvcd, cfsc_sqno, cfsc_apdy, cfsc_endy, hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, insn_tycd)
         SELECT
             #{pid},
-            'H1',
+            #{cfsc.cfsc_dvcd},
             IFNULL(MAX(cbptcfscnt.cfsc_sqno) + 1, 1),
-            #{period.from},
-            #{period.to},
+            #{cfsc.period.from},
+            #{cfsc.period.to},
             #{hspt_cd},
             #{frst_rgst_usid},
             #{frst_rgdt},
@@ -284,7 +284,6 @@
         FROM cbptcfscnt
         WHERE pid = #{pid}
           AND hspt_cd = #{hspt_cd}
-          AND cfsc_dvcd = 'H1'
     </insert>
 
 <!--    보험 구분 목록   -->

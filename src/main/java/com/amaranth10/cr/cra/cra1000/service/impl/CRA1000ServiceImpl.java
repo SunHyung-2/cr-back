@@ -76,10 +76,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     /** 만성질환 수정 */
     @Transactional
     @Override
-    public void updateChrn (Object param) { cra1000Mapper.updateChrn(param); }
+    public void updateCfsc (Object param) { cra1000Mapper.updateCfsc(param); }
     @Transactional
     @Override
-    public void saveChrn (Object param) { cra1000Mapper.saveChrn(param); }
+    public void saveCfsc (Object param) { cra1000Mapper.saveCfsc(param); }
 
     /** 보험구분 목록 조회 */
     @Override
