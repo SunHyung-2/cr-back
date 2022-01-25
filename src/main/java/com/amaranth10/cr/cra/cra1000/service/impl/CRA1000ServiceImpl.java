@@ -163,7 +163,7 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
 
     /** 경과기록 조회 */
     @Override
-    public List<Progress> prgrList (Object param) { return cra1000Mapper.prgrList(param); }
+    public Progress prgrList (Object param) { return cra1000Mapper.prgrList(param); }
 
     /** 완료 검사결과 조회 */
     @Override

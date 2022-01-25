@@ -116,7 +116,7 @@ public interface CRA1000Mapper {
     List<Reception> pastList (Object param);
 
     /** 경과기록 조회 */
-    List<Progress> prgrList (Object param);
+    Progress prgrList (Object param);
 
     /** 완료 검사결과 조회 */
     List<Exam> completeExam (Object param);

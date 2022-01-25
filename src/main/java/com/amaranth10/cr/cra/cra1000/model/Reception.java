@@ -19,6 +19,7 @@ public class Reception {
     private String mdcr_dr_id; // 진료의
     private String mddp_cd; // 진료과
     private String rcpn_sqno; // 접수 일련번호
+    private String dgns_cd; // 주상병코드
 //    private String type_asst_cd; // 유형보조코드
 //    private String rcpn_memo; // 접수메모
 //    private String cmhs_path_cd; // 내원경로코드
