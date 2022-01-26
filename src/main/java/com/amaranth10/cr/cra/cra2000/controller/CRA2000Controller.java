@@ -34,10 +34,6 @@ public class CRA2000Controller {
     @PostMapping("/blpeDetail")
     public Object blpeDetail (@RequestBody Object param) { return this.iCRA2000Service.blpeDetail(param); };
 
-    /** 상용구 코드 max값 조회 */
-    @PostMapping("/maxBlpe")
-    public Object maxBlpe (@RequestBody Object param) { return this.iCRA2000Service.maxBlpe(param); };
-
     /** 상용구 추가 */
     @PostMapping("/insertBlpe")
     public void insertBlpe (@RequestBody Object param) { this.iCRA2000Service.insertBlpe(param); };
