@@ -8,5 +8,5 @@ import lombok.Setter;
 public class Slip {
     private String slip_cd; // slip코드
     private String slip_nm; // slip명
-    private String clsf_dvcd; // 분류구분코드
+    private String slip_uprn_clsf_cd; // 상위Slip분류코드
 }

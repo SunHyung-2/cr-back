@@ -539,10 +539,10 @@
     <select id="slipList" resultType="com.amaranth10.cr.cra.cra1000.model.Slip">
         SELECT slip_cd,
                slip_nm,
-               clsf_dvcd
+        slip_uprn_clsf_cd
         FROM crslipclmt
         WHERE hspt_cd = #{hspt_cd}
-        ORDER BY slip_cd
+        ORDER BY slip_uprn_clsf_cd, slip_dspl_seq
     </select>
 
 <!--    SLIP 수가 항목      -->
