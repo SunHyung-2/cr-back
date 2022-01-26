@@ -609,7 +609,7 @@
                     #{pid},
                     #{rcpn_sqno},
                     IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
-                    #{date},
+                    #{dateTime},
                     #{mddp_cd},
                     #{usid},
                     #{item.dgns_cd},
