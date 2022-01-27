@@ -11,6 +11,7 @@ import lombok.Setter;
 public class Exam {
     private String hspt_cd; // 병원코드
     private String pid; // 등록번호
+    private String prsc_date; // 처방일
     private String exmn_date; // 검사일
     private String prsc_prgr_stat_cd; // 처방진행상태코드 M(실시), N(보고)
     private String exmn_cd; // 검사코드
