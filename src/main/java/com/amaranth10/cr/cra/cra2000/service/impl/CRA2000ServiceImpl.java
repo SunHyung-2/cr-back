@@ -38,10 +38,6 @@ public class CRA2000ServiceImpl implements ICRA2000Service {
     @Override
     public Tree blpeDetail(Object param) { return cra2000Mapper.blpeDetail(param); }
 
-    /** 상용구 코드 max값 조회 */
-    @Override
-    public Integer maxBlpe(Object param) { System.out.println(cra2000Mapper.maxBlpe(param)); return cra2000Mapper.maxBlpe(param); }
-
     /** 상용구 추가 */
     @Transactional
     @Override

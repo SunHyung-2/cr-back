@@ -22,9 +22,6 @@ public interface ICRA2000Service {
     /** 상용구 상세 조회 */
     Tree blpeDetail (Object param);
 
-    /** 상용구 코드 max값 조회 */
-    Integer maxBlpe (Object param);
-
     /** 상용구 추가 */
     void insertBlpe (Object param);
 
