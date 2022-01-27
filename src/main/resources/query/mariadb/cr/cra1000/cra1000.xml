@@ -111,7 +111,47 @@
           AND cbotrcinmv.pid = #{pid}
           AND cbptbainmt.pid = cbotrcinmv.pid
           AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
-<!--        AND cbotrcinmv.hstr_sqno-->
+<!--        AND cbotrcinmv.hstr_stat_cd = 'Y'-->
+    </select>
+
+<!--    산정특례, 만성질환 관리제 조회       -->
+    <select id="ptCfsc" resultType="java.util.HashMap">
+        <choose>
+            <when test="mdcr_date == null">
+                SELECT cfsc_sqno, cfsc_dvcd, cfsc_apdy, cfsc_endy
+                FROM cbptcfscnt
+                WHERE pid = #{pid}
+                  AND hspt_cd = #{hspt_cd}
+                  AND cfsc_dvcd NOT IN ('H1')
+            </when>
+            <otherwise>
+                SELECT MAX(cfsc_sqno) AS cfsc_sqno, cfsc_dvcd, cfsc_apdy, cfsc_endy
+                FROM cbptcfscnt
+                WHERE pid = #{pid}
+                  AND hspt_cd = #{hspt_cd}
+                  AND cfsc_dvcd NOT IN ('H1')
+                  AND #{mdcr_date} BETWEEN cfsc_apdy AND cfsc_endy
+            </otherwise>
+        </choose>
+    </select>
+    <select id="ptChrn" resultType="java.util.HashMap">
+        <choose>
+            <when test="mdcr_date == null">
+                SELECT cfsc_sqno, cfsc_apdy, cfsc_endy
+                FROM cbptcfscnt
+                WHERE pid = #{pid}
+                  AND hspt_cd = #{hspt_cd}
+                  AND cfsc_dvcd = 'H1'
+            </when>
+            <otherwise>
+                SELECT MAX(cfsc_sqno) AS cfsc_sqno, cfsc_apdy, cfsc_endy
+                FROM cbptcfscnt
+                WHERE pid = #{pid}
+                AND hspt_cd = #{hspt_cd}
+                AND cfsc_dvcd = 'H1'
+                AND #{mdcr_date} BETWEEN cfsc_apdy AND cfsc_endy
+            </otherwise>
+        </choose>
     </select>
 
 <!--    관심환자 여부 수정     -->
@@ -133,6 +173,7 @@
         WHERE hspt_cd = #{hspt_cd}
           AND pid = #{pid}
           AND rcpn_sqno = #{rcpn_sqno}
+          AND hstr_stat_cd = 'Y'
     </update>
 
 <!--    진료메모 & 환자메모 저장      -->
@@ -168,19 +209,82 @@
             cbptbainmt.detl_addr = #{patient.detl_addr},
             cbptbainmt.vip_pt_yn = #{patient.vip_pt_yn},
             cbptbainmt.priv_pt_yn = #{patient.priv_pt_yn},
-            cbptbainmt.cmhs_path_dvcd = #{patient.cmhs_path_dvcd},
-            cbotrcinnt.last_uddt = #{last_uddt},
+            cbptbainmt.cmhs_path_dvcd = #{patient.cmhs_path_dvcd}
+        <if test='update_rcpn == "Y"'>
+            , cbotrcinnt.last_uddt = #{last_uddt},
             cbotrcinnt.last_updt_usid = #{last_updt_usid},
-            cbotrcinnt.mdcr_date = #{patient.cr_date},
-            cbotrcinnt.mdcr_hm = #{patient.mdcr_hm},
-            cbotrcinnt.mddp_cd = #{patient.mddp_cd},
-            cbotrcinnt.mdcr_dr_id = #{patient.mdcr_dr_id},
-            cbotrcinnt.fvnr_dvcd = #{patient.fvnr_dvcd},
-            cbotrcinnt.insn_tycd = #{patient.insn_tycd},
-            cbotrcinnt.cmhs_prps_cd = #{patient.cmhs_prps_cd}
+            cbotrcinnt.hstr_stat_cd = 'C'
+        </if>
         WHERE cbptbainmt.hspt_cd = #{hspt_cd}
           AND cbptbainmt.pid = #{pid}
     </update>
+    <insert id="saveRcpn">
+        INSERT INTO cbotrcinnt
+            (rcpn_sqno, hstr_sqno, hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, rcpn_dvcd, hstr_stat_cd, pid,
+            mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, rcpn_stat_cd, clcl_stat_cd, fvnr_dvcd, insn_tycd, type_asst_cd,
+            rcpn_memo, cmhs_prps_cd, prgn_yn, usch_dvcd, optn_hspt_cd, optn_hspt_cd_nm)
+        SELECT rcpn_sqno,
+                MAX(hstr_sqno) + 1,
+                #{hspt_cd},
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
+                rcpn_dvcd,
+                'Y',
+                #{pid},
+                #{patient.mdcr_date},
+                #{patient.mdcr_hm},
+                #{patient.mddp_cd},
+                #{patient.mdcr_dr_id},
+                rcpn_stat_cd,
+                clcl_stat_cd,
+                #{patient.fvnr_dvcd},
+                #{patient.insn_tycd},
+                type_asst_cd,
+                rcpn_memo,
+                #{patient.cmhs_prps_cd},
+                prgn_yn,
+                usch_dvcd,
+                optn_hspt_cd,
+                optn_hspt_cd_nm
+        FROM cbotrcinnt
+        WHERE hspt_cd = #{hspt_cd}
+          AND rcpn_sqno = #{rcpn_sqno}
+          AND pid = #{pid}
+    </insert>
+
+<!--    산정특례, 만성질환 수정     -->
+    <update id="updateCfsc">
+        UPDATE cbptcfscnt
+        SET last_updt_usid = #{last_updt_usid},
+            last_uddt = #{last_uddt},
+            cfsc_apdy = #{cfsc.period.from},
+            cfsc_endy = #{cfsc.period.to},
+            insn_tycd = #{patient.insn_tycd}
+        WHERE pid = #{pid}
+        AND hspt_cd = #{hspt_cd}
+        AND cfsc_sqno = #{cfsc.cfsc_sqno}
+    </update>
+    <insert id="saveCfsc">
+        INSERT INTO cbptcfscnt
+            (pid, cfsc_dvcd, cfsc_sqno, cfsc_apdy, cfsc_endy, hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, insn_tycd)
+        SELECT
+            #{pid},
+            #{cfsc.cfsc_dvcd},
+            IFNULL(MAX(cbptcfscnt.cfsc_sqno) + 1, 1),
+            #{cfsc.period.from},
+            #{cfsc.period.to},
+            #{hspt_cd},
+            #{frst_rgst_usid},
+            #{frst_rgdt},
+            #{last_updt_usid},
+            #{last_uddt},
+            #{patient.insn_tycd}
+        FROM cbptcfscnt
+        WHERE pid = #{pid}
+          AND hspt_cd = #{hspt_cd}
+    </insert>
 
 <!--    보험 구분 목록   -->
     <select id="insnList" resultType="java.util.HashMap">
@@ -228,6 +332,16 @@
         FROM czcomcodmt
         WHERE hspt_cd = #{hspt_cd}
           AND cmcd_clsf_cd = 'CB4009'
+        ORDER BY cmcd_cd
+    </select>
+
+<!--    산정특례구분코드 목록     -->
+    <select id="cfscDvcdList" resultType="java.util.HashMap">
+        SELECT cmcd_cd As value,
+               cmcd_nm As text
+        FROM czcomcodmt
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB3014'
         ORDER BY cmcd_cd
     </select>
 
@@ -372,17 +486,22 @@
 <!--    CLRS0106 처방조회 ==========================================================================================================================================-->
 <!--    과거기록 조회     -->
     <select id="pastList" resultType="com.amaranth10.cr.cra.cra1000.model.Reception">
-        SELECT rcpn_sqno,
-               DATE_FORMAT(mdcr_date, '%Y-%m-%d') AS mdcr_date,
-               fn_get_username(hspt_cd, mdcr_dr_id) As mdcr_dr_id,
-               fn_get_deptname(hspt_cd, mdcr_date, mddp_cd) As mddp_cd,
-               fn_get_commname(hspt_cd, mdcr_date, 'CB4003', fvnr_dvcd) As fvnr_dvcd,
-               fn_get_commname(hspt_cd, mdcr_date, 'CB4005', insn_tycd) As insn_tycd
-        FROM cbotrcinmv
-        WHERE hspt_cd = #{hspt_cd}
-          AND pid = #{pid}
-        <![CDATA[AND mdcr_date <= #{date}]]>
-        ORDER BY mdcr_date DESC
+        SELECT cbotrcinmv.rcpn_sqno,
+               DATE_FORMAT(cbotrcinmv.mdcr_date, '%Y-%m-%d') AS mdcr_date,
+               fn_get_username(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_dr_id) As mdcr_dr_id,
+               fn_get_deptname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, cbotrcinmv.mddp_cd) As mddp_cd,
+               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4003', cbotrcinmv.fvnr_dvcd) As fvnr_dvcd,
+               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4005', cbotrcinmv.insn_tycd) As insn_tycd,
+               crptdgnsnt.dgns_cd As dgns_cd
+        FROM cbotrcinmv AS cbotrcinmv
+        LEFT OUTER JOIN crptdgnsnt AS crptdgnsnt
+          ON crptdgnsnt.rcpn_sqno = cbotrcinmv.rcpn_sqno
+        AND crptdgnsnt.del_yn = "N"
+        AND crptdgnsnt.dvsn = '1'
+        WHERE cbotrcinmv.hspt_cd = #{hspt_cd}
+          AND cbotrcinmv.pid = #{pid}
+        <![CDATA[AND cbotrcinmv.mdcr_date <= #{date}]]>
+        ORDER BY cbotrcinmv.mdcr_date DESC
     </select>
 
 <!--    경과기록 조회     -->
@@ -401,14 +520,29 @@
           AND rcpn_sqno = #{rcpn_sqno}
     </select>
 
+<!--    완료 검사결과 조회      -->
+    <select id="completeExam" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
+        SELECT DATE_FORMAT(rptg_date, '%Y.%m.%d') AS exmn_date,
+                exmn_cd,
+                exmn_rslt1
+<!--                exmn_rslt_tycd-->
+        FROM crexmrelnt
+        WHERE hspt_cd = #{hspt_cd}
+          AND pid = #{pid}
+          AND prsc_date = #{prsc_date}
+          AND prsc_sqno = #{prsc_sqno}
+<!--        AND csexmrelnt.rcpn_sqno = #{rcpn_sqon}-->
+        ORDER BY exmn_rslt_sqno
+    </select>
+
 <!--    SLIP 목록     -->
     <select id="slipList" resultType="com.amaranth10.cr.cra.cra1000.model.Slip">
         SELECT slip_cd,
                slip_nm,
-               clsf_dvcd
+        slip_uprn_clsf_cd
         FROM crslipclmt
         WHERE hspt_cd = #{hspt_cd}
-        ORDER BY slip_cd
+        ORDER BY slip_uprn_clsf_cd, slip_dspl_seq
     </select>
 
 <!--    SLIP 수가 항목      -->
@@ -475,7 +609,7 @@
                     #{pid},
                     #{rcpn_sqno},
                     IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
-                    #{date},
+                    #{dateTime},
                     #{mddp_cd},
                     #{usid},
                     #{item.dgns_cd},
@@ -586,6 +720,7 @@
     <select id="prscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
         SELECT prsc_sqno,
                 prsc_date,
+                prsc_inpt_dt,
                 fn_get_username(hspt_cd, prsc_dr_id) AS prsc_dr_id,
                 prsc_cd,
                 prsc_nm,
@@ -608,7 +743,8 @@
                 dc_yn,
                 dc_resn_cd,
                 dc_resn,
-                apnt_yn
+                apnt_yn,
+                prsc_prgr_stat_cd
         FROM crprescpmv
         WHERE hspt_cd = #{hspt_cd}
           AND rcpn_sqno = #{rcpn_sqno}

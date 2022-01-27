@@ -51,18 +51,10 @@
            AND blpe_sqno = #{blpe_sqno}
     </select>
 
-<!--    상용구 코드 max값 조회-->
-    <select id="maxBlpe" resultType="java.lang.Integer">
-        SELECT IFNULL(MAX(blpe_sqno) + 1, 1)
-          FROM crblpmngmt
-         WHERE hspt_cd = #{hspt_cd}
-<!--           AND inps_usid = #{inps_usid}-->
-    </select>
-
 <!--    상용구 추가-->
     <insert id="insertBlpe">
-        INSERT INTO crblpmngmt (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, inps_usid, blpe_clsf, blpe_sqno, blpe_nm, blpe_cnts)
-        VALUES (#{hspt_cd}, #{frst_rgst_usid}, #{frst_rgdt}, #{last_updt_usid}, #{last_uddt}, #{inps_usid}, #{blpe_clsf}, #{blpe_sqno}, #{blpe_nm}, #{blpe_cnts})
+        INSERT INTO crblpmngmt (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, inps_usid, blpe_clsf, blpe_nm, blpe_cnts)
+        VALUES (#{hspt_cd}, #{frst_rgst_usid}, #{frst_rgdt}, #{last_updt_usid}, #{last_uddt}, #{inps_usid}, #{blpe_clsf}, #{blpe_nm}, #{blpe_cnts})
     </insert>
 
 <!--    상용구 수정-->
