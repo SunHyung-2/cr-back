@@ -82,6 +82,9 @@ public interface CRA1000Mapper {
     /** 신체사정그래프 데이터 조회 */
     List<Vital> vitalGraphData (Object param);
 
+    /** 신체사정 참고치 데이터 */
+    List<Object> vitalReferData (Object param);
+
     /** 검사결과 조회 */
     List<Exam> examResult (Object param);
     /** ========================================================================================================================================================== */
