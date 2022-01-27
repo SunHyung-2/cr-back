@@ -55,7 +55,7 @@
            AND cbotrcinmv.mdcr_dr_id like #{mdcr_dr_id}
            AND cbotrcinmv.rcpn_stat_cd NOT IN ('C')
            AND cbptbainmt.del_yn = 'N'
-         ORDER BY cbotrcinmv.mdcr_hm
+         ORDER BY cbotrcinmv.mdcr_hm, cbotrcinmv.rcpn_sqno
     </select>
 <!--    ==========================================================================================================================================================-->
 
