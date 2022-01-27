@@ -385,6 +385,14 @@
          ORDER BY inpt_dt DESC
     </select>
 
+<!--    신체사정 참고치 데이터-->
+    <select id="vitalReferData" resultType="java.util.HashMap">
+        SELECT cmcd_cd, cmcd_nm, cmcd_figr_valu1 AS low, cmcd_figr_valu2 AS high
+          FROM czcomcodmt
+         WHERE hspt_cd = #{hspt_cd}
+           AND cmcd_clsf_cd = 'CR1002'
+    </select>
+
 <!--    검사결과 조회-->
     <select id="examResult" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
         SELECT DATE_FORMAT(csexmrelnt.exmn_date, '%Y-%m-%d') AS exmn_date,

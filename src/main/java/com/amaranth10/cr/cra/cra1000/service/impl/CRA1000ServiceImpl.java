@@ -116,6 +116,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Vital> vitalGraphData(Object param) { return cra1000Mapper.vitalGraphData(param); }
 
+    /** 신체사정 참고치 데이터 */
+    @Override
+    public List<Object> vitalReferData(Object param) { return cra1000Mapper.vitalReferData(param); }
+
     /** 검사결과 조회 */
     @Override
     public List<Exam> examResult(Object param) { return cra1000Mapper.examResult(param); }

@@ -139,6 +139,12 @@ public class CRA1000Controller {
         return this.iCRA1000Service.vitalGraphData(param);
     }
 
+    /** 신체사정 참고치 데이터 */
+    @PostMapping("/vitalReferData")
+    public Object vitalReferData (@RequestBody Object param) {
+        return this.iCRA1000Service.vitalReferData(param);
+    }
+
     /** 검사결과 조회 */
     @PostMapping("/examResult")
     public Object examResult (@RequestBody Object param) { return this.iCRA1000Service.examResult(param); }
