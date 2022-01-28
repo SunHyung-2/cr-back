@@ -350,7 +350,7 @@
 <!--    CRA1030 신체사정정보 / 검사결과 ================================================================================================================================-->
 <!--    신체사정정보 조회-->
     <select id="vitalData" resultType="com.amaranth10.cr.cra.cra1000.model.Vital">
-        SELECT DATE_FORMAT(inpt_dt, '%Y-%m-%d %H:%i') AS inpt_dt,
+        SELECT DATE_FORMAT(inpt_dt, '%y-%m-%d %H:%i') AS inpt_dt,
                sbp,
                dbp,
                bt,
