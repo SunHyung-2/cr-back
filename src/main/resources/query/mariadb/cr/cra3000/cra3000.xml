@@ -47,10 +47,11 @@
                 prsc_notm As notm,
                 prsc_nody As nody,
                 iotm_cd,
-        prsc_pay_dvcd,
+                prsc_pay_dvcd,
                 hsin_hsot_dvcd,
                 spfm_excp_resn_cd As hsin_prsc_resn_cd,
-                prsc_sqno
+                prsc_sqno,
+                prsc_clsf_cd
         FROM crsetprsdt
         WHERE set_prsc_sqno = #{set_cd}
         ORDER BY sort_sqno
