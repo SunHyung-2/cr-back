@@ -55,7 +55,7 @@
            AND cbotrcinmv.mdcr_dr_id like #{mdcr_dr_id}
            AND cbotrcinmv.rcpn_stat_cd NOT IN ('C')
            AND cbptbainmt.del_yn = 'N'
-         ORDER BY cbotrcinmv.mdcr_hm
+         ORDER BY cbotrcinmv.mdcr_hm, cbotrcinmv.rcpn_sqno
     </select>
 <!--    ==========================================================================================================================================================-->
 
@@ -395,20 +395,19 @@
 
 <!--    검사결과 조회-->
     <select id="examResult" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
-        SELECT DATE_FORMAT(csexmrelnt.exmn_date, '%Y-%m-%d') AS exmn_date,
-               csexmrelnt.prsc_prgr_stat_cd,
-               csexmrelnt.exmn_cd,
+        SELECT DATE_FORMAT(crexmrelnt.prsc_date, '%Y-%m-%d') AS prsc_date,
+               fn_get_commname(crexmrelnt.hspt_cd, crexmrelnt.prsc_date, 'CS1008', crexmrelnt.prsc_prgr_stat_cd) AS prsc_prgr_stat_cd,
+               crexmrelnt.exmn_cd,
                crprsccdmt.prsc_nm,
-               csexmrelnt.exmn_rslt1,
-               csexmrelnt.nots_low,
-               csexmrelnt.nots_high,
-               csexmrelnt.prsc_sqno
-          FROM csexmrelnt, crprsccdmt
-         WHERE csexmrelnt.hspt_cd = #{hspt_cd}
-           AND csexmrelnt.pid = #{pid}
-           AND csexmrelnt.hspt_cd = crprsccdmt.hspt_cd
-           AND csexmrelnt.exmn_cd = crprsccdmt.prsc_cd
-         ORDER BY csexmrelnt.exmn_date DESC, csexmrelnt.prsc_sqno DESC
+               crexmrelnt.exmn_rslt1,
+               crexmrelnt.nots_low,
+               crexmrelnt.nots_high
+          FROM crexmrelnt, crprsccdmt
+         WHERE crexmrelnt.hspt_cd = #{hspt_cd}
+           AND crexmrelnt.pid = #{pid}
+           AND crexmrelnt.hspt_cd = crprsccdmt.hspt_cd
+           AND crexmrelnt.exmn_cd = crprsccdmt.prsc_cd
+         ORDER BY crexmrelnt.prsc_date DESC
     </select>
 <!--    ==========================================================================================================================================================-->
 
