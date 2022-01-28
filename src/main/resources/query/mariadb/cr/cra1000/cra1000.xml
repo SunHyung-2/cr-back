@@ -30,7 +30,8 @@
 <!--    환자현황 대기 리스트-->
     <select id="patientList" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
         SELECT cbotrcinmv.mdcr_date,
-               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4001', cbotrcinmv.rcpn_stat_cd) AS rcpn_stat_cd,
+               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4001', cbotrcinmv.rcpn_stat_cd) AS rcpn_stat_nm,
+               cbotrcinmv.rcpn_stat_cd,
                cbotrcinmv.mdcr_hm,
                cbptbainmt.pt_nm,
                cbptbainmt.pid,

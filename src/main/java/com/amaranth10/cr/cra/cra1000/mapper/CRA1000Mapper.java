@@ -2,8 +2,6 @@ package com.amaranth10.cr.cra.cra1000.mapper;
 
 import com.amaranth10.cr.cra.cra1000.model.*;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 

@@ -1,18 +1,8 @@
 package com.amaranth10.cr.cra.cra1000.controller;
 
-import com.amaranth10.backendcommon.util.helper.ExtractUtil;
-import com.amaranth10.backendcommon.util.model.APIResult;
-import com.amaranth10.backendcommon.util.model.SessionInfo;
 import com.amaranth10.cr.cra.cra1000.service.ICRA1000Service;
-import com.amaranth10.cr.model.RequestModel;
-import klago.log.utils.RequestInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * 진료 메인 Controller
