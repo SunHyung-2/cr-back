@@ -3,9 +3,6 @@ package com.amaranth10.cr.cra.cra1000.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Array;
-import java.util.Map;
-
 /**
  * 진료 메인 Model
  */
@@ -17,6 +14,7 @@ public class Patient {
     private String pt_nm; // 환자명
     private String mdcr_date; // 진료일
     private String rcpn_stat_cd; // 접수상태
+    private String rcpn_stat_nm; // 접수상태명
     private String mdcr_hm; // 진료시간
     private String sex; // 성별
     private String age; // 나이
