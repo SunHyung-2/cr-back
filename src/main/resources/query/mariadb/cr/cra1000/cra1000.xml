@@ -726,8 +726,8 @@
 <!--    처방 내역       -->
     <select id="prscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
         SELECT prsc_sqno,
-                prsc_date,
-                prsc_inpt_dt,
+<!--                prsc_date,-->
+        DATE_FORMAT(prsc_inpt_dt, '%Y-%m-%d %T') As prsc_inpt_dt,
                 fn_get_username(hspt_cd, prsc_dr_id) AS prsc_dr_id,
                 prsc_cd,
                 prsc_nm,
