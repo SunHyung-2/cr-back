@@ -371,7 +371,7 @@
 
 <!--    신체사정그래프 데이터 조회-->
     <select id="vitalGraphData" resultType="com.amaranth10.cr.cra.cra1000.model.Vital">
-        SELECT DATE_FORMAT(crvitlsgnt.inpt_dt, '%Y-%m-%d') AS inpt_dt,
+        SELECT DATE_FORMAT(crvitlsgnt.inpt_dt, '%y-%m-%d') AS inpt_dt,
                sbp,
                dbp,
                pr,
@@ -396,7 +396,7 @@
 
 <!--    검사결과 조회-->
     <select id="examResult" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
-        SELECT DATE_FORMAT(crexmrelnt.prsc_date, '%Y-%m-%d') AS prsc_date,
+        SELECT DATE_FORMAT(crexmrelnt.prsc_date, '%y-%m-%d') AS prsc_date,
                fn_get_commname(crexmrelnt.hspt_cd, crexmrelnt.prsc_date, 'CS1008', crexmrelnt.prsc_prgr_stat_cd) AS prsc_prgr_stat_cd,
                crexmrelnt.exmn_cd,
                crprsccdmt.prsc_nm,
