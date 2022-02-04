@@ -2,6 +2,8 @@ package com.amaranth10.cr.cra.cra1000.mapper;
 
 import com.amaranth10.cr.cra.cra1000.model.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -14,6 +16,9 @@ public interface CRA1000Mapper {
     /** CRA1010 환자현황 =========================================================================================================================================== */
     /** 환자현황 진료의 목록 조회 */
     List<Object> doctList (Object param);
+
+    /** 접수상태코드 목록 조회 */
+    List<Object> rcpnStatList (Object param);
 
     /** 환자현황 대기 환자수 조회 */
     Object patientCount (Object param);
