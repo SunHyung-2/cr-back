@@ -13,6 +13,9 @@ public interface ICRA1000Service {
     /** 환자현황 진료의 목록 조회 */
     List<Object> doctList(Object param);
 
+    /** 접수상태코드 목록 조회 */
+    List<Object> rcpnStatList (Object param);
+
     /** 환자현황 대기 환자수 조회 */
     Object patientCount(Object param);
 
