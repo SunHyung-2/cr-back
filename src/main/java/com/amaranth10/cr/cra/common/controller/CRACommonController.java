@@ -1,9 +1,5 @@
 package com.amaranth10.cr.cra.common.controller;
 
-import com.amaranth10.cr.cra.common.model.Diagnosis;
-import com.amaranth10.cr.cra.common.model.Patient;
-import com.amaranth10.cr.cra.common.model.Prescription;
-import com.amaranth10.cr.cra.common.model.Reception;
 import com.amaranth10.cr.cra.common.service.ICRACommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -30,7 +30,8 @@
 <!--    환자현황 대기 리스트-->
     <select id="patientList" resultType="com.amaranth10.cr.cra.cra1000.model.Patient">
         SELECT cbotrcinmv.mdcr_date,
-               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4001', cbotrcinmv.rcpn_stat_cd) AS rcpn_stat_cd,
+               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4001', cbotrcinmv.rcpn_stat_cd) AS rcpn_stat_nm,
+               cbotrcinmv.rcpn_stat_cd,
                cbotrcinmv.mdcr_hm,
                cbptbainmt.pt_nm,
                cbptbainmt.pid,
@@ -350,7 +351,7 @@
 <!--    CRA1030 신체사정정보 / 검사결과 ================================================================================================================================-->
 <!--    신체사정정보 조회-->
     <select id="vitalData" resultType="com.amaranth10.cr.cra.cra1000.model.Vital">
-        SELECT DATE_FORMAT(inpt_dt, '%Y-%m-%d %H:%i') AS inpt_dt,
+        SELECT DATE_FORMAT(inpt_dt, '%y-%m-%d %H:%i') AS inpt_dt,
                sbp,
                dbp,
                bt,
@@ -370,7 +371,7 @@
 
 <!--    신체사정그래프 데이터 조회-->
     <select id="vitalGraphData" resultType="com.amaranth10.cr.cra.cra1000.model.Vital">
-        SELECT DATE_FORMAT(crvitlsgnt.inpt_dt, '%Y-%m-%d') AS inpt_dt,
+        SELECT DATE_FORMAT(crvitlsgnt.inpt_dt, '%y-%m-%d') AS inpt_dt,
                sbp,
                dbp,
                pr,
@@ -395,7 +396,7 @@
 
 <!--    검사결과 조회-->
     <select id="examResult" resultType="com.amaranth10.cr.cra.cra1000.model.Exam">
-        SELECT DATE_FORMAT(crexmrelnt.prsc_date, '%Y-%m-%d') AS prsc_date,
+        SELECT DATE_FORMAT(crexmrelnt.prsc_date, '%y-%m-%d') AS prsc_date,
                fn_get_commname(crexmrelnt.hspt_cd, crexmrelnt.prsc_date, 'CS1008', crexmrelnt.prsc_prgr_stat_cd) AS prsc_prgr_stat_cd,
                crexmrelnt.exmn_cd,
                crprsccdmt.prsc_nm,
@@ -726,8 +727,8 @@
 <!--    처방 내역       -->
     <select id="prscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
         SELECT prsc_sqno,
-                prsc_date,
-                prsc_inpt_dt,
+<!--                prsc_date,-->
+        DATE_FORMAT(prsc_inpt_dt, '%Y-%m-%d %T') As prsc_inpt_dt,
                 fn_get_username(hspt_cd, prsc_dr_id) AS prsc_dr_id,
                 prsc_cd,
                 prsc_nm,
