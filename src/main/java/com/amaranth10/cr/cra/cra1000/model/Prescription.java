@@ -7,7 +7,8 @@ import lombok.Setter;
 @Setter
 public class Prescription {
     private String prsc_cd; // 처방코드
-    private String prsc_date; // 처방일자
+    private String rcpn_sqno; // 접수일련번호
+//    private String prsc_date; // 처방일자
     private String prsc_inpt_dt; // 처방입력일시
     private String prsc_dr_id; // 처방의
     private String prsc_nm; // 처방명
