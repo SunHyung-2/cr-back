@@ -4,10 +4,30 @@
 <mapper namespace="com.amaranth10.cr.cra.cra3000.mapper.CRA3000Mapper">
 <!--    약속처방 목록     -->
     <select id="setList"  resultType="com.amaranth10.cr.cra.cra3000.model.SetPrsc">
+        WITH  RECURSIVE CTE AS (
+            SELECT hspt_cd,
+                    set_prsc_usid,
+                    set_prsc_sqno,
+                    set_prsc_nm,
+                    set_prsc_uprn_sqno,
+                    CONVERT ("", VARCHAR(100)) AS depth
+            FROM crsetprsmt
+            WHERE set_prsc_sqno = 1
+            UNION ALL
+            SELECT A.hspt_cd,
+                    A.set_prsc_usid,
+                    A.set_prsc_sqno,
+                    A.set_prsc_nm,
+                    A.set_prsc_uprn_sqno,
+        TRIM(CONCAT(depth, " > ", B.set_prsc_nm)) AS depth
+            FROM crsetprsmt AS A
+            INNER JOIN CTE AS B ON B.set_prsc_sqno = A.set_prsc_uprn_sqno
+        )
         SELECT set_prsc_sqno,
-               set_prsc_nm,
-               set_prsc_uprn_sqno
-        FROM crsetprsmt
+                set_prsc_nm,
+                set_prsc_uprn_sqno,
+                RTRIM(TRIM(LEADING "> " FROM depth)) AS depth
+        FROM CTE
         WHERE hspt_cd = #{hspt_cd}
           AND set_prsc_usid = #{usid}
         ORDER BY set_prsc_sqno
@@ -27,8 +47,9 @@
     </select>
 
 <!--    약속처방 진단 내역     -->
-    <select id="setDgnsList" resultType="com.amaranth10.cr.cra.cra1000.model.Diagnosis">
-        SELECT dgns_cd,
+    <select id="setDgnsList" resultType="com.amaranth10.cr.cra.cra3000.model.Diagnosis">
+        SELECT set_prsc_sqno,
+               dgns_cd,
                dgns_nm,
                dgns_site_cd As site_dvcd,
                dgns_sqno
@@ -38,8 +59,9 @@
     </select>
 
 <!--    약속처방 처방 내역     -->
-    <select id="setPrscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
-        SELECT prsc_cd,
+    <select id="setPrscList" resultType="com.amaranth10.cr.cra.cra3000.model.Prescription">
+        SELECT set_prsc_sqno,
+                prsc_cd,
                 prsc_nm,
                 mix_yn,
                 mix_no,
@@ -87,14 +109,14 @@
                 <foreach collection="delPrsc" item="item" separator=";">
                     DELETE FROM crsetprsdt
                     WHERE set_prsc_sqno = #{set.set_prsc_sqno}
-                    AND prsc_sqno = #{item.prsc_sqno}
-                    AND hspt_cd = #{hspt_cd}
+                      AND prsc_sqno = #{item.prsc_sqno}
+                      AND hspt_cd = #{hspt_cd}
                 </foreach>
             </if>
         </if>
     </delete>
 
-<!--    약속처방 진단 저장      -->
+<!--    약속처방 저장      -->
     <insert id="saveSet" parameterType="java.util.Objects">
         <if test='set.set_prsc_sqno == 0'>
             INSERT INTO crsetprsmt
@@ -110,7 +132,7 @@
                 #{set.set_prsc_nm}
             );
         </if>
-        <if test="dgnsList != null and dgnsList.size != 0">
+        <if test='dgnsList != null and dgnsList.size != 0'>
             <foreach collection="dgnsList" item="item" separator=";">
                 INSERT INTO crsetdigdt
                     (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
@@ -152,7 +174,7 @@
                 </choose>
             </foreach>;
         </if>
-        <if test="prscList != null and prscList.size != 0">
+        <if test='prscList != null and prscList.size != 0'>
             <foreach collection="prscList" item="item" separator=";">
             INSERT INTO crsetprsdt
                 (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
@@ -217,7 +239,7 @@
             set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno}
         WHERE hspt_cd = #{hspt_cd}
           AND set_prsc_sqno = #{set.set_prsc_sqno};
-        <if test="updDgns != null and updDgns.size != 0">
+        <if test='updDgns != null and updDgns.size != 0'>
             <foreach collection="updDgns" item="item" separator=";">
                 UPDATE crsetdigdt
                 SET last_updt_usid = #{last_updt_usid},
@@ -230,7 +252,7 @@
                   AND crsetdigdt.dgns_sqno = #{item.dgns_sqno}
             </foreach>;
         </if>
-        <if test="updPrsc != null and updPrsc.size != 0">
+        <if test='updPrsc != null and updPrsc.size != 0'>
             <foreach collection="updPrsc" item="item" separator=";">
                 UPDATE crsetprsdt
                 SET last_updt_usid = #{last_updt_usid},
@@ -245,7 +267,7 @@
                     mix_yn = #{item.mix_yn},
                     mix_no = #{item.mix_no},
                     prsc_qty = #{item.totl_vol},
-                prsc_pay_dvcd = #{item.prsc_pay_dvcd},
+                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                     sort_sqno = #{item.row}
                 WHERE crsetprsdt.hspt_cd = #{hspt_cd}
                   AND crsetprsdt.set_prsc_sqno = #{set.set_prsc_sqno}

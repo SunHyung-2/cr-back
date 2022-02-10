@@ -46,21 +46,17 @@ public class CRA3000Controller {
 
     /** 약속처방 삭제 */
     @PostMapping("/deleteSet")
-    public void deleteSet (@RequestBody Object param) {
-        this.iCRA3000Service.deleteSet(param);
-    }
+    public void deleteSet (@RequestBody Object param) { this.iCRA3000Service.deleteSet(param); }
 
     /** 약속처방 저장 */
     @PostMapping("/saveSet")
-    public void saveSet (@RequestBody Object param) {
-        this.iCRA3000Service.saveSet(param);
-    }
+    public void saveSet (@RequestBody Object param) { this.iCRA3000Service.saveSet(param); }
 
     /** 약속처방 수정 */
     @PostMapping("/updateSet")
     public void updateSet (@RequestBody Object param) {
         this.iCRA3000Service.updateSet(param);
-        this.iCRA3000Service.deleteSet(param);
-        this.iCRA3000Service.saveSet(param);
+//        this.iCRA3000Service.deleteSet(param);
+//        this.iCRA3000Service.saveSet(param);
     }
 }
