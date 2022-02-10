@@ -19,6 +19,12 @@ public class CRA1000Controller {
         return this.iCRA1000Service.doctList(param);
     };
 
+    /** 접수상태코드 목록 조회 */
+    @PostMapping("/rcpnStatList")
+    public Object rcpnStatList (@RequestBody Object param) {
+        return this.iCRA1000Service.rcpnStatList(param);
+    };
+
     /** 환자현황 대기 환자수 조회 */
     @PostMapping("/patientCount")
     public Object patientCount (@RequestBody Object param) {

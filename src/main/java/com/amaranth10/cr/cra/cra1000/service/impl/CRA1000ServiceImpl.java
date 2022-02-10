@@ -22,6 +22,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Object> doctList(Object param) { return cra1000Mapper.doctList(param); }
 
+    /** 접수상태코드 목록 조회 */
+    @Override
+    public List<Object> rcpnStatList(Object param) { return cra1000Mapper.rcpnStatList(param); }
+
     /** 환자현황 대기 환자수 조회 */
     @Override
     public Object patientCount(Object param) { return cra1000Mapper.patientCount(param); }

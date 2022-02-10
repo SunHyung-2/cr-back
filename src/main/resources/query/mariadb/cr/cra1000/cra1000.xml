@@ -13,6 +13,16 @@
            AND cxusemngmt.del_yn = 'N'
          ORDER BY user_nm
     </select>
+
+<!--    접수상태코드 목록 조회  -->
+    <select id="rcpnStatList" resultType="java.util.HashMap">
+        SELECT cmcd_cd, cmcd_nm
+        FROM czcomcodmt
+        WHERE hspt_cd = '10260084'
+        AND #{date} BETWEEN cmcd_apdy AND cmcd_endy
+        AND cmcd_clsf_cd = 'CB4001'
+    </select>
+
 <!--    환자현황 대기 환자수 조회  -->
     <select id="patientCount" resultType="java.util.HashMap">
         SELECT COUNT(CASE WHEN cbotrcinmv.rcpn_stat_cd IN ('R', 'M') THEN 1 END) AS Rcount,
