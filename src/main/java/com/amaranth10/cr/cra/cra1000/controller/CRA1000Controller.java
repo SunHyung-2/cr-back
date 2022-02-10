@@ -224,9 +224,7 @@ public class CRA1000Controller {
 
     /** 진단 내역 조회 */
     @PostMapping("/dgnsList")
-    public Object dgnsList (@RequestBody Object param) {
-        return this.iCRA1000Service.dgnsList(param);
-    }
+    public Object dgnsList (@RequestBody Object param) { return this.iCRA1000Service.dgnsList(param); }
 
     /** 진단 저장 */
     @PostMapping("/savePtDgns")
@@ -238,7 +236,7 @@ public class CRA1000Controller {
     @PostMapping("/updatePtDgns")
     public void updatePtDgns (@RequestBody Object param) {
         this.iCRA1000Service.updatePtDgns(param);
-        this.iCRA1000Service.savePtDgns(param);
+//        this.iCRA1000Service.savePtDgns(param);
     }
 
     /** 진단 형태 목록 조회 */
@@ -271,7 +269,7 @@ public class CRA1000Controller {
     @PostMapping("/updatePtPrsc")
     public void updatePtPrsc (@RequestBody Object param) {
         this.iCRA1000Service.updatePtPrsc(param);
-        this.iCRA1000Service.savePtPrsc(param);
+//        this.iCRA1000Service.savePtPrsc(param);
     }
 
     /** 의약분업예외 목록 조회 */

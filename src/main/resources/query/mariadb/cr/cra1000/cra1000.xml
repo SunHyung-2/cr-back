@@ -579,9 +579,16 @@
                lwlm_age
         FROM crkcddgcmt
         WHERE hspt_cd = #{hspt_cd}
-          AND (dgns_cd LIKE CONCAT("%", #{keyword}, "%")
-            OR dgns_enm LIKE CONCAT("%", #{keyword}, "%")
-            OR dgns_hnm LIKE CONCAT("%", #{keyword}, "%"))
+        <choose>
+            <when test='status != null and status == "copy"'>
+                AND dgns_cd = #{keyword}
+            </when>
+            <otherwise>
+                AND (dgns_cd LIKE CONCAT("%", #{keyword}, "%")
+                OR dgns_enm LIKE CONCAT("%", #{keyword}, "%")
+                OR dgns_hnm LIKE CONCAT("%", #{keyword}, "%"))
+            </otherwise>
+        </choose>
     </select>
 
 <!--    진단 내역       -->
@@ -600,6 +607,9 @@
           AND del_yn = "N"
           AND rcpn_sqno = #{rcpn_sqno}
           AND pid = #{pid}
+<!--        <if test=''>-->
+
+<!--        </if>-->
         ORDER BY sort_sqno
     </select>
 
@@ -641,7 +651,7 @@
 
 <!--    진단 수정       -->
     <update id="updatePtDgns" parameterType="java.util.Objects">
-        <if test="updateList != null and updateList.size != 0">
+        <if test='updateList != null and updateList.size != 0'>
             <foreach collection="updateList" item="item" index="index" separator=";">
                 <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>
                     UPDATE crptdgnsnt
@@ -663,7 +673,7 @@
                 </if>
             </foreach>;
         </if>
-        <if test="delList != null and delList.size != 0">
+        <if test='delList != null and delList.size != 0'>
             <foreach collection="delList" item="item">
                 UPDATE crptdgnsnt
                    SET del_yn = 'Y'
@@ -727,6 +737,7 @@
 <!--    처방 내역       -->
     <select id="prscList" resultType="com.amaranth10.cr.cra.cra1000.model.Prescription">
         SELECT prsc_sqno,
+                rcpn_sqno,
 <!--                prsc_date,-->
         DATE_FORMAT(prsc_inpt_dt, '%Y-%m-%d %T') As prsc_inpt_dt,
                 fn_get_username(hspt_cd, prsc_dr_id) AS prsc_dr_id,
@@ -802,8 +813,8 @@
                         #{item.prsc_memo},
                         #{item.jx999},
                         'N',
-                    '',
-                    'N'
+                        '',
+                        'N'
                     FROM crbasprsnt, cbotrcinmv
                     WHERE crbasprsnt.hspt_cd = #{hspt_cd}
                       AND crbasprsnt.rcpn_sqno = #{rcpn_sqno}
@@ -821,7 +832,7 @@
                         sort_sqno, cmpt_yn, prsc_memo, jx999, dc_yn,
                         dosg_1, uncd, totl_vol, notm, nody, drug_injc_dvsn,
                         iotm_cd, prsc_pay_dvcd, pwdr_yn, mix_yn, mix_no,
-                        hsin_hsot_dvcd, hsin_prsc_resn_cd, prsc_prgr_stat_cd, rcpt_stat_cd)
+                        hsin_hsot_dvcd, hsin_prsc_resn_cd, prsc_prgr_stat_cd, rcpt_stat_cd, cndt_yn)
                     SELECT
                         #{hspt_cd},
                         #{frst_rgst_usid},
@@ -843,7 +854,7 @@
                         #{usid},
                         #{dateTime},
                         cbotrcinmv.insn_tycd,
-                    cbotrcinmv.type_asst_cd,
+                        cbotrcinmv.type_asst_cd,
                         #{item.row},
                         #{item.cmpt_yn},
                         #{item.prsc_memo},
@@ -862,8 +873,9 @@
                         #{item.mix_no},
                         #{item.hsin_hsot_dvcd},
                         #{item.hsin_prsc_resn_cd},
-                    '',
-                    'N'
+                        '',
+                        'N',
+                        'N'
                     FROM crdrinprnt, cbotrcinmv
                     WHERE crdrinprnt.hspt_cd = #{hspt_cd}
                       AND crdrinprnt.rcpn_sqno = #{rcpn_sqno}
