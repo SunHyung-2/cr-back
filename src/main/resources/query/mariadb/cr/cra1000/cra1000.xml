@@ -636,7 +636,14 @@
                     #{last_uddt},
                     #{pid},
                     #{rcpn_sqno},
-                    IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
+                    <choose>
+                        <when test='item.dgns_sqno == null'>
+                            IFNULL(MAX(crptdgnsnt.dgns_sqno) + 1, 1),
+                        </when>
+                        <otherwise>
+                            #{item.dgns_sqno},
+                        </otherwise>
+                    </choose>
                     #{dateTime},
                     #{mddp_cd},
                     #{usid},
@@ -655,42 +662,55 @@
                 WHERE hspt_cd = #{hspt_cd}
                   AND rcpn_sqno = #{rcpn_sqno}
                   AND pid = #{pid}
+                ON DUPLICATE KEY UPDATE
+                    last_updt_usid = #{last_updt_usid},
+                    last_uddt = #{last_uddt},
+                    dvsn = #{item.dvsn},
+                    ro_yn =
+                    <choose>
+                        <when test='item.ro_yn == "True"'>'Y',</when>
+                        <otherwise>'N',</otherwise>
+                    </choose>
+                    dgns_nm = #{item.dgns_nm},
+                    site_dvcd = #{item.site_dvcd},
+                    spcf_rgno = #{item.spcf_rgno},
+                    sort_sqno = #{item.row}
             </foreach>
         </if>
     </insert>
 
 <!--    진단 수정       -->
     <update id="updatePtDgns" parameterType="java.util.Objects">
-        <if test='updateList != null and updateList.size != 0'>
-            <foreach collection="updateList" item="item" index="index" separator=";">
-                <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>
-                    UPDATE crptdgnsnt
-                    SET last_updt_usid = #{last_updt_usid},
-                        last_uddt = #{last_uddt},
-                        dvsn = #{item.dvsn},
-                        ro_yn =
-                            <choose>
-                                <when test='item.ro_yn == "True"'>'Y',</when>
-                                <otherwise>'N',</otherwise>
-                            </choose>
-                        dgns_nm = #{item.dgns_nm},
-                        site_dvcd = #{item.site_dvcd},
-                        spcf_rgno = #{item.spcf_rgno},
-                        sort_sqno = #{item.row}
-                    WHERE hspt_cd = #{hspt_cd}
-                      AND rcpn_sqno = #{rcpn_sqno}
-                      AND dgns_sqno = #{item.dgns_sqno}
-                </if>
-            </foreach>;
-        </if>
+<!--        <if test='updateList != null and updateList.size != 0'>-->
+<!--            <foreach collection="updateList" item="item" index="index" separator=";">-->
+<!--                <if test='item.dgns_sqno != null and !item.dgns_sqno.equals("")'>-->
+<!--                    UPDATE crptdgnsnt-->
+<!--                    SET last_updt_usid = #{last_updt_usid},-->
+<!--                        last_uddt = #{last_uddt},-->
+<!--                        dvsn = #{item.dvsn},-->
+<!--                        ro_yn =-->
+<!--                            <choose>-->
+<!--                                <when test='item.ro_yn == "True"'>'Y',</when>-->
+<!--                                <otherwise>'N',</otherwise>-->
+<!--                            </choose>-->
+<!--                        dgns_nm = #{item.dgns_nm},-->
+<!--                        site_dvcd = #{item.site_dvcd},-->
+<!--                        spcf_rgno = #{item.spcf_rgno},-->
+<!--                        sort_sqno = #{item.row}-->
+<!--                    WHERE hspt_cd = #{hspt_cd}-->
+<!--                      AND rcpn_sqno = #{rcpn_sqno}-->
+<!--                      AND dgns_sqno = #{item.dgns_sqno}-->
+<!--                </if>-->
+<!--            </foreach>;-->
+<!--        </if>-->
         <if test='delList != null and delList.size != 0'>
-            <foreach collection="delList" item="item">
+            <foreach collection="delList" item="item" separator=";">
                 UPDATE crptdgnsnt
                    SET del_yn = 'Y'
                 WHERE hspt_cd = #{hspt_cd}
                   AND rcpn_sqno = #{rcpn_sqno}
                   AND dgns_sqno = #{item.dgns_sqno}
-            </foreach>;
+            </foreach>
         </if>
     </update>
 
@@ -801,7 +821,14 @@
                         #{last_uddt},
                         #{pid},
                         #{date},
-                        IFNULL(MAX(crbasprsnt.prsc_sqno) + 1, 1),
+                        <choose>
+                            <when test='item.prsc_sqno == null'>
+                                IFNULL(MAX(crbasprsnt.prsc_sqno) + 1, 1),
+                            </when>
+                            <otherwise>
+                                #{item.prsc_sqno},
+                            </otherwise>
+                        </choose>
                         #{item.prsc_cd},
                         #{item.prsc_nm},
                         #{rcpn_sqno},
@@ -832,6 +859,22 @@
                       AND cbotrcinmv.hspt_cd = #{hspt_cd}
                       AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
                       AND cbotrcinmv.pid = #{pid}
+                    ON DUPLICATE KEY UPDATE
+                        last_updt_usid= #{last_updt_usid},
+                        last_uddt= #{last_uddt},
+                        prsc_nm = #{item.prsc_nm},
+                        sort_sqno = #{item.row},
+                        cmpt_yn = #{item.cmpt_yn},
+                        prsc_memo = #{item.prsc_memo},
+                        jx999 = #{item.jx999},
+                        prsc_pay_dvcd = #{item.prsc_pay_dvcd},
+                        dc_yn = #{item.dc_yn}
+                        <if test='item.dc_yn == "Y"'>
+                            , dc_drcn_dr_id = #{usid},
+                            dc_drcn_dt = #{dateTime},
+                            dc_resn = #{item.dc_resn},
+                            dc_resn_cd = #{item.dc_resn_cd}
+                        </if>
                 </if>
                 <!-- 약주사 처방 -->
                 <if test='item.prsc_clsf_cd == "B1" or item.prsc_clsf_cd == "B2" or item.prsc_clsf_cd == "B3" or item.prsc_clsf_cd == "B4"'>
@@ -851,7 +894,14 @@
                         #{last_uddt},
                         #{pid},
                         #{date},
-                        IFNULL(MAX(crdrinprnt.prsc_sqno) + 1, 1),
+                    <choose>
+                        <when test='item.prsc_sqno == null'>
+                            IFNULL(MAX(crdrinprnt.prsc_sqno) + 1, 1),
+                        </when>
+                        <otherwise>
+                            #{item.prsc_sqno},
+                        </otherwise>
+                    </choose>
                         #{item.prsc_cd},
                         #{item.prsc_nm},
                         #{rcpn_sqno},
@@ -893,6 +943,31 @@
                       AND cbotrcinmv.hspt_cd = #{hspt_cd}
                       AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
                       AND cbotrcinmv.pid = #{pid}
+                    ON DUPLICATE KEY UPDATE
+                        last_updt_usid = #{last_updt_usid},
+                        last_uddt = #{last_uddt},
+                        prsc_nm = #{item.prsc_nm},
+                        sort_sqno = #{item.row},
+                        dosg_1 = #{item.dosg_1},
+                        totl_vol = #{item.totl_vol},
+                        notm = #{item.notm},
+                        nody = #{item.nody},
+                        iotm_cd = #{item.iotm_cd},
+                        mix_yn = #{item.mix_yn},
+                        mix_no = #{item.mix_no},
+                        prsc_pay_dvcd = #{item.prsc_pay_dvcd},
+                        hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},
+                        hsin_prsc_resn_cd = #{item.hsin_prsc_resn_cd},
+                        cmpt_yn = #{item.cmpt_yn},
+                        prsc_memo = #{item.prsc_memo},
+                        jx999 = #{item.jx999},
+                        dc_yn = #{item.dc_yn}
+                        <if test='item.dc_yn == "Y"'>
+                            , dc_drcn_dr_id = #{usid},
+                            dc_drcn_dt = #{dateTime},
+                            dc_resn = #{item.dc_resn},
+                            dc_resn_cd =#{item.dc_resn_cd}
+                        </if>
                 </if>
                 <!-- 검사 처방 -->
                 <if test='item.prsc_clsf_cd == "C1" or item.prsc_clsf_cd == "C2" or item.prsc_clsf_cd == "C3"'>
@@ -910,7 +985,14 @@
                         #{last_uddt},
                         #{pid},
                         #{date},
-                        IFNULL(MAX(crexmprsnt.prsc_sqno) + 1, 1),
+                    <choose>
+                        <when test='item.prsc_sqno == null'>
+                            IFNULL(MAX(crexmprsnt.prsc_sqno) + 1, 1),
+                        </when>
+                        <otherwise>
+                            #{item.prsc_sqno},
+                        </otherwise>
+                    </choose>
                         #{item.prsc_cd},
                         #{item.prsc_nm},
                         #{rcpn_sqno},
@@ -932,8 +1014,8 @@
                         'N',
                         #{item.spcm_cd_1},
                         #{item.exrm_cd},
-                    '',
-                    'N'
+                        '',
+                        'N'
                     FROM crexmprsnt, cbotrcinmv
                     WHERE crexmprsnt.hspt_cd = #{hspt_cd}
                       AND crexmprsnt.rcpn_sqno = #{rcpn_sqno}
@@ -941,6 +1023,23 @@
                       AND cbotrcinmv.hspt_cd = #{hspt_cd}
                       AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
                       AND cbotrcinmv.pid = #{pid}
+                    ON DUPLICATE KEY UPDATE
+                        last_updt_usid = #{last_updt_usid},
+                        last_uddt = #{last_uddt},
+                        prsc_nm = #{item.prsc_nm},
+                        sort_sqno = #{item.row},
+                        cmpt_yn = #{item.cmpt_yn},
+                        prsc_memo = #{item.prsc_memo},
+                        jx999 = #{item.jx999},
+                        prsc_pay_dvcd = #{item.prsc_pay_dvcd},
+                        dc_yn = #{item.dc_yn},
+                        spcm_cd_1 = #{item.spcm_cd_1}
+                        <if test='item.dc_yn == "Y"'>
+                            , dc_drcn_dr_id = #{usid},
+                            dc_drcn_dt = #{dateTime},
+                            dc_resn = #{item.dc_resn},
+                            dc_resn_cd =#{item.dc_resn_cd},
+                        </if>
                 </if>
                 <!-- 처치 처방 -->
                 <if test='item.prsc_clsf_cd == "D" or item.prsc_clsf_cd == "D1" or item.prsc_clsf_cd == "D2" or item.prsc_clsf_cd == "D3" or item.prsc_clsf_cd == "D4" or item.prsc_clsf_cd == "D5"'>
@@ -958,7 +1057,14 @@
                         #{last_uddt},
                         #{pid},
                         #{date},
-                        IFNULL(MAX(crtrtprsnt.prsc_sqno) + 1, 1),
+                    <choose>
+                        <when test='item.prsc_sqno == null'>
+                            IFNULL(MAX(crtrtprsnt.prsc_sqno) + 1, 1),
+                        </when>
+                        <otherwise>
+                            #{item.prsc_sqno},
+                        </otherwise>
+                    </choose>
                         #{item.prsc_cd},
                         #{item.prsc_nm},
                         #{rcpn_sqno},
@@ -990,6 +1096,24 @@
                       AND cbotrcinmv.hspt_cd = #{hspt_cd}
                       AND cbotrcinmv.rcpn_sqno = #{rcpn_sqno}
                       AND cbotrcinmv.pid = #{pid}
+                    ON DUPLICATE KEY UPDATE
+                        last_updt_usid = #{last_updt_usid},
+                        last_uddt = #{last_uddt},
+                        prsc_nm = #{item.prsc_nm},
+                        sort_sqno = #{item.row},
+                        cmpt_yn = #{item.cmpt_yn},
+                        prsc_memo = #{item.prsc_memo},
+                        jx999 = #{item.jx999},
+                        prsc_pay_dvcd = #{item.prsc_pay_dvcd},
+                        dc_yn = #{item.dc_yn},
+                        qty = #{item.dosg_1},
+                        notm = #{item.notm}
+                        <if test='item.dc_yn == "Y"'>
+                            , dc_drcn_dr_id = #{usid},
+                            dc_drcn_dt = #{dateTime},
+                            dc_resn = #{item.dc_resn},
+                            dc_resn_cd =#{item.dc_resn_cd}
+                        </if>
                 </if>
             </foreach>
         </if>
@@ -1000,105 +1124,105 @@
         <if test='updateList != null and updateList.size != 0'>
             <foreach collection="updateList" item="item" separator=";">
                 <!-- 기본 처방 -->
-                <if test='item.prsc_clsf_cd == "A1" or item.prsc_clsf_cd == "A2" or item.prsc_clsf_cd == "A3"'>
-                    UPDATE crbasprsnt
-                    SET last_updt_usid= #{last_updt_usid},
-                        last_uddt= #{last_uddt},
-                        prsc_nm = #{item.prsc_nm},
-                        sort_sqno = #{item.row},
-                        cmpt_yn = #{item.cmpt_yn},
-                        prsc_memo = #{item.prsc_memo},
-                        jx999 = #{item.jx999},
-                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
-                        dc_yn = #{item.dc_yn}
-                    <if test='item.dc_yn == "Y"'>
-                        , dc_drcn_dr_id = #{usid},
-                        dc_drcn_dt = #{dateTime},
-                        dc_resn = #{item.dc_resn},
-                        dc_resn_cd = #{item.dc_resn_cd}
-                    </if>
-                    WHERE hspt_cd = #{hspt_cd}
-                      AND rcpn_sqno = #{rcpn_sqno}
-                      AND prsc_sqno = #{item.prsc_sqno}
-                </if>
+<!--                <if test='item.prsc_clsf_cd == "A1" or item.prsc_clsf_cd == "A2" or item.prsc_clsf_cd == "A3"'>-->
+<!--                    UPDATE crbasprsnt-->
+<!--                    SET last_updt_usid= #{last_updt_usid},-->
+<!--                        last_uddt= #{last_uddt},-->
+<!--                        prsc_nm = #{item.prsc_nm},-->
+<!--                        sort_sqno = #{item.row},-->
+<!--                        cmpt_yn = #{item.cmpt_yn},-->
+<!--                        prsc_memo = #{item.prsc_memo},-->
+<!--                        jx999 = #{item.jx999},-->
+<!--                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},-->
+<!--                        dc_yn = #{item.dc_yn}-->
+<!--                    <if test='item.dc_yn == "Y"'>-->
+<!--                        , dc_drcn_dr_id = #{usid},-->
+<!--                        dc_drcn_dt = #{dateTime},-->
+<!--                        dc_resn = #{item.dc_resn},-->
+<!--                        dc_resn_cd = #{item.dc_resn_cd}-->
+<!--                    </if>-->
+<!--                    WHERE hspt_cd = #{hspt_cd}-->
+<!--                      AND rcpn_sqno = #{rcpn_sqno}-->
+<!--                      AND prsc_sqno = #{item.prsc_sqno}-->
+<!--                </if>-->
                 <!-- 약주사 처방 -->
-                <if test='item.prsc_clsf_cd == "B1" or item.prsc_clsf_cd == "B2" or item.prsc_clsf_cd == "B3" or item.prsc_clsf_cd == "B4"'>
-                    UPDATE crdrinprnt
-                    SET last_updt_usid = #{last_updt_usid},
-                        last_uddt = #{last_uddt},
-                        prsc_nm = #{item.prsc_nm},
-                        sort_sqno = #{item.row},
-                        dosg_1 = #{item.dosg_1},
-                        totl_vol = #{item.totl_vol},
-                        notm = #{item.notm},
-                        nody = #{item.nody},
-                        iotm_cd = #{item.iotm_cd},
-                        mix_yn = #{item.mix_yn},
-                        mix_no = #{item.mix_no},
-                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
-                        hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},
-                        hsin_prsc_resn_cd = #{item.hsin_prsc_resn_cd},
-                        cmpt_yn = #{item.cmpt_yn},
-                        prsc_memo = #{item.prsc_memo},
-                        jx999 = #{item.jx999},
-                        dc_yn = #{item.dc_yn}
-                    <if test='item.dc_yn == "Y"'>
-                        , dc_drcn_dr_id = #{usid},
-                        dc_drcn_dt = #{dateTime},
-                        dc_resn = #{item.dc_resn},
-                        dc_resn_cd =#{item.dc_resn_cd}
-                    </if>
-                    WHERE hspt_cd = #{hspt_cd}
-                      AND rcpn_sqno = #{rcpn_sqno}
-                      AND prsc_sqno = #{item.prsc_sqno}
-                </if>
+<!--                <if test='item.prsc_clsf_cd == "B1" or item.prsc_clsf_cd == "B2" or item.prsc_clsf_cd == "B3" or item.prsc_clsf_cd == "B4"'>-->
+<!--                    UPDATE crdrinprnt-->
+<!--                    SET last_updt_usid = #{last_updt_usid},-->
+<!--                        last_uddt = #{last_uddt},-->
+<!--                        prsc_nm = #{item.prsc_nm},-->
+<!--                        sort_sqno = #{item.row},-->
+<!--                        dosg_1 = #{item.dosg_1},-->
+<!--                        totl_vol = #{item.totl_vol},-->
+<!--                        notm = #{item.notm},-->
+<!--                        nody = #{item.nody},-->
+<!--                        iotm_cd = #{item.iotm_cd},-->
+<!--                        mix_yn = #{item.mix_yn},-->
+<!--                        mix_no = #{item.mix_no},-->
+<!--                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},-->
+<!--                        hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},-->
+<!--                        hsin_prsc_resn_cd = #{item.hsin_prsc_resn_cd},-->
+<!--                        cmpt_yn = #{item.cmpt_yn},-->
+<!--                        prsc_memo = #{item.prsc_memo},-->
+<!--                        jx999 = #{item.jx999},-->
+<!--                        dc_yn = #{item.dc_yn}-->
+<!--                    <if test='item.dc_yn == "Y"'>-->
+<!--                        , dc_drcn_dr_id = #{usid},-->
+<!--                        dc_drcn_dt = #{dateTime},-->
+<!--                        dc_resn = #{item.dc_resn},-->
+<!--                        dc_resn_cd =#{item.dc_resn_cd}-->
+<!--                    </if>-->
+<!--                    WHERE hspt_cd = #{hspt_cd}-->
+<!--                      AND rcpn_sqno = #{rcpn_sqno}-->
+<!--                      AND prsc_sqno = #{item.prsc_sqno}-->
+<!--                </if>-->
                 <!-- 검사 처방 -->
-                <if test='item.prsc_clsf_cd == "C1" or item.prsc_clsf_cd == "C2" or item.prsc_clsf_cd == "C3"'>
-                    UPDATE crexmprsnt
-                    SET last_updt_usid = #{last_updt_usid},
-                        last_uddt = #{last_uddt},
-                        prsc_nm = #{item.prsc_nm},
-                        sort_sqno = #{item.row},
-                        cmpt_yn = #{item.cmpt_yn},
-                        prsc_memo = #{item.prsc_memo},
-                        jx999 = #{item.jx999},
-                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
-                        dc_yn = #{item.dc_yn},
-                    spcm_cd_1 = #{item.spcm_cd_1}
-                    <if test='item.dc_yn == "Y"'>
-                        , dc_drcn_dr_id = #{usid},
-                        dc_drcn_dt = #{dateTime},
-                        dc_resn = #{item.dc_resn},
-                        dc_resn_cd =#{item.dc_resn_cd},
-                    </if>
-                    WHERE hspt_cd = #{hspt_cd}
-                      AND rcpn_sqno = #{rcpn_sqno}
-                      AND prsc_sqno = #{item.prsc_sqno}
-                </if>
+<!--                <if test='item.prsc_clsf_cd == "C1" or item.prsc_clsf_cd == "C2" or item.prsc_clsf_cd == "C3"'>-->
+<!--                    UPDATE crexmprsnt-->
+<!--                    SET last_updt_usid = #{last_updt_usid},-->
+<!--                        last_uddt = #{last_uddt},-->
+<!--                        prsc_nm = #{item.prsc_nm},-->
+<!--                        sort_sqno = #{item.row},-->
+<!--                        cmpt_yn = #{item.cmpt_yn},-->
+<!--                        prsc_memo = #{item.prsc_memo},-->
+<!--                        jx999 = #{item.jx999},-->
+<!--                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},-->
+<!--                        dc_yn = #{item.dc_yn},-->
+<!--                    spcm_cd_1 = #{item.spcm_cd_1}-->
+<!--                    <if test='item.dc_yn == "Y"'>-->
+<!--                        , dc_drcn_dr_id = #{usid},-->
+<!--                        dc_drcn_dt = #{dateTime},-->
+<!--                        dc_resn = #{item.dc_resn},-->
+<!--                        dc_resn_cd =#{item.dc_resn_cd},-->
+<!--                    </if>-->
+<!--                    WHERE hspt_cd = #{hspt_cd}-->
+<!--                      AND rcpn_sqno = #{rcpn_sqno}-->
+<!--                      AND prsc_sqno = #{item.prsc_sqno}-->
+<!--                </if>-->
                 <!-- 처치 처방 -->
-                <if test='item.prsc_clsf_cd == "D" or item.prsc_clsf_cd == "D1" or item.prsc_clsf_cd == "D2" or item.prsc_clsf_cd == "D3" or item.prsc_clsf_cd == "D4" or item.prsc_clsf_cd == "D5"'>
-                    UPDATE crtrtprsnt
-                    SET last_updt_usid = #{last_updt_usid},
-                        last_uddt = #{last_uddt},
-                        prsc_nm = #{item.prsc_nm},
-                        sort_sqno = #{item.row},
-                        cmpt_yn = #{item.cmpt_yn},
-                        prsc_memo = #{item.prsc_memo},
-                        jx999 = #{item.jx999},
-                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},
-                        dc_yn = #{item.dc_yn},
-                        qty = #{item.dosg_1},
-                        notm = #{item.notm}
-                    <if test='item.dc_yn == "Y"'>
-                        , dc_drcn_dr_id = #{usid},
-                        dc_drcn_dt = #{dateTime},
-                        dc_resn = #{item.dc_resn},
-                        dc_resn_cd =#{item.dc_resn_cd}
-                    </if>
-                    WHERE hspt_cd = #{hspt_cd}
-                      AND rcpn_sqno = #{rcpn_sqno}
-                      AND prsc_sqno = #{item.prsc_sqno}
-                </if>
+<!--                <if test='item.prsc_clsf_cd == "D" or item.prsc_clsf_cd == "D1" or item.prsc_clsf_cd == "D2" or item.prsc_clsf_cd == "D3" or item.prsc_clsf_cd == "D4" or item.prsc_clsf_cd == "D5"'>-->
+<!--                    UPDATE crtrtprsnt-->
+<!--                    SET last_updt_usid = #{last_updt_usid},-->
+<!--                        last_uddt = #{last_uddt},-->
+<!--                        prsc_nm = #{item.prsc_nm},-->
+<!--                        sort_sqno = #{item.row},-->
+<!--                        cmpt_yn = #{item.cmpt_yn},-->
+<!--                        prsc_memo = #{item.prsc_memo},-->
+<!--                        jx999 = #{item.jx999},-->
+<!--                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},-->
+<!--                        dc_yn = #{item.dc_yn},-->
+<!--                        qty = #{item.dosg_1},-->
+<!--                        notm = #{item.notm}-->
+<!--                    <if test='item.dc_yn == "Y"'>-->
+<!--                        , dc_drcn_dr_id = #{usid},-->
+<!--                        dc_drcn_dt = #{dateTime},-->
+<!--                        dc_resn = #{item.dc_resn},-->
+<!--                        dc_resn_cd =#{item.dc_resn_cd}-->
+<!--                    </if>-->
+<!--                    WHERE hspt_cd = #{hspt_cd}-->
+<!--                      AND rcpn_sqno = #{rcpn_sqno}-->
+<!--                      AND prsc_sqno = #{item.prsc_sqno}-->
+<!--                </if>-->
             </foreach>
         </if>
     </update>

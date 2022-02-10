@@ -272,11 +272,11 @@ public class CRA1000Controller {
     }
 
     /** 처방 수정 */
-    @PostMapping("/updatePtPrsc")
-    public void updatePtPrsc (@RequestBody Object param) {
-        this.iCRA1000Service.updatePtPrsc(param);
-//        this.iCRA1000Service.savePtPrsc(param);
-    }
+//    @PostMapping("/updatePtPrsc")
+//    public void updatePtPrsc (@RequestBody Object param) {
+//        this.iCRA1000Service.updatePtPrsc(param);
+////        this.iCRA1000Service.savePtPrsc(param);
+//    }
 
     /** 의약분업예외 목록 조회 */
     @PostMapping("/excpList")
