@@ -617,9 +617,6 @@
           AND del_yn = "N"
           AND rcpn_sqno = #{rcpn_sqno}
           AND pid = #{pid}
-<!--        <if test=''>-->
-
-<!--        </if>-->
         ORDER BY sort_sqno
     </select>
 
@@ -760,8 +757,15 @@
         FROM crprsccdmt
         WHERE hspt_cd = #{hspt_cd}
           AND prsc_psbl_yn = "Y"
-          AND (prsc_cd LIKE CONCAT("%", #{keyword}, "%")
-            OR prsc_nm LIKE CONCAT("%", #{keyword}, "%"))
+        <choose>
+            <when test='status != null and status == "copy"'>
+                AND prsc_cd = #{keyword}
+            </when>
+            <otherwise>
+                AND (prsc_cd LIKE CONCAT("%", #{keyword}, "%")
+                OR prsc_nm LIKE CONCAT("%", #{keyword}, "%"))
+            </otherwise>
+        </choose>
     </select>
 
 <!--    처방 내역       -->
