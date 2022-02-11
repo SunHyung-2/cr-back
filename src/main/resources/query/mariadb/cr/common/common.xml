@@ -37,7 +37,7 @@
             WHERE hspt_cd = #{hspt_cd}
               AND pid = #{pid}
               AND mdcr_date BETWEEN #{period.from} AND #{period.to}
-            ORDER BY mdcr_date DESC
+            ORDER BY mdcr_date DESC, rcpn_sqno DESC
         </if>
         <if test='option == "2"'>
             SELECT cbotrcinmv.rcpn_sqno,
@@ -75,10 +75,9 @@
 
 <!--    진단 내역       -->
     <select id="pastDgns" resultType="com.amaranth10.cr.cra.common.model.Diagnosis">
-        SELECT dgns_sqno,
-               dgns_cd,
+        SELECT dgns_cd,
                dgns_nm,
-               fn_get_commname(hspt_cd, inpt_dt, 'CR2001', dvsn) As dvsn
+               fn_get_commname(hspt_cd, LEFT(inpt_dt, 8), 'CR2001', dvsn) As dvsn
         FROM crptdgnsnt
         WHERE hspt_cd = #{hspt_cd}
           AND del_yn = "N"
