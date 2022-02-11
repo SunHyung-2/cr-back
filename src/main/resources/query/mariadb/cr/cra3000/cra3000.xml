@@ -101,8 +101,8 @@
                 <foreach collection="delDgns" item="item" separator=";">
                     DELETE FROM crsetdigdt
                     WHERE set_prsc_sqno = #{set.set_prsc_sqno}
-                    AND dgns_sqno = #{item.dgns_sqno}
-                    AND hspt_cd = #{hspt_cd}
+                      AND dgns_sqno = #{item.dgns_sqno}
+                      AND hspt_cd = #{hspt_cd}
                 </foreach>
             </if>
             <if test='delPrsc != null and delPrsc.size != 0'>
@@ -134,44 +134,57 @@
         </if>
         <if test='dgnsList != null and dgnsList.size != 0'>
             <foreach collection="dgnsList" item="item" separator=";">
-                INSERT INTO crsetdigdt
-                    (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
-                    set_prsc_sqno, dgns_sqno, dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
-                SELECT
-                    #{hspt_cd},
-                    #{frst_rgst_usid},
-                    #{frst_rgdt},
-                    #{last_updt_usid},
-                    #{last_uddt},
-                    <choose>
-                        <when test='set.set_prsc_sqno == 0'>
-                            (SELECT AUTO_INCREMENT - 1
-                            FROM information_schema.tables
-                            WHERE table_name = 'crsetprsmt'
-                            AND table_schema = DATABASE( )),
-                        </when>
-                        <otherwise>
-                            #{set.set_prsc_sqno},
-                        </otherwise>
-                    </choose>
-                    IFNULL(MAX(crsetdigdt.dgns_sqno) + 1, 1),
-                    #{item.dgns_cd},
-                    #{item.dgns_nm},
-                    #{item.site_dvcd},
-                    #{item.row}
-                FROM crsetdigdt
-                WHERE set_prsc_sqno =
+            INSERT INTO crsetdigdt
+                (hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt,
+                set_prsc_sqno, dgns_sqno, dgns_cd, dgns_nm, dgns_site_cd, sort_sqno)
+            SELECT
+                #{hspt_cd},
+                #{frst_rgst_usid},
+                #{frst_rgdt},
+                #{last_updt_usid},
+                #{last_uddt},
                 <choose>
                     <when test='set.set_prsc_sqno == 0'>
                         (SELECT AUTO_INCREMENT - 1
                         FROM information_schema.tables
                         WHERE table_name = 'crsetprsmt'
-                        AND table_schema = DATABASE( ))
+                        AND table_schema = DATABASE( )),
                     </when>
                     <otherwise>
-                        #{set.set_prsc_sqno}
+                        #{set.set_prsc_sqno},
                     </otherwise>
                 </choose>
+                <choose>
+                    <when test='item.dgns_sqno == null'>
+                        IFNULL(MAX(crsetdigdt.dgns_sqno) + 1, 1),
+                    </when>
+                    <otherwise>
+                        #{item.dgns_sqno},
+                    </otherwise>
+                </choose>
+                #{item.dgns_cd},
+                #{item.dgns_nm},
+                #{item.site_dvcd},
+                #{item.row}
+            FROM crsetdigdt
+            WHERE set_prsc_sqno =
+            <choose>
+                <when test='set.set_prsc_sqno == 0'>
+                    (SELECT AUTO_INCREMENT - 1
+                    FROM information_schema.tables
+                    WHERE table_name = 'crsetprsmt'
+                    AND table_schema = DATABASE( ))
+                </when>
+                <otherwise>
+                    #{set.set_prsc_sqno}
+                </otherwise>
+            </choose>
+            ON DUPLICATE KEY UPDATE
+                last_updt_usid = #{last_updt_usid},
+                last_uddt = #{last_uddt},
+                dgns_nm = #{item.dgns_nm},
+                dgns_site_cd = #{item.site_dvcd},
+                sort_sqno = #{item.row}
             </foreach>;
         </if>
         <if test='prscList != null and prscList.size != 0'>
@@ -198,7 +211,14 @@
                         #{set.set_prsc_sqno},
                     </otherwise>
                 </choose>
-                IFNULL(MAX(crsetprsdt.prsc_sqno) + 1, 1),
+                <choose>
+                    <when test='item.prsc_sqno == null'>
+                        IFNULL(MAX(crsetprsdt.prsc_sqno) + 1, 1),
+                    </when>
+                    <otherwise>
+                        #{item.prsc_sqno},
+                    </otherwise>
+                </choose>
                 #{item.prsc_cd},
                 #{item.prsc_nm},
                 #{item.prsc_clsf_cd},
@@ -226,36 +246,8 @@
                         #{set.set_prsc_sqno}
                     </otherwise>
                 </choose>
-            </foreach>;
-        </if>
-    </insert>
-
-<!--    약속처방 수정     -->
-    <update id="updateSet" parameterType="java.util.Objects">
-        UPDATE crsetprsmt
-        SET last_updt_usid = #{last_updt_usid},
-            last_uddt = #{last_uddt},
-            set_prsc_nm = #{set.set_prsc_nm},
-            set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno}
-        WHERE hspt_cd = #{hspt_cd}
-          AND set_prsc_sqno = #{set.set_prsc_sqno};
-        <if test='updDgns != null and updDgns.size != 0'>
-            <foreach collection="updDgns" item="item" separator=";">
-                UPDATE crsetdigdt
-                SET last_updt_usid = #{last_updt_usid},
-                    last_uddt = #{last_uddt},
-                    dgns_nm = #{item.dgns_nm},
-                    dgns_site_cd = #{item.site_dvcd},
-                    sort_sqno = #{item.row}
-                WHERE crsetdigdt.hspt_cd = #{hspt_cd}
-                  AND crsetdigdt.set_prsc_sqno = #{set.set_prsc_sqno}
-                  AND crsetdigdt.dgns_sqno = #{item.dgns_sqno}
-            </foreach>;
-        </if>
-        <if test='updPrsc != null and updPrsc.size != 0'>
-            <foreach collection="updPrsc" item="item" separator=";">
-                UPDATE crsetprsdt
-                SET last_updt_usid = #{last_updt_usid},
+                ON DUPLICATE KEY UPDATE
+                    last_updt_usid = #{last_updt_usid},
                     last_uddt = #{last_uddt},
                     prsc_nm = #{item.prsc_nm},
                     prsc_dosg1 = #{item.dosg_1},
@@ -269,10 +261,53 @@
                     prsc_qty = #{item.totl_vol},
                     prsc_pay_dvcd = #{item.prsc_pay_dvcd},
                     sort_sqno = #{item.row}
-                WHERE crsetprsdt.hspt_cd = #{hspt_cd}
-                  AND crsetprsdt.set_prsc_sqno = #{set.set_prsc_sqno}
-                  AND crsetprsdt.prsc_sqno = #{item.prsc_sqno}
             </foreach>;
         </if>
+    </insert>
+
+<!--    약속처방 수정     -->
+    <update id="updateSet" parameterType="java.util.Objects">
+        UPDATE crsetprsmt
+        SET last_updt_usid = #{last_updt_usid},
+            last_uddt = #{last_uddt},
+            set_prsc_nm = #{set.set_prsc_nm},
+            set_prsc_uprn_sqno = #{set.set_prsc_uprn_sqno}
+        WHERE hspt_cd = #{hspt_cd}
+          AND set_prsc_sqno = #{set.set_prsc_sqno};
+<!--        <if test='updDgns != null and updDgns.size != 0'>-->
+<!--            <foreach collection="updDgns" item="item" separator=";">-->
+<!--                UPDATE crsetdigdt-->
+<!--                SET last_updt_usid = #{last_updt_usid},-->
+<!--                    last_uddt = #{last_uddt},-->
+<!--                    dgns_nm = #{item.dgns_nm},-->
+<!--                    dgns_site_cd = #{item.site_dvcd},-->
+<!--                    sort_sqno = #{item.row}-->
+<!--                WHERE crsetdigdt.hspt_cd = #{hspt_cd}-->
+<!--                  AND crsetdigdt.set_prsc_sqno = #{set.set_prsc_sqno}-->
+<!--                  AND crsetdigdt.dgns_sqno = #{item.dgns_sqno}-->
+<!--            </foreach>;-->
+<!--        </if>-->
+<!--        <if test='updPrsc != null and updPrsc.size != 0'>-->
+<!--            <foreach collection="updPrsc" item="item" separator=";">-->
+<!--                UPDATE crsetprsdt-->
+<!--                SET last_updt_usid = #{last_updt_usid},-->
+<!--                    last_uddt = #{last_uddt},-->
+<!--                    prsc_nm = #{item.prsc_nm},-->
+<!--                    prsc_dosg1 = #{item.dosg_1},-->
+<!--                    prsc_notm = #{item.notm},-->
+<!--                    prsc_nody = #{item.nody},-->
+<!--                    iotm_cd = #{item.iotm_cd},-->
+<!--                    hsin_hsot_dvcd = #{item.hsin_hsot_dvcd},-->
+<!--                    spfm_excp_resn_cd = #{item.hsin_prsc_resn_cd},-->
+<!--                    mix_yn = #{item.mix_yn},-->
+<!--                    mix_no = #{item.mix_no},-->
+<!--                    prsc_qty = #{item.totl_vol},-->
+<!--                    prsc_pay_dvcd = #{item.prsc_pay_dvcd},-->
+<!--                    sort_sqno = #{item.row}-->
+<!--                WHERE crsetprsdt.hspt_cd = #{hspt_cd}-->
+<!--                  AND crsetprsdt.set_prsc_sqno = #{set.set_prsc_sqno}-->
+<!--                  AND crsetprsdt.prsc_sqno = #{item.prsc_sqno}-->
+<!--            </foreach>;-->
+<!--        </if>-->
     </update>
 </mapper>
