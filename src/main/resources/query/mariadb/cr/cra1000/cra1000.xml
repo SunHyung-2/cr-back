@@ -655,7 +655,7 @@
                         </otherwise>
                     </choose>
                     #{dateTime},
-                    #{mddp_cd},
+<!--                    #{mddp_cd},-->
                     #{usid},
                     #{item.dgns_cd},
                     #{item.dgns_nm},
@@ -851,8 +851,10 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
@@ -924,14 +926,18 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
                         #{dateTime},
+
                         cbotrcinmv.insn_tycd,
                         cbotrcinmv.type_asst_cd,
+
                         #{item.row},
                         #{item.cmpt_yn},
                         #{item.prsc_memo},
@@ -1015,8 +1021,10 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
