@@ -116,6 +116,12 @@ public class CRA1000Controller {
         return this.iCRA1000Service.prpsList(param);
     }
 
+    /** 내원목적상세 목록 조회 */
+    @PostMapping("/mdcrKindList")
+    public Object mdcrKindList (@RequestBody Object param) {
+        return this.iCRA1000Service.mdcrKindList(param);
+    }
+
     /** 산정특례구분코드 목록 조회 */
     @PostMapping("/cfscDvcdList")
     public Object cfscDvcdList (@RequestBody Object param) { return this.iCRA1000Service.cfscDvcdList(param); }

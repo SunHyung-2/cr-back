@@ -97,9 +97,7 @@
                 mix_no,
                 fn_get_commname(hspt_cd, mdcr_date, 'CB3001', prsc_pay_dvcd) As prsc_pay_dvcd,
                 IF(hsin_hsot_dvcd = '-', '-', fn_get_commname(hspt_cd, mdcr_date, 'CR3003', hsin_hsot_dvcd)) As hsin_hsot_dvcd,
-<!--공통코드 적용해야 함-->
-<!--        IF(prsc_prgr_stat_cd = '-', '-', fn_get_commname(hspt_cd, mdcr_date, 'CS', prsc_prgr_stat_cd)) As prsc_prgr_stat_cd,-->
-                prsc_prgr_stat_cd,
+                IF(prsc_prgr_stat_cd = '-', '-', fn_get_commname(hspt_cd, mdcr_date, 'CS1008', prsc_prgr_stat_cd)) As prsc_prgr_stat_cd,
                 rcpt_stat_cd,
                 prsc_memo,
                 jx999,

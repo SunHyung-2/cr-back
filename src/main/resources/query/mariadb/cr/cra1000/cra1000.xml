@@ -90,7 +90,7 @@
                cbptbainmt.cncn_pt_yn,
                cbptbainmt.priv_pt_yn,
                cbptbainmt.cmhs_path_dvcd,
-               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4004', cbptbainmt.cmhs_path_dvcd) As cmhs_path_cd_nm,
+<!--               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4004', cbptbainmt.cmhs_path_dvcd) As cmhs_path_cd_nm,-->
                cbotrcinmv.rcpn_sqno,
                cbotrcinmv.mdcr_date,
                cbotrcinmv.mdcr_hm,
@@ -104,6 +104,8 @@
                fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4010', cbotrcinmv.type_asst_cd) As type_asst_cd_nm,
                cbotrcinmv.rcpn_memo,
                cbotrcinmv.cmhs_prps_cd,
+               cbotrcinmv.mdcr_kind_cd,
+               fn_get_commname(cbotrcinmv.hspt_cd, cbotrcinmv.mdcr_date, 'CB4012', cbotrcinmv.mdcr_kind_cd) As mdcr_kind_cd_nm,
                cbptmeinnt1.memo_dvsn As clr_dvsn,
                cbptmeinnt1.memo_cnts As clr_cnts,
                cbptmeinnt2.memo_dvsn As pat_dvsn,
@@ -233,7 +235,7 @@
         INSERT INTO cbotrcinnt
             (rcpn_sqno, hstr_sqno, hspt_cd, frst_rgst_usid, frst_rgdt, last_updt_usid, last_uddt, rcpn_dvcd, hstr_stat_cd, pid,
             mdcr_date, mdcr_hm, mddp_cd, mdcr_dr_id, rcpn_stat_cd, clcl_stat_cd, fvnr_dvcd, insn_tycd, type_asst_cd,
-            rcpn_memo, cmhs_prps_cd, prgn_yn, usch_dvcd, optn_hspt_cd, optn_hspt_cd_nm)
+            rcpn_memo, cmhs_prps_cd, mdcr_kind_cd, prgn_yn, usch_dvcd, optn_hspt_cd, optn_hspt_cd_nm)
         SELECT rcpn_sqno,
                 MAX(hstr_sqno) + 1,
                 #{hspt_cd},
@@ -255,6 +257,7 @@
                 type_asst_cd,
                 rcpn_memo,
                 #{patient.cmhs_prps_cd},
+        #{patient.mdcr_kind_cd},
                 prgn_yn,
                 usch_dvcd,
                 optn_hspt_cd,
@@ -343,6 +346,16 @@
         FROM czcomcodmt
         WHERE hspt_cd = #{hspt_cd}
           AND cmcd_clsf_cd = 'CB4009'
+        ORDER BY cmcd_cd
+    </select>
+    
+<!--    내원목적상세 목록       -->
+    <select id="mdcrKindList" resultType="java.util.HashMap">
+        SELECT cmcd_cd As value,
+               cmcd_nm As text
+        FROM czcomcodmt
+        WHERE hspt_cd = #{hspt_cd}
+          AND cmcd_clsf_cd = 'CB4012'
         ORDER BY cmcd_cd
     </select>
 
@@ -642,7 +655,7 @@
                         </otherwise>
                     </choose>
                     #{dateTime},
-                    #{mddp_cd},
+<!--                    #{mddp_cd},-->
                     #{usid},
                     #{item.dgns_cd},
                     #{item.dgns_nm},
@@ -838,8 +851,10 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
@@ -911,14 +926,18 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
                         #{dateTime},
+
                         cbotrcinmv.insn_tycd,
                         cbotrcinmv.type_asst_cd,
+
                         #{item.row},
                         #{item.cmpt_yn},
                         #{item.prsc_memo},
@@ -1002,8 +1021,10 @@
                         #{rcpn_sqno},
                         #{item.prsc_clsf_cd},
                         #{item.slip_cd},
+
                         cbotrcinmv.mdcr_date,
                         cbotrcinmv.mdcr_hm,
+
                         #{mddp_cd},
                         #{usid},
                         #{usid},
