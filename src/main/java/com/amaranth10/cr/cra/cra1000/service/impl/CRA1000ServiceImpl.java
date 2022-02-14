@@ -105,6 +105,10 @@ public class CRA1000ServiceImpl implements ICRA1000Service {
     @Override
     public List<Object> prpsList(Object param) { return cra1000Mapper.prpsList(param); }
 
+    /** 내원목적상세 목록 조회 */
+    @Override
+    public List<Object> mdcrKindList(Object param) { return cra1000Mapper.mdcrKindList(param); }
+
     /** 산정특례구분코드 목록 조회 */
     @Override
     public List<Object> cfscDvcdList (Object param) { return cra1000Mapper.cfscDvcdList(param); }

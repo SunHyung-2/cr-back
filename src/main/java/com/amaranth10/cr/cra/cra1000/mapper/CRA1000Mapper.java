@@ -73,6 +73,9 @@ public interface CRA1000Mapper {
     /** 내원목적 목록 조회 */
     List<Object> prpsList (Object param);
 
+    /** 내원목적상세 목록 조회 */
+    List<Object> mdcrKindList (Object param);
+
     /** 산정특례구분코드 목록 조회 */
     List<Object> cfscDvcdList (Object param);
     /** ========================================================================================================================================================== */
